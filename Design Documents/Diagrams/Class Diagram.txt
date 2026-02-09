@@ -1,0 +1,30 @@
+classDiagram
+    class GameManager {
+        +PlayerData currentPlayer
+        +int questionCounter
+        +ProcessAnswer(bool isCorrect)
+        +SaveGame()
+    }
+    class PlayerData {
+        +string name
+        +int coins
+        +List unlockedAnimals
+    }
+    class QuestionEngine {
+        +List questionList
+        +GetQuestion(difficulty)
+    }
+    class UIManager {
+        +UpdateCoins()
+        +SetAvatarFace(mood)
+        +ShowQuestion()
+    }
+    class Animal {
+        +string species
+        +PlaySound()
+        +WalkLogic()
+    }
+    GameManager --> PlayerData
+    GameManager --> QuestionEngine
+    GameManager --> UIManager
+    Animal --|> GameManager : rewards

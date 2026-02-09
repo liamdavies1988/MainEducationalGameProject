@@ -1,0 +1,35 @@
+graph TD
+    %% Setup Phase
+    Start([Start Button]) --> PlayerType{New or Existing?}
+    PlayerType -- New --> AvatarSelect[Avatar Selection & Name Input]
+    AvatarSelect --> FarmSelect[Farm Style Selection]
+    FarmSelect --> MainMenu[MAIN MENU HUB]
+    PlayerType -- Existing --> MainMenu
+
+    %% Hub
+    subgraph Hub [Central Hub]
+        MainMenu
+        CoinsDisplay[Display Coins]
+    end
+
+    MainMenu --> Play[START GAME]
+    MainMenu --> Farm[View Farm Layout]
+    MainMenu --> Shop[Unlock Animals]
+
+    %% Learning Loop
+    Play --> Subj[Choose Subject & Difficulty]
+    Subj --> QLoop[Display Question]
+    QLoop --> Logic{Check Answer}
+    
+    Logic -- Incorrect --> Sad[Avatar Face: SAD]
+    Sad --> QLoop
+
+    Logic -- Correct --> Happy[Avatar Face: HAPPY + 1 Coin]
+    Happy --> Counter{Answered 10?}
+    Counter -- No --> QLoop
+    Counter -- Yes --> Summary[Session Summary]
+    Summary --> MainMenu
+
+    %% Farm Loop
+    Farm --> Interaction[Drag/Drop Animals & Play Sounds]
+    Interaction --> MainMenu

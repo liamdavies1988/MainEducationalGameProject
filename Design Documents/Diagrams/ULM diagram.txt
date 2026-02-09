@@ -1,0 +1,52 @@
+classDiagram
+    class GameManager {
+        <<Singleton>>
+        +PlayerData activeProfile
+        +int questionsCorrect
+        +ProcessAnswer(bool correct)
+        +UpdateCoinTotal(int amount)
+        +SaveAndExit()
+    }
+
+    class PlayerData {
+        +string studentName
+        +int avatarChoiceID
+        +int totalCoins
+        +List unlockedAnimals
+        +SaveToDisk()
+    }
+
+    class QuestionManager {
+        +List mathsQuestions
+        +List spellingQuestions
+        +GetNextQuestion(int difficulty)
+        +bool VerifyChoice(int index)
+    }
+
+    class UIManager {
+        +Text coinCounterDisplay
+        +Text questionTextField
+        +Image avatarExpression
+        +SetFace(string mood)
+        +ShowSummaryScreen()
+    }
+
+    class FarmManager {
+        +int selectedLayoutID
+        +GameObject[] animalPrefabs
+        +TryPlaceAnimal(int animalID)
+    }
+
+    class AnimalAI {
+        +AudioClip clickSound
+        +float walkRange
+        +MoveAnimal()
+        +PlayAnimalSound()
+    }
+
+    %% Relationships
+    GameManager "1" -- "1" PlayerData : manages
+    GameManager "1" -- "1" QuestionManager : controls
+    GameManager "1" -- "1" UIManager : updates
+    GameManager "1" -- "1" FarmManager : triggers
+    FarmManager "1" -- "*" AnimalAI : spawns
