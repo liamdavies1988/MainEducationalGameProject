@@ -5,3 +5,6 @@ By getting these diagrams done early, I’ve moved from a broad idea to a specif
 
 12/02/26
 created a new folder for the assets and sprites from kenney.nl and added slides to the game mock up slides 
+
+finished creating the mock up game slides 
+https://www.canva.com/design/DAHA7YorNy4/vLv8g-30j9FeNT2r3n66HQ/edit?utm_content=DAHA7YorNy4&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
