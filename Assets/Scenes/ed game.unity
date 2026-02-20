@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 137353969}
   - component: {fileID: 137353968}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Topic Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -471,8 +471,8 @@ RectTransform:
   m_LocalScale: {x: 1.2875, y: 1.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1273205500}
   - {fileID: 318871382}
+  - {fileID: 1273205500}
   - {fileID: 228309423}
   - {fileID: 208296959}
   - {fileID: 1294695939}
@@ -637,6 +637,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7096337172415229305, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
   m_PrefabInstance: {fileID: 284343757}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &284343759 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5617617047804635269, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
+  m_PrefabInstance: {fileID: 284343757}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2816820a4e7f32d45ba351361ac74de3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnswerButton
 --- !u!1 &318871381
 GameObject:
   m_ObjectHideFlags: 0
@@ -648,8 +659,9 @@ GameObject:
   - component: {fileID: 318871382}
   - component: {fileID: 318871384}
   - component: {fileID: 318871383}
+  - component: {fileID: 318871385}
   m_Layer: 5
-  m_Name: Question Text
+  m_Name: Question Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -694,7 +706,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: What is 1 + 1 = ?
+  m_text: Question
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a6c78558269accd4992797a9271ff089, type: 2}
   m_sharedMaterial: {fileID: 7808736743612277541, guid: a6c78558269accd4992797a9271ff089, type: 2}
@@ -721,15 +733,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60.8
+  m_fontSize: 72
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1
@@ -774,6 +786,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 318871381}
   m_CullTransparentMesh: 1
+--- !u!114 &318871385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 318871381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51a1cc29ac21af4438fd346b9c62eb2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestionSetup
+  questions: []
+  QuestionText: {fileID: 318871383}
+  TopicDisplay: {fileID: 137353968}
+  answerbuttons:
+  - {fileID: 701079855}
+  - {fileID: 1144268056}
+  - {fileID: 1294695940}
+  - {fileID: 284343759}
+  selectedTopic: TestMathsQuestions
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -866,6 +899,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &701079855 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5617617047804635269, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
+  m_PrefabInstance: {fileID: 8979230495740564613}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2816820a4e7f32d45ba351361ac74de3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnswerButton
 --- !u!1 &856936820
 GameObject:
   m_ObjectHideFlags: 0
@@ -969,6 +1013,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1144268056 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5617617047804635269, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
+  m_PrefabInstance: {fileID: 208296958}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2816820a4e7f32d45ba351361ac74de3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnswerButton
 --- !u!1 &1273205499
 GameObject:
   m_ObjectHideFlags: 0
@@ -996,7 +1051,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1273205499}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.7453003, y: 0.6509761, z: 0.94343}
   m_ConstrainProportionsScale: 0
@@ -1006,7 +1061,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 210}
+  m_AnchoredPosition: {x: 0, y: 190}
   m_SizeDelta: {x: 170, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &1273205501
@@ -1223,6 +1278,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7096337172415229305, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
   m_PrefabInstance: {fileID: 1294695938}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1294695940 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5617617047804635269, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
+  m_PrefabInstance: {fileID: 1294695938}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2816820a4e7f32d45ba351361ac74de3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnswerButton
 --- !u!1 &2120126274
 GameObject:
   m_ObjectHideFlags: 0

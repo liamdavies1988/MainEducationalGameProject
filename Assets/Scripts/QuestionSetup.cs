@@ -2,22 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEditor.Callbacks;
 
 public class QuestionSetup : MonoBehaviour
 {
-    [SerializeField]
-    private List<QuestionData> questions;
+    [SerializeField] private List<QuestionData> questions;
     private QuestionData currentQuestion;
 
-    [SerializeField]
-    private TextMeshProUGUI QuestionText;
-    [SerializeField]
-    private TextMeshProUGUI Topic;
-    [SerializeField]
-    private AnswerButton[] answerbuttons;
+    [SerializeField] private TextMeshProUGUI QuestionText;
+    [SerializeField] private TextMeshProUGUI TopicDisplay; // Avoid naming conflicts with variables
+    [SerializeField] private AnswerButton[] answerbuttons;
+    [SerializeField] private string selectedTopic = "Maths"; // Set this in the Inspector
 
-    [SerializeField]
     private int correctAnswerChoice;
 
     private void Awake()
@@ -25,31 +20,86 @@ public class QuestionSetup : MonoBehaviour
         GetQuestionAssets();
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         SelectNewQuestion();
-
-        SetQuestionValue();
-
-        SetAnswerValue();
-        
+        SetQuestionValues();
+        SetAnswerValues();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     private void GetQuestionAssets()
     {
-       questions = new List<QuestionData>(Resources.LoadAll<QuestionData>("Questions"));
+        // Now it only loads questions from the specific subfolder!
+        string path = "Questions/" + selectedTopic;
+        QuestionData[] loadedQuestions = Resources.LoadAll<QuestionData>(path);
+
+        if (loadedQuestions.Length == 0)
+        {
+            Debug.LogError($"No questions found in {path}");
+        }
+        else
+        {
+            questions = new List<QuestionData>(loadedQuestions);
+        }
     }
 
     private void SelectNewQuestion()
     {
-        int randomQuestionIndex = Random.Range(0, questions.Count);
-        currentQuestion = questions[randomQuestionIndex];
-        questions.RemoveAt(randomQuestionIndex);
+        if (questions.Count > 0)
+        {
+            int randomQuestionIndex = Random.Range(0, questions.Count);
+            currentQuestion = questions[randomQuestionIndex];
+            questions.RemoveAt(randomQuestionIndex);
+        }
     }
+
+    private void SetQuestionValues()
+    {
+        QuestionText.text = currentQuestion.question;
+        TopicDisplay.text = currentQuestion.topic;
+    }
+    
+    private void SetAnswerValues()
+    {
+        // Use the correct array name from QuestionData
+        List<string> randomizedAnswers = RandomizeAnswers(new List<string>(currentQuestion.answers));
+
+        for(int i = 0; i < answerbuttons.Length; i++)
+        {
+            bool isThisCorrect = false;
+        
+            if(i == correctAnswerChoice)
+            {
+                isThisCorrect = true; // Fixed: removed "bool" so it updates the variable above
+            }
+
+            answerbuttons[i].SetIsCorrect(isThisCorrect);
+            answerbuttons[i].SetAnswerText(randomizedAnswers[i]);
+        }
+    }
+
+    private List<string> RandomizeAnswers(List<string> originalList)
+    {
+        bool correctAnswerFound = false;
+        List<string> newList = new List<string>();
+        int originalCount = originalList.Count;
+
+        for(int i = 0; i < originalCount; i++)
+        {
+            int random = Random.Range(0, originalList.Count);
+            
+            // If we are picking the first item from the original list, 
+            // that is our correct answer (based on your ScriptableObject logic)
+            if (random == 0 && !correctAnswerFound)
+            {
+                correctAnswerChoice = i;
+                correctAnswerFound = true;
+            }
+
+            newList.Add(originalList[random]);
+            originalList.RemoveAt(random);
+        }
+        return newList;
+    }
+    
 }

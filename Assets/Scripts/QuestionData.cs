@@ -1,14 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "QuestionData", menuName = "Scriptable Objects/QuestionData",order =1)]
+[CreateAssetMenu(fileName = "QuestionData", menuName = "Scriptable Objects/QuestionData", order = 1)]
 public class QuestionData : ScriptableObject
 {
-    public string QuestionText;
-    public string Topic;
-    //Correct answer will always be box A and then box A position will be randomised.
-    public string[] QuestionAnswer;
-
-
+    public string question; // Match naming in Setup
+    public string topic;    // Match naming in Setup
+    
+    // Correct answer should be at index [0] in this array
+    public string[] answers; 
 }

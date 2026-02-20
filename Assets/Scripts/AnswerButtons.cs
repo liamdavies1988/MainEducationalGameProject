@@ -1,32 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class AnswerButton : MonoBehaviour
 {
-    private bool CorrectAnswer;
-    [SerializeField]
-    private TextMeshProUGUI AnswerText;
+    private bool isCorrectAnswer; // Renamed for clarity
+    [SerializeField] private TextMeshProUGUI AnswerText;
 
-    public void SetAnswer(string answer)
+    // This needs to match the name called in QuestionSetup
+    public void SetAnswerText(string answer)
     {
         AnswerText.text = answer;
-        
     }
-    public void IsCorrect(bool correct)
+
+    // This needs to match the name called in QuestionSetup
+    public void SetIsCorrect(bool correct)
     {
-        CorrectAnswer = correct;
+        isCorrectAnswer = correct;
     }
+
     public void OnClick()
     {
-        if (CorrectAnswer)
+        if (isCorrectAnswer)
         {
-            Debug.Log("Correct");
+            Debug.Log("Correct!");
+            // Later you can add: GameManager.instance.AddCoin();
         }
         else
         {
-            Debug.Log("Wrong");
+            Debug.Log("Wrong answer, try again.");
         }
     }
 }

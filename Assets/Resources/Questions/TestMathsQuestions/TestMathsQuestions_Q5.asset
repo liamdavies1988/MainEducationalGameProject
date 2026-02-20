@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 147c737c74227a34eab20f0160de76b9, type: 3}
-  m_Name: Test questions
+  m_Name: TestMathsQuestions_Q5
   m_EditorClassIdentifier: Assembly-CSharp::QuestionData
-  QuestionText: what is right
-  Topic: test
-  QuestionAnswer:
-  - Correct answer
-  - 'wrong 1 '
-  - 'wrong 2 '
-  - wrong 3
+  question: What is 4 + 1 = ?
+  topic: Maths
+  answers:
+  - 5
+  - 3
+  - 4
+  - 6
