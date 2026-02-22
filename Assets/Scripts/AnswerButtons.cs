@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class AnswerButton : MonoBehaviour
 {
@@ -23,11 +24,31 @@ public class AnswerButton : MonoBehaviour
         if (isCorrectAnswer)
         {
             Debug.Log("Correct!");
-            // Later you can add: GameManager.instance.AddCoin();
+            
+
+        // 1. Give the reward
+        GameManager.Instance.AddCoin(); 
+        
+        // 2. TODO: Trigger the 'Happy Face' animation/sprite change here
+        
+        // 3. Load the next question (you'll likely want a small delay here)
+        // Invoke("LoadNextQuestion", 1.0f);
+        
+        StartCoroutine(NextQuestionDelay());
         }
         else
         {
             Debug.Log("Wrong answer, try again.");
+            // TODO: Trigger the 'Sad Face' animation/sprite change here
         }
+        
+    }
+    // This "Coroutine" waits before refreshing the screen
+    IEnumerator NextQuestionDelay()
+    {
+    yield return new WaitForSeconds(1.0f); // Wait for 1 second
+    
+    // Find the QuestionSetup script and tell it to refresh
+    FindObjectOfType<QuestionSetup>().StartNextQuestion();
     }
 }

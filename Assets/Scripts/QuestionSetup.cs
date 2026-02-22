@@ -51,6 +51,11 @@ public class QuestionSetup : MonoBehaviour
             currentQuestion = questions[randomQuestionIndex];
             questions.RemoveAt(randomQuestionIndex);
         }
+        else 
+        {
+        // This is where you would load the "Session Summary" screen!
+        Debug.Log("Out of questions! Returning to Farm...");
+        }
     }
 
     private void SetQuestionValues()
@@ -101,5 +106,15 @@ public class QuestionSetup : MonoBehaviour
         }
         return newList;
     }
-    
+    public void StartNextQuestion()
+        {
+        // 1. Select a new random question from the list
+        SelectNewQuestion();
+
+        // 2. Update the Chalkboard text
+        SetQuestionValues();
+
+        // 3. Update the 4 buttons with new answers
+        SetAnswerValues();
+        }
 }
