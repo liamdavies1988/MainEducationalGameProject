@@ -43,12 +43,18 @@ public class AnswerButton : MonoBehaviour
         }
         
     }
-    // This "Coroutine" waits before refreshing the screen
+
     IEnumerator NextQuestionDelay()
     {
-    yield return new WaitForSeconds(1.0f); // Wait for 1 second
-    
-    // Find the QuestionSetup script and tell it to refresh
-    FindObjectOfType<QuestionSetup>().StartNextQuestion();
+        // Wait for 1 second so the child can see their reward
+        yield return new WaitForSeconds(1.0f);
+
+        // 2. Use the new "FindFirstObjectByType" instead of the old "FindObjectOfType"
+        QuestionSetup qs = Object.FindFirstObjectByType<QuestionSetup>();
+
+        if (qs != null)
+        {
+            qs.StartNextQuestion();
+        }
     }
 }

@@ -8,12 +8,15 @@ public class QuestionSetup : MonoBehaviour
     [SerializeField] private List<QuestionData> questions;
     private QuestionData currentQuestion;
 
+    [SerializeField] private TextMeshProUGUI QuestionCountText;
     [SerializeField] private TextMeshProUGUI QuestionText;
-    [SerializeField] private TextMeshProUGUI TopicDisplay; // Avoid naming conflicts with variables
+    [SerializeField] private TextMeshProUGUI TopicDisplay;
     [SerializeField] private AnswerButton[] answerbuttons;
-    [SerializeField] private string selectedTopic = "Maths"; // Set this in the Inspector
+    [SerializeField] private string selectedTopic = "Maths";
+    [SerializeField] private int totalQuestionsPerSession = 3;
 
     private int correctAnswerChoice;
+    private int currentQuestionNumber = 1; // Start at 1 for the UI
 
     private void Awake()
     {
@@ -22,6 +25,8 @@ public class QuestionSetup : MonoBehaviour
 
     void Start()
     {
+        // On the very first start, we don't need to increment, 
+        // we just set the values for Question 1.
         SelectNewQuestion();
         SetQuestionValues();
         SetAnswerValues();
@@ -29,7 +34,6 @@ public class QuestionSetup : MonoBehaviour
 
     private void GetQuestionAssets()
     {
-        // Now it only loads questions from the specific subfolder!
         string path = "Questions/" + selectedTopic;
         QuestionData[] loadedQuestions = Resources.LoadAll<QuestionData>(path);
 
@@ -45,39 +49,52 @@ public class QuestionSetup : MonoBehaviour
 
     private void SelectNewQuestion()
     {
+        // Safety check to make sure we actually have questions in the folder
         if (questions.Count > 0)
         {
             int randomQuestionIndex = Random.Range(0, questions.Count);
             currentQuestion = questions[randomQuestionIndex];
             questions.RemoveAt(randomQuestionIndex);
         }
-        else 
-        {
-        // This is where you would load the "Session Summary" screen!
-        Debug.Log("Out of questions! Returning to Farm...");
-        }
     }
 
     private void SetQuestionValues()
     {
+        QuestionCountText.text = "Question " + currentQuestionNumber;
         QuestionText.text = currentQuestion.question;
         TopicDisplay.text = currentQuestion.topic;
     }
-    
+    public void StartNextQuestion()
+    {
+        // CHECK: Have we reached the limit?
+        if (currentQuestionNumber < totalQuestionsPerSession)
+        {
+            currentQuestionNumber++;
+
+            SelectNewQuestion();
+            SetQuestionValues();
+            SetAnswerValues();
+        }
+        else
+        {
+            // END OF SESSION
+            Debug.Log("Session Finished! No more questions.");
+
+            // This stops the game in the editor for testing
+            #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+            #else
+            Application.Quit();
+            #endif
+        }
+    }
     private void SetAnswerValues()
     {
-        // Use the correct array name from QuestionData
         List<string> randomizedAnswers = RandomizeAnswers(new List<string>(currentQuestion.answers));
 
-        for(int i = 0; i < answerbuttons.Length; i++)
+        for (int i = 0; i < answerbuttons.Length; i++)
         {
-            bool isThisCorrect = false;
-        
-            if(i == correctAnswerChoice)
-            {
-                isThisCorrect = true; // Fixed: removed "bool" so it updates the variable above
-            }
-
+            bool isThisCorrect = (i == correctAnswerChoice);
             answerbuttons[i].SetIsCorrect(isThisCorrect);
             answerbuttons[i].SetAnswerText(randomizedAnswers[i]);
         }
@@ -89,12 +106,10 @@ public class QuestionSetup : MonoBehaviour
         List<string> newList = new List<string>();
         int originalCount = originalList.Count;
 
-        for(int i = 0; i < originalCount; i++)
+        for (int i = 0; i < originalCount; i++)
         {
             int random = Random.Range(0, originalList.Count);
-            
-            // If we are picking the first item from the original list, 
-            // that is our correct answer (based on your ScriptableObject logic)
+
             if (random == 0 && !correctAnswerFound)
             {
                 correctAnswerChoice = i;
@@ -106,15 +121,6 @@ public class QuestionSetup : MonoBehaviour
         }
         return newList;
     }
-    public void StartNextQuestion()
-        {
-        // 1. Select a new random question from the list
-        SelectNewQuestion();
 
-        // 2. Update the Chalkboard text
-        SetQuestionValues();
-
-        // 3. Update the 4 buttons with new answers
-        SetAnswerValues();
-        }
+    
 }
