@@ -31,6 +31,12 @@ public class GameManager : MonoBehaviour
         totalCoins += 1; // Give 1 coin
         UpdateCoinUI();
         Debug.Log("Coin added! New total: " + totalCoins);
+        
+        // PLAY THE SOUND HERE
+        if (audioSource != null && coinSound != null)
+        {
+            audioSource.PlayOneShot(coinSound);
+        }
     }
 
     void UpdateCoinUI()
@@ -40,10 +46,5 @@ public class GameManager : MonoBehaviour
             coinCountText.text = totalCoins.ToString();
         }
         
-        // PLAY THE SOUND HERE
-        if (audioSource != null && coinSound != null)
-        {
-            audioSource.PlayOneShot(coinSound);
-        }
     }
 }
