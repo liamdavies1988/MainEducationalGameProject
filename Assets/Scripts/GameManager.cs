@@ -5,6 +5,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance; // The "Singleton" so buttons can find it
 
+    public AudioSource audioSource; // The speaker
+    public AudioClip coinSound;     // The actual sound file
+
     [Header("Economy")]
     public int totalCoins = 0;
 
@@ -35,6 +38,12 @@ public class GameManager : MonoBehaviour
         if (coinCountText != null)
         {
             coinCountText.text = totalCoins.ToString();
+        }
+        
+        // PLAY THE SOUND HERE
+        if (audioSource != null && coinSound != null)
+        {
+            audioSource.PlayOneShot(coinSound);
         }
     }
 }
