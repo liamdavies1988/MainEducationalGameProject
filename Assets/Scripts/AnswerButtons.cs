@@ -21,6 +21,8 @@ public class AnswerButton : MonoBehaviour
 
     public void OnClick()
     {
+        Animator anim = GetComponent<Animator>();
+
         if (isCorrectAnswer)
         {
             Debug.Log("Correct!");
@@ -40,6 +42,13 @@ public class AnswerButton : MonoBehaviour
         {
             Debug.Log("Wrong answer, try again.");
             // TODO: Trigger the 'Sad Face' animation/sprite change here
+
+            // TRIGGER THE SHAKE!
+            if (anim != null)
+            {
+                anim.SetTrigger("WrongAnswer");
+            }
+
         }
         
     }

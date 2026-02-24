@@ -1980,7 +1980,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4842878356904353926, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
       propertyPath: m_AnimationTriggers.m_NormalTrigger
-      value: 
+      value: Normal
       objectReference: {fileID: 0}
     - target: {fileID: 4842878356904353926, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
