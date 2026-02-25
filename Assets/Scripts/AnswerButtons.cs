@@ -4,16 +4,30 @@ using System.Collections;
 
 public class AnswerButton : MonoBehaviour
 {
-    private bool isCorrectAnswer; // Renamed for clarity
+    private bool isCorrectAnswer;
+    private Animator anim;
+
+    [Header("UI References")]
     [SerializeField] private TextMeshProUGUI AnswerText;
 
-    // This needs to match the name called in QuestionSetup
-    public void SetAnswerText(string answer)
+    [Header("Character Reaction")]
+    [SerializeField] private GameObject sadFaceEmoji; // Drag your character's sad face object here
+
+    private void Awake()
     {
-        AnswerText.text = answer;
+        anim = GetComponent<Animator>();
     }
 
-    // This needs to match the name called in QuestionSetup
+    // Called by QuestionSetup to update the text on the button
+    public void SetAnswerText(string answer)
+    {
+        if (AnswerText != null)
+        {
+            AnswerText.text = answer;
+        }
+    }
+
+    // Called by QuestionSetup to tell the button if it is the right answer
     public void SetIsCorrect(bool correct)
     {
         isCorrectAnswer = correct;
@@ -21,49 +35,59 @@ public class AnswerButton : MonoBehaviour
 
     public void OnClick()
     {
-        Animator anim = GetComponent<Animator>();
-
         if (isCorrectAnswer)
         {
             Debug.Log("Correct!");
-            
 
-        // 1. Give the reward
-        GameManager.Instance.AddCoin(); 
-        
-        // 2. TODO: Trigger the 'Happy Face' animation/sprite change here
-        
-        // 3. Load the next question (you'll likely want a small delay here)
-        // Invoke("LoadNextQuestion", 1.0f);
-        
-        StartCoroutine(NextQuestionDelay());
+            // 1. Trigger the 'Right' animation (Shrink/Pop)
+            if (anim != null) anim.SetTrigger("Pressed");
+
+            // 2. Add the coin to the total
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.AddCoin();
+            }
+
+            // 3. Move to the next question after a 1 second delay
+            StartCoroutine(NextQuestionDelay());
         }
         else
         {
-            Debug.Log("Wrong answer, try again.");
-            // TODO: Trigger the 'Sad Face' animation/sprite change here
+            Debug.Log("Wrong!");
 
-            // TRIGGER THE SHAKE!
-            if (anim != null)
+            // 1. Trigger the 'Wrong' animation (Wobble)
+            if (anim != null) anim.SetTrigger("WrongAnswer");
+
+            // 2. Show the Sad Face on the character
+            if (sadFaceEmoji != null)
             {
-                anim.SetTrigger("WrongAnswer");
+                sadFaceEmoji.SetActive(true);
+                //StartCoroutine(HideSadFace());
             }
-
         }
-        
     }
 
     IEnumerator NextQuestionDelay()
     {
-        // Wait for 1 second so the child can see their reward
+        // Wait so the child can see the reward/animation
         yield return new WaitForSeconds(1.0f);
 
-        // 2. Use the new "FindFirstObjectByType" instead of the old "FindObjectOfType"
+        // Find the QuestionSetup script and load the next question
         QuestionSetup qs = Object.FindFirstObjectByType<QuestionSetup>();
-
         if (qs != null)
         {
             qs.StartNextQuestion();
         }
     }
+
+   /* IEnumerator HideSadFace()
+    {
+        // Keep the sad face visible for 1 second
+        yield return new WaitForSeconds(1.0f);
+
+        if (sadFaceEmoji != null)
+        {
+            sadFaceEmoji.SetActive(false);
+        }
+    }*/
 }

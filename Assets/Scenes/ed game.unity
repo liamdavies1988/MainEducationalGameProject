@@ -1975,16 +1975,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9100000, guid: 569590e2ac83f284ebd0955238a36061, type: 2}
     - target: {fileID: 4842878356904353926, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
-      propertyPath: m_Navigation.m_Mode
+      propertyPath: m_Transition
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4842878356904353926, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
-      propertyPath: m_AnimationTriggers.m_NormalTrigger
-      value: Normal
-      objectReference: {fileID: 0}
-    - target: {fileID: 4842878356904353926, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4842878356904353926, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
