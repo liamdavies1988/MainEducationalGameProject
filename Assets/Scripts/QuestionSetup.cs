@@ -25,6 +25,8 @@ public class QuestionSetup : MonoBehaviour
 
     void Start()
     {
+
+
         // On the very first start, we don't need to increment, 
         // we just set the values for Question 1.
         SelectNewQuestion();

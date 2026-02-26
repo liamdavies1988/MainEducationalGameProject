@@ -35,35 +35,22 @@ public class AnswerButton : MonoBehaviour
 
     public void OnClick()
     {
+        if (anim == null) anim = GetComponent<Animator>(); // Double check we have the animator
+
         if (isCorrectAnswer)
         {
             Debug.Log("Correct!");
-
-            // 1. Trigger the 'Right' animation (Shrink/Pop)
-            if (anim != null) anim.SetTrigger("Pressed");
-
-            // 2. Add the coin to the total
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.AddCoin();
-            }
-
-            // 3. Move to the next question after a 1 second delay
+            anim.SetTrigger("Pressed");
+            GameManager.Instance.AddCoin();
             StartCoroutine(NextQuestionDelay());
         }
         else
         {
             Debug.Log("Wrong!");
+            // Make sure "WrongAnswer" matches the name in your Parameters tab EXACTLY
+            anim.SetTrigger("WrongAnswer");
 
-            // 1. Trigger the 'Wrong' animation (Wobble)
-            if (anim != null) anim.SetTrigger("WrongAnswer");
-
-            // 2. Show the Sad Face on the character
-            if (sadFaceEmoji != null)
-            {
-                sadFaceEmoji.SetActive(true);
-                //StartCoroutine(HideSadFace());
-            }
+            
         }
     }
 
