@@ -42,6 +42,7 @@ public class AnswerButton : MonoBehaviour
                 Debug.Log("Correct!");
 
                 PlayFeedbackAnimation(true);// Play the correct answer animation
+                anim.SetTrigger("CoinIcon");
                 GameManager.Instance.AddCoin();// Player wins a coin
                 StartCoroutine(NextQuestionDelay());// Starts next question after delay, giving time for the animation to play
             }
