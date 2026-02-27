@@ -41,9 +41,24 @@ public class AnswerButton : MonoBehaviour
             {
                 Debug.Log("Correct!");
 
-                PlayFeedbackAnimation(true);// Play the correct answer animation
+                
+
+                //PlayFeedbackAnimation(true);// Play the correct answer animation
+                
+                
+                anim.SetBool("IsCorrect", true); //TESTING
+                
+                
+                
                 anim.SetTrigger("CoinIcon");
                 GameManager.Instance.AddCoin();// Player wins a coin
+
+
+                
+                StartCoroutine(ResetCorrectBool()); //TESTING
+                
+
+
                 StartCoroutine(NextQuestionDelay());// Starts next question after delay, giving time for the animation to play
             }
             else if (anim != null)
@@ -52,14 +67,21 @@ public class AnswerButton : MonoBehaviour
 
                 // Change from SetTrigger to SetBool
                 anim.SetBool("IsWrong", true);// This will trigger the wobble animation in the Animator
-
+                GameManager.Instance.WrongAnswerSound(); // Play the wrong answer sound effect
                 // We MUST turn it back to false after a delay, 
                 // otherwise the button will stay in the 'Wrong' state forever.
                 StartCoroutine(ResetWrongBool());// This will reset the bool after the wobble animation is done
                 StartCoroutine(NextQuestionDelay());// Starts next question after delay, giving time for the animation to play
+                
 
             }
         }
+    }
+
+    IEnumerator ResetCorrectBool()
+    {
+    yield return new WaitForSeconds(0.5f); // Match the length of your animation
+    anim.SetBool("IsCorrect", false);
     }
 
     IEnumerator ResetWrongBool()
@@ -75,6 +97,9 @@ public class AnswerButton : MonoBehaviour
         {
             // Tell animator to play the Right sequence
             anim.SetTrigger("Pressed");
+
+            //Test
+            anim.SetTrigger("test");
         }
         else
         {
