@@ -13,6 +13,10 @@ public class AnswerButton : MonoBehaviour
     [Header("Character Reaction")]
     [SerializeField] private GameObject sadFaceEmoji; // Drag your character's sad face object here
 
+    [Header("Button Feedback Icons")]
+    [SerializeField] private GameObject tickIcon;
+    [SerializeField] private GameObject crossIcon;
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -32,6 +36,11 @@ public class AnswerButton : MonoBehaviour
     {
         isCorrectAnswer = correct;
     }
+    IEnumerator ResetWrongBool()
+    {
+        yield return new WaitForSeconds(0.5f); // Length of your wobble
+        anim.SetBool("IsWrong", false);
+    }
 
     public void OnClick()
     {
@@ -41,11 +50,10 @@ public class AnswerButton : MonoBehaviour
             {
                 Debug.Log("Correct!");
 
-                
+                 // 1. Show the Tick, hide the Text
+                if (tickIcon != null) tickIcon.SetActive(true);
+                if (AnswerText != null) AnswerText.gameObject.SetActive(false);
 
-                //PlayFeedbackAnimation(true);// Play the correct answer animation
-                
-                
                 anim.SetBool("IsCorrect", true); //TESTING
                 
                 
@@ -53,24 +61,22 @@ public class AnswerButton : MonoBehaviour
                 anim.SetTrigger("CoinIcon");
                 GameManager.Instance.AddCoin();// Player wins a coin
 
-
+                StartCoroutine(ResetButtonUI()); //TESTING
                 
-                StartCoroutine(ResetCorrectBool()); //TESTING
-                
-
-
                 StartCoroutine(NextQuestionDelay());// Starts next question after delay, giving time for the animation to play
             }
             else if (anim != null)
             {
                 Debug.Log("Wrong!");
 
+                // 2. Show the Cross, hide the Text
+                if (crossIcon != null) crossIcon.SetActive(true);
+                if (AnswerText != null) AnswerText.gameObject.SetActive(false);
+                GameManager.Instance.WrongAnswerSound(); // Play the wrong answer sound effect
                 // Change from SetTrigger to SetBool
                 anim.SetBool("IsWrong", true);// This will trigger the wobble animation in the Animator
-                GameManager.Instance.WrongAnswerSound(); // Play the wrong answer sound effect
-                // We MUST turn it back to false after a delay, 
-                // otherwise the button will stay in the 'Wrong' state forever.
-                StartCoroutine(ResetWrongBool());// This will reset the bool after the wobble animation is done
+                StartCoroutine(ResetButtonUI());
+                //StartCoroutine(ResetWrongBool());// This will reset the bool after the wobble animation is done
                 StartCoroutine(NextQuestionDelay());// Starts next question after delay, giving time for the animation to play
                 
 
@@ -78,35 +84,10 @@ public class AnswerButton : MonoBehaviour
         }
     }
 
-    IEnumerator ResetCorrectBool()
-    {
-    yield return new WaitForSeconds(0.5f); // Match the length of your animation
-    anim.SetBool("IsCorrect", false);
-    }
-
-    IEnumerator ResetWrongBool()
-    {
-        yield return new WaitForSeconds(0.5f); // Length of your wobble
-        anim.SetBool("IsWrong", false);
-    }
+    
 
     // This is the clean function you wanted!
-    private void PlayFeedbackAnimation(bool isRight)
-    {
-        if (isRight)
-        {
-            // Tell animator to play the Right sequence
-            anim.SetTrigger("Pressed");
-
-            //Test
-            anim.SetTrigger("test");
-        }
-        else
-        {
-            // Tell animator to play the Wrong sequence
-            anim.SetTrigger("WrongAnswer");
-        }
-    }
+   
     IEnumerator NextQuestionDelay()
     {
         // Wait so the child can see the reward/animation
@@ -118,6 +99,19 @@ public class AnswerButton : MonoBehaviour
         {
             qs.StartNextQuestion();
         }
+    }
+    IEnumerator ResetButtonUI()
+    {
+    // Wait for the same time as your animation
+    yield return new WaitForSeconds(1.0f);
+
+    // Turn everything back to normal for the next question
+    if (tickIcon != null) tickIcon.SetActive(false);
+    if (crossIcon != null) crossIcon.SetActive(false);
+    if (AnswerText != null) AnswerText.gameObject.SetActive(true);
+    
+    anim.SetBool("IsCorrect", false);
+    anim.SetBool("IsWrong", false);
     }
 
    /* IEnumerator HideSadFace()
