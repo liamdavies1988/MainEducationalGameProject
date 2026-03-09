@@ -69,7 +69,7 @@ public class AnswerButton : MonoBehaviour
             {
                 Debug.Log("Wrong!");
 
-                // 2. Show the Cross, hide the Text
+                
                 if (crossIcon != null) crossIcon.SetActive(true);
                 if (AnswerText != null) AnswerText.gameObject.SetActive(false);
                 GameManager.Instance.WrongAnswerSound(); // Play the wrong answer sound effect
@@ -86,7 +86,7 @@ public class AnswerButton : MonoBehaviour
 
     
 
-    // This is the clean function you wanted!
+    
    
     IEnumerator NextQuestionDelay()
     {
@@ -114,14 +114,5 @@ public class AnswerButton : MonoBehaviour
     anim.SetBool("IsWrong", false);
     }
 
-   /* IEnumerator HideSadFace()
-    {
-        // Keep the sad face visible for 1 second
-        yield return new WaitForSeconds(1.0f);
-
-        if (sadFaceEmoji != null)
-        {
-            sadFaceEmoji.SetActive(false);
-        }
-    }*/
+   
 }
