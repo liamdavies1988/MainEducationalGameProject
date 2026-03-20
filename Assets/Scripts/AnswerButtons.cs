@@ -69,24 +69,19 @@ public class AnswerButton : MonoBehaviour
             {
                 Debug.Log("Wrong!");
 
-                
                 if (crossIcon != null) crossIcon.SetActive(true);
                 if (AnswerText != null) AnswerText.gameObject.SetActive(false);
-                GameManager.Instance.WrongAnswerSound(); // Play the wrong answer sound effect
+                // FIX: Changed method name from WrongAnswerSound() to PlayWrongSound()
+                GameManager.Instance.PlayWrongSound(); // Play the wrong answer sound effect
                 // Change from SetTrigger to SetBool
                 anim.SetBool("IsWrong", true);// This will trigger the wobble animation in the Animator
                 StartCoroutine(ResetButtonUI());
                 //StartCoroutine(ResetWrongBool());// This will reset the bool after the wobble animation is done
                 StartCoroutine(NextQuestionDelay());// Starts next question after delay, giving time for the animation to play
-                
-
             }
         }
     }
 
-    
-
-    
    
     IEnumerator NextQuestionDelay()
     {
