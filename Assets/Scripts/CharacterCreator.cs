@@ -49,29 +49,27 @@ public class CharacterCreator : MonoBehaviour
 
     public void SavePlayer()
     {
-        string playerName = nameInput.text;
+        // 1. Get the slot ID from the GameManager (0, 1, or 2)
+        int slotID = GameManager.Instance.selectedSlot;
 
-        // Basic check for empty name
-        if (string.IsNullOrEmpty(playerName)) playerName = "Farmer";
+        // 2. Create the filename (adds 1 so the file is called Slot 1, 2, or 3)
+        string fileName = "SaveSlot_" + (slotID + 1) + ".json";
+        string folderPath = Application.dataPath + "/Saves/";
+        string filePath = folderPath + fileName;
 
-        // Create the data object
+        // 3. Prepare the data
         PlayerSaveData data = new PlayerSaveData();
-        data.playerName = playerName;
+        data.playerName = nameInput.text;
         data.headID = currentHeadIndex;
         data.bodyID = currentBodyIndex;
         data.legsID = currentLegsIndex;
-        data.coins = GameManager.Instance != null ? GameManager.Instance.totalCoins : 0;
+        data.coins = GameManager.Instance.totalCoins;
 
-        // Save to project folder
-        string folderPath = Application.dataPath + "/PlayerSaveFiles/";
-        if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
-
+        // 4. Save to the file
         string json = JsonUtility.ToJson(data, true);
-        string filePath = folderPath + "SaveSlot_" + GameManager.Instance.selectedSlot + ".json";
-        Debug.Log("Character Saved! Name: " + playerName);
+        System.IO.File.WriteAllText(filePath, json);
 
-        // OPTIONAL: Move to next scene
-        // UnityEngine.SceneManagement.SceneManager.LoadScene("MainGame");
+        Debug.Log("Saved to: " + fileName);
     }
 
     public void LoadPlayer()

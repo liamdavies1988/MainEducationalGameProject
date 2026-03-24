@@ -30,19 +30,22 @@ public class GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            // Ensure the Saves folder exists on your computer
-            string folderPath = Application.dataPath + "/PlayerSaveFiles/";
+            // Ensure the folder exists
+            string folderPath = Application.dataPath + "/Saves/";
             if (!System.IO.Directory.Exists(folderPath))
             {
                 System.IO.Directory.CreateDirectory(folderPath);
             }
-
-            LoadGame();
         }
         else
         {
+            // If a duplicate is found, kill it
             Destroy(gameObject);
+            return; // Stop running the rest of this function
         }
+
+        // Now safe to load
+        LoadGame();
     }
 
     private void Start()
