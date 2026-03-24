@@ -6,32 +6,41 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance; // Singleton instance for easy access from other scripts
 
-    [Header("Audio")]
+    [Header("Audio")] // Grouping for audio-related variables
     public AudioSource audioSource;
     public AudioClip coinSound;
     public AudioClip wrongAnswerSound;
 
-    [Header("Economy")]
+    [Header("Economy")] // Grouping for coin-related variables
     public int totalCoins = 0;
 
-    [Header("Player Data")]
+    [Header("Player Data")] // Grouping for player-related variables
     public string playerName = "Player1";
 
-    [Header("UI Reference")]
+    [Header("UI Reference")] // Grouping for UI-related variables
     public TextMeshProUGUI coinCountText;
+
+    [Header("Save System")] // Grouping for save system-related variables
+    public int selectedSlot;
 
     private void Awake()
     {
-        
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Keeps this alive across scenes
+            DontDestroyOnLoad(gameObject);
+
+            // Ensure the Saves folder exists on your computer
+            string folderPath = Application.dataPath + "/PlayerSaveFiles/";
+            if (!System.IO.Directory.Exists(folderPath))
+            {
+                System.IO.Directory.CreateDirectory(folderPath);
+            }
+
             LoadGame();
         }
         else
         {
-            // If another instance already exists, destroy this one to enforce the singleton pattern
             Destroy(gameObject);
         }
     }
@@ -64,17 +73,22 @@ public class GameManager : MonoBehaviour
 
     public void SaveGame() // Call this whenever you want to save the current game state
     {
-        PlayerPrefs.SetInt("SavedCoins", totalCoins);
-        PlayerPrefs.SetString("SavedName", playerName);
+        // Use the selectedSlot to name the file!
+        string filePath = Application.dataPath + "/PlayerSaveFiles/SaveSlot_" + selectedSlot + ".json";
+
+        PlayerPrefs.SetInt("SavedCoins_" + selectedSlot, totalCoins);
+        PlayerPrefs.SetString("SavedName_" + selectedSlot, playerName);
         PlayerPrefs.Save();
-        // Added a space between name and 'has'
+
+        Debug.Log("Game Saved to Slot " + selectedSlot);
         Debug.Log("Game Saved! " + playerName + " has " + totalCoins + " coins remaining.");
     }
 
     public void LoadGame() // Call this at the start of the game to load saved data
     {
-        totalCoins = PlayerPrefs.GetInt("SavedCoins", 0);
-        playerName = PlayerPrefs.GetString("SavedName", "Player1");
+        // Make sure we load the coins and name for the specific student in this slot
+        totalCoins = PlayerPrefs.GetInt("SavedCoins_" + selectedSlot, 0);
+        playerName = PlayerPrefs.GetString("SavedName_" + selectedSlot, "Player1");
         UpdateCoinUI();
     }
 

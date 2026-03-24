@@ -21,6 +21,9 @@ public class CharacterCreator : MonoBehaviour
     private int currentBodyIndex = 0;
     private int currentLegsIndex = 0;
 
+    string filePath = folderPath + "SaveSlot_" + GameManager.Instance.selectedSlot + ".json"; // Construct the file path using the selected slot from GameManager
+    private static string folderPath;
+
     // --- ARROW FUNCTIONS ---
 
     public void NextHead() { ChangeIndex(ref currentHeadIndex, 1, headOptions, headDisplay); }
@@ -64,12 +67,43 @@ public class CharacterCreator : MonoBehaviour
         if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
 
         string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(folderPath + "PlayerProfile.json", json);
-
+        string filePath = folderPath + "SaveSlot_" + GameManager.Instance.selectedSlot + ".json";
         Debug.Log("Character Saved! Name: " + playerName);
 
         // OPTIONAL: Move to next scene
         // UnityEngine.SceneManagement.SceneManager.LoadScene("MainGame");
+    }
+
+    public void LoadPlayer()
+    {
+        string filePath = Application.dataPath + "/Saves/PlayerProfile.json";
+
+        // 1. Check if the file actually exists
+        if (File.Exists(filePath))
+        {
+            // 2. Read the text from the file
+            string json = File.ReadAllText(filePath);
+
+            // 3. Convert that text back into a Data Object
+            PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
+
+            // 4. Update the variables in the code
+            nameInput.text = data.playerName;
+            currentHeadIndex = data.headID;
+            currentBodyIndex = data.bodyID;
+            currentLegsIndex = data.legsID;
+
+            // 5. Update the images on the screen so the player sees the change
+            headDisplay.sprite = headOptions[currentHeadIndex];
+            bodyDisplay.sprite = bodyOptions[currentBodyIndex];
+            legsDisplay.sprite = legsOptions[currentLegsIndex];
+
+            Debug.Log("Character Loaded! Welcome back, " + data.playerName);
+        }
+        else
+        {
+            Debug.LogWarning("No save file found at: " + filePath);
+        }
     }
 }
 

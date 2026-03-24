@@ -129,13 +129,17 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1581885849919706090, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_Name
-      value: MiddleChoice
+      value: Slot2
       objectReference: {fileID: 0}
     - target: {fileID: 3963935357370811136, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_text
       value: 'Slot 2?
 
         ______________'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5850048156028286211, guid: 6f960d25c6764c141811077671281445, type: 3}
+      propertyPath: m_Name
+      value: Slot2Text
       objectReference: {fileID: 0}
     - target: {fileID: 7313615906249328973, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_Pivot.x
@@ -237,13 +241,17 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1581885849919706090, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_Name
-      value: BottomChoice
+      value: Slot3
       objectReference: {fileID: 0}
     - target: {fileID: 3963935357370811136, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_text
       value: 'Slot 3?
 
         ______________'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5850048156028286211, guid: 6f960d25c6764c141811077671281445, type: 3}
+      propertyPath: m_Name
+      value: Slot3Text
       objectReference: {fileID: 0}
     - target: {fileID: 7313615906249328973, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_Pivot.x
@@ -686,6 +694,68 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1473073834 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3963935357370811136, guid: 6f960d25c6764c141811077671281445, type: 3}
+  m_PrefabInstance: {fileID: 2002891937}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &1493470714
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1493470716}
+  - component: {fileID: 1493470715}
+  m_Layer: 5
+  m_Name: SaveSlotManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1493470715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493470714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d10d5f0e538fe543890db6930d4da98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoadSlotManager
+  slot1Text: {fileID: 1473073834}
+  slot2Text: {fileID: 2040678325}
+  slot3Text: {fileID: 1983917525}
+--- !u!224 &1493470716
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493470714}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5010995, y: 0.5010995, z: 0.5010995}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 959.8891, y: 540.0623}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1811544816
 GameObject:
   m_ObjectHideFlags: 0
@@ -734,6 +804,17 @@ RectTransform:
   m_AnchoredPosition: {x: 959.8891, y: 540.0623}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1983917525 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3963935357370811136, guid: 6f960d25c6764c141811077671281445, type: 3}
+  m_PrefabInstance: {fileID: 300214441}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1001 &2002891937
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -744,13 +825,17 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1581885849919706090, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_Name
-      value: TopChoice
+      value: Slot1
       objectReference: {fileID: 0}
     - target: {fileID: 3963935357370811136, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_text
       value: 'Slot 1?
 
         ______________'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5850048156028286211, guid: 6f960d25c6764c141811077671281445, type: 3}
+      propertyPath: m_Name
+      value: Slot1Text
       objectReference: {fileID: 0}
     - target: {fileID: 7313615906249328973, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_Pivot.x
@@ -832,6 +917,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7941140392488612390, guid: 6f960d25c6764c141811077671281445, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1493470714}
+    - target: {fileID: 7941140392488612390, guid: 6f960d25c6764c141811077671281445, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -842,6 +935,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7313615906249328973, guid: 6f960d25c6764c141811077671281445, type: 3}
   m_PrefabInstance: {fileID: 2002891937}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2040678325 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3963935357370811136, guid: 6f960d25c6764c141811077671281445, type: 3}
+  m_PrefabInstance: {fileID: 196681805}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -849,4 +953,5 @@ SceneRoots:
   - {fileID: 1292900520}
   - {fileID: 1295702870}
   - {fileID: 1811544818}
+  - {fileID: 1493470716}
   - {fileID: 1355595795}
