@@ -15,8 +15,17 @@ EditorBuildSettings:
     path: Assets/Scenes/New_LoadGame.unity
     guid: 15aa9cee1d4472943b327c5d37492987
   - enabled: 1
+    path: Assets/Scenes/SelectPlayerSlot.unity
+    guid: 06d26ec1a195aab40b1183c02852d6ff
+  - enabled: 1
     path: Assets/Scenes/PlayerCreation.unity
     guid: c0dd0eb196c8a814dab3ab81359424a0
+  - enabled: 1
+    path: Assets/Scenes/PremadeFarms.unity
+    guid: 7bc3808708a82764dbc32e8340d0b6a1
+  - enabled: 1
+    path: Assets/Scenes/PlayerAndFarm.unity
+    guid: 8e7cf1f25a98ded44a516ebffd7b38d7
   - enabled: 1
     path: Assets/Scenes/FarmCreation.unity
     guid: be58c23b330c3014987cbf8abf5a8ade

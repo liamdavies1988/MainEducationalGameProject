@@ -10,6 +10,11 @@ public class LoadManager : MonoBehaviour
     public TextMeshProUGUI slot2Text;
     public TextMeshProUGUI slot3Text;
 
+    [Header("Pop-up Reference")]
+    public GameObject confirmationPopup;
+    public TextMeshProUGUI popupText; // To show "Are you sure ?
+    private int slotPendingDeletion; // Temporary "Holding Box" for the slot number
+
     void Start()
     {
         // When the scene loads, check our 3 specific slots
@@ -50,6 +55,63 @@ public class LoadManager : MonoBehaviour
         }
 
         GameManager.Instance.selectedSlot = id;
-        // ... rest of your code
+        
+    }
+    public void DeleteSlot(int id)
+    {
+        // 1. Build the path to the specific file
+        string fileName = "SaveSlot_" + (id + 1) + ".json";
+        string filePath = Path.Combine(Application.dataPath, "Saves", fileName);
+
+        // 2. Check if it exists before trying to delete
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+            Debug.Log("Deleted file: " + fileName);
+
+            // 3. Refresh the labels immediately so the UI updates
+            RefreshSlotLabels();
+        }
+        else
+        {
+            Debug.LogWarning("Nothing to delete in slot " + id);
+        }
+    }
+   
+    // THIS IS CALLED BY YOUR 3 INDIVIDUAL DELETE BUTTONS
+    public void RequestDelete(int id)
+    {
+        slotPendingDeletion = id; // Remember which one was clicked
+
+        // OPTIONAL: Make the pop-up text show the player's name so it's extra clear
+        string path = Application.dataPath + "/Saves/SaveSlot_" + (id + 1) + ".json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
+            popupText.text = "Are you sure you want to delete " + data.playerName + "?";
+        }
+
+        confirmationPopup.SetActive(true); // Show the pop-up
+    }
+
+    // THIS IS CALLED BY THE "YES" BUTTON ON THE POP-UP
+    public void ConfirmDeletion()
+    {
+        string fileName = "SaveSlot_" + (slotPendingDeletion + 1) + ".json";
+        string filePath = Path.Combine(Application.dataPath, "Saves", fileName);
+
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+            RefreshSlotLabels(); // Updates the main buttons back to "New Game"
+        }
+
+        ClosePopup();
+    }
+
+    public void ClosePopup()
+    {
+        confirmationPopup.SetActive(false);
     }
 }

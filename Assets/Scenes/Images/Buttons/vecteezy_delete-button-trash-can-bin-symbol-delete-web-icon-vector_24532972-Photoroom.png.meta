@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8cfe353afd49dfa41b2ed9b0d5172c90
+guid: cd3044deec9e55a4193d7ff680b25860
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2320936582201017066
-    second: vecteezy_ai-generated-rectangle-button-with-wooden-texture-png_36256357_0
+      213: -9122745056330960105
+    second: vecteezy_delete-button-trash-can-bin-symbol-delete-web-icon-vector_24532972-Photoroom_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: vecteezy_ai-generated-rectangle-button-with-wooden-texture-png_36256357_0
+      name: vecteezy_delete-button-trash-can-bin-symbol-delete-web-icon-vector_24532972-Photoroom_0
       rect:
         serializedVersion: 2
-        x: 246
-        y: 560
-        width: 1523
-        height: 867
+        x: 0
+        y: 10
+        width: 1263
+        height: 1118
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ae20d40568f953020800000000000000
-      internalID: 2320936582201017066
+      spriteID: 71331f4a4bf756180800000000000000
+      internalID: -9122745056330960105
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      vecteezy_ai-generated-rectangle-button-with-wooden-texture-png_36256357_0: 2320936582201017066
+      vecteezy_delete-button-trash-can-bin-symbol-delete-web-icon-vector_24532972-Photoroom_0: -9122745056330960105
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
