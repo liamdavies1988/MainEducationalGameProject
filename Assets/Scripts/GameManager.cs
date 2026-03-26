@@ -23,6 +23,13 @@ public class GameManager : MonoBehaviour
     [Header("Save System")] // Grouping for save system-related variables
     public int selectedSlot;
 
+    [Header("Topic Settings")]
+    public string selectedSubject = "Maths"; // Default
+    public string selectedDifficulty = "Easy"; // Default
+
+    [Header("Difficulty Popup")]
+    public GameObject difficultyPopup;
+
     private void Awake()
     {
         if (Instance == null)
@@ -127,4 +134,27 @@ public class GameManager : MonoBehaviour
     {
         throw new NotImplementedException();
     }
+    public void SelectSubject(string subject)
+    {
+        selectedSubject = subject;
+        difficultyPopup.SetActive(true); // Show the Easy/Hard choice
+    }
+    public void SetSubject(string newSubject)
+    {
+        selectedSubject = newSubject;
+        Debug.Log("Subject changed to: " + selectedSubject);
+    }
+    public void SelectDifficultyAndStart(string difficulty)
+    {
+        selectedDifficulty = difficulty;
+
+        // Now that we have both Subject AND Difficulty, we can play!
+        UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+    }
+    public void SetDifficulty(string newDifficulty)
+    {
+        selectedDifficulty = newDifficulty;
+        Debug.Log("Difficulty changed to: " + selectedDifficulty);
+    }
+    
 }

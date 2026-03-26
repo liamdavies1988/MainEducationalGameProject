@@ -36,16 +36,24 @@ public class QuestionSetup : MonoBehaviour
 
     private void GetQuestionAssets()
     {
-        string path = "Questions/" + selectedTopic;
+        // 1. Get the choices from the GameManager
+        string subject = GameManager.Instance.selectedSubject;
+        string difficulty = GameManager.Instance.selectedDifficulty;
+
+        // 2. Build the folder path: e.g., "Questions/Maths/Easy"
+        string path = "Questions/" + subject + "/" + difficulty;
+
+        // 3. Load all questions from that specific sub-folder
         QuestionData[] loadedQuestions = Resources.LoadAll<QuestionData>(path);
 
         if (loadedQuestions.Length == 0)
         {
-            Debug.LogError($"No questions found in {path}");
+            Debug.LogError("FATAL ERROR: No questions found at " + path);
         }
         else
         {
             questions = new List<QuestionData>(loadedQuestions);
+            Debug.Log("Successfully loaded " + questions.Count + " questions from " + path);
         }
     }
 
