@@ -156,5 +156,14 @@ public class GameManager : MonoBehaviour
         selectedDifficulty = newDifficulty;
         Debug.Log("Difficulty changed to: " + selectedDifficulty);
     }
+
+    // This variable holds the 'switch' to your pop-up
+public GameObject myPopup; 
+
+public void ShowThePopup()
+{
+    // This 'switches on' the lightbulb
+    myPopup.SetActive(true); 
+}
     
 }

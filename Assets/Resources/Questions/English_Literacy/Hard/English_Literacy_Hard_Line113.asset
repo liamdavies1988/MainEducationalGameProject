@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147c737c74227a34eab20f0160de76b9, type: 3}
+  m_Name: English_Literacy_Hard_Line113
+  m_EditorClassIdentifier: Assembly-CSharp::QuestionData
+  question: The sun shines during the day but at ___ it is dark.
+  topic: English_Literacy
+  answers:
+  - night
+  - knight
+  - nite
+  - niet

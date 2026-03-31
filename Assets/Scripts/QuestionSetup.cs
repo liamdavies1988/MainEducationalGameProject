@@ -11,8 +11,10 @@ public class QuestionSetup : MonoBehaviour
     [SerializeField] private TextMeshProUGUI QuestionCountText;
     [SerializeField] private TextMeshProUGUI QuestionText;
     [SerializeField] private TextMeshProUGUI TopicDisplay;
+    [SerializeField] private TextMeshProUGUI DifficultyDisplay;
     [SerializeField] private AnswerButton[] answerbuttons;
-    [SerializeField] private string selectedTopic = "Maths";
+    [SerializeField] private string selectedTopic = "Welsh";
+    [SerializeField] private string selectedDifficulty = "Easy";
     [SerializeField] private int totalQuestionsPerSession = 3;
 
     private int correctAnswerChoice;
@@ -20,15 +22,13 @@ public class QuestionSetup : MonoBehaviour
 
     private void Awake()
     {
-        GetQuestionAssets();
+       
     }
 
-    void Start()
-    {
-
-
-         
+    private void Start()
+    { 
         
+        GetQuestionAssets();
         SelectNewQuestion();
         SetQuestionValues();
         SetAnswerValues();
@@ -36,24 +36,32 @@ public class QuestionSetup : MonoBehaviour
 
     private void GetQuestionAssets()
     {
-        // 1. Get the choices from the GameManager
-        string subject = GameManager.Instance.selectedSubject;
-        string difficulty = GameManager.Instance.selectedDifficulty;
+        // 1. Safety Check: Make sure the GameManager exists
+        if (GameManager.Instance == null)
+        {
+            Debug.LogError("GameManager not found! Cannot load questions.");
+            return;
+        }
 
-        // 2. Build the folder path: e.g., "Questions/Maths/Easy"
+        // 2. Get the current choices from the GameManager
+        string subject = GameManager.Instance.selectedSubject;     // e.g., "Welsh"
+        string difficulty = GameManager.Instance.selectedDifficulty; // e.g., "Easy"
+
+        // 3. Build the folder path to match your CSV output
+        // This looks for: Assets/Resources/Questions/Welsh/Easy
         string path = "Questions/" + subject + "/" + difficulty;
 
-        // 3. Load all questions from that specific sub-folder
+        // 4. Load every QuestionData file in that specific folder
         QuestionData[] loadedQuestions = Resources.LoadAll<QuestionData>(path);
 
         if (loadedQuestions.Length == 0)
         {
-            Debug.LogError("FATAL ERROR: No questions found at " + path);
+            Debug.LogError($"FATAL ERROR: No questions found at Resources/{path}. Check your folder names!");
         }
         else
         {
             questions = new List<QuestionData>(loadedQuestions);
-            Debug.Log("Successfully loaded " + questions.Count + " questions from " + path);
+            Debug.Log($"Successfully loaded {questions.Count} {difficulty} {subject} questions.");
         }
     }
 
@@ -70,10 +78,15 @@ public class QuestionSetup : MonoBehaviour
 
     private void SetQuestionValues()
     {
-        QuestionCountText.text = "Question " + currentQuestionNumber;
-        QuestionText.text = currentQuestion.question;
-        TopicDisplay.text = currentQuestion.topic;
-    }
+    // SAFETY CHECK: If no question was loaded, stop here!
+    if (currentQuestion == null) return;
+
+    QuestionCountText.text = "Question " + currentQuestionNumber; 
+    QuestionText.text = currentQuestion.question;
+    TopicDisplay.text = currentQuestion.topic;
+    DifficultyDisplay.text = GameManager.Instance.selectedDifficulty; // Get this from the GameManager!
+}
+
     public void StartNextQuestion()
     {
         // CHECK: Have we reached the limit?
@@ -91,13 +104,14 @@ public class QuestionSetup : MonoBehaviour
             Debug.Log("Session Finished! No more questions.");
 
             // This stops the game in the editor for testing
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
-            #else
+#else
             Application.Quit();
-            #endif
+#endif
         }
     }
+
     private void SetAnswerValues()
     {
         List<string> randomizedAnswers = RandomizeAnswers(new List<string>(currentQuestion.answers));
@@ -129,8 +143,7 @@ public class QuestionSetup : MonoBehaviour
             newList.Add(originalList[random]);
             originalList.RemoveAt(random);
         }
+
         return newList;
     }
-
-    
 }

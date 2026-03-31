@@ -1,0 +1,141 @@
+QUESTION,TOPIC,DIFFICULTY,CORRECT,WRONG 1,WRONG 2,WRONG 3
+What is 5 + 3?,Mathematics,Easy,8,7,9,6
+What is 10 - 4?,Mathematics,Easy,6,5,7,14
+What is 7 + 2?,Mathematics,Easy,9,8,10,5
+What is 15 - 5?,Mathematics,Easy,10,9,11,20
+What is 6 + 6?,Mathematics,Easy,12,11,13,10
+What is 8 - 3?,Mathematics,Easy,5,4,6,11
+What is 9 + 4?,Mathematics,Easy,13,12,14,5
+What is 12 - 6?,Mathematics,Easy,6,5,7,18
+What is 4 + 7?,Mathematics,Easy,11,10,12,3
+What is 20 - 10?,Mathematics,Easy,10,5,15,30
+What is 3 + 3?,Mathematics,Easy,6,5,7,9
+What is 14 - 2?,Mathematics,Easy,12,11,13,16
+What is 8 + 8?,Mathematics,Easy,16,15,17,0
+What is 9 - 7?,Mathematics,Easy,2,1,3,16
+What is 11 + 5?,Mathematics,Easy,16,15,17,6
+What is 17 - 4?,Mathematics,Easy,13,12,14,21
+What is 5 + 9?,Mathematics,Easy,14,13,15,4
+What is 18 - 8?,Mathematics,Easy,10,9,11,26
+What is 2 + 15?,Mathematics,Easy,17,16,18,13
+What is 19 - 9?,Mathematics,Easy,10,8,11,28
+What is 7 + 7?,Mathematics,Easy,14,13,15,0
+What is 13 - 4?,Mathematics,Easy,9,8,10,17
+What is 1 + 12?,Mathematics,Easy,13,12,14,11
+What is 16 - 8?,Mathematics,Easy,8,7,9,24
+What is 10 + 9?,Mathematics,Easy,19,18,20,1
+What is 11 - 6?,Mathematics,Easy,5,4,6,17
+What is 4 + 14?,Mathematics,Easy,18,17,19,10
+What is 15 - 7?,Mathematics,Easy,8,7,9,22
+What is 9 + 8?,Mathematics,Easy,17,16,18,1
+What is 20 - 5?,Mathematics,Easy,15,14,16,25
+What is 28 + 6?,Mathematics,Hard,34,33,35,32
+What is 42 - 5?,Mathematics,Hard,37,38,36,47
+What is 47 + 8?,Mathematics,Hard,55,54,56,45
+What is 61 - 4?,Mathematics,Hard,57,58,56,65
+What is 83 - 9?,Mathematics,Hard,74,75,73,92
+What is 35 + 20?,Mathematics,Hard,55,45,65,37
+What is 78 - 30?,Mathematics,Hard,48,58,38,75
+What is 100 - 40?,Mathematics,Hard,60,50,70,40
+What is 50 + 40?,Mathematics,Hard,90,80,100,10
+What is 92 - 60?,Mathematics,Hard,32,42,22,86
+What is the missing number? 14 + ___ = 21,Mathematics,Hard,7,6,8,5
+What is the missing number? ___ - 6 = 15,Mathematics,Hard,21,20,9,22
+What is the missing number? 25 = 18 + ___,Mathematics,Hard,7,6,8,43
+What is the missing number? 30 - ___ = 22,Mathematics,Hard,8,7,9,52
+What is the missing number? ___ + 15 = 45,Mathematics,Hard,30,20,40,60
+What is 5 + 7 + 3?,Mathematics,Hard,15,14,16,12
+What is 8 + 6 + 4?,Mathematics,Hard,18,17,19,16
+What is 9 + 1 + 8?,Mathematics,Hard,18,17,19,16
+What is 4 + 7 + 4?,Mathematics,Hard,15,14,16,11
+What is 6 + 5 + 6?,Mathematics,Hard,17,16,18,11
+What is 22 + 15?,Mathematics,Hard,37,36,38,47
+What is 56 - 24?,Mathematics,Hard,32,30,34,42
+What is 55 + 22?,Mathematics,Hard,77,76,78,67
+What is 89 - 33?,Mathematics,Hard,56,66,46,55
+What is 41 + 28?,Mathematics,Hard,69,79,68,70
+What is 95 - 12?,Mathematics,Hard,83,82,84,93
+What is 39 + 11?,Mathematics,Hard,50,49,51,40
+What is 60 - 15?,Mathematics,Hard,45,55,35,75
+What is 19 + 19?,Mathematics,Hard,38,37,39,28
+What is the missing number? ___ - 10 = 55,Mathematics,Hard,65,45,50,60
+Which word rhymes with cat?,English_Literacy,Easy,bat,bit,cot,cut
+Which word rhymes with dog?,English_Literacy,Easy,log,dig,dot,pig
+Which word rhymes with sun?,English_Literacy,Easy,fun,sin,sat,sad
+What usually goes at the end of a sentence?,English_Literacy,Easy,A full stop,A capital letter,A space,A number
+Which of these words needs a capital letter?,English_Literacy,Easy,London,dog,tree,house
+What goes at the end of an asking sentence?,English_Literacy,Easy,A question mark,A full stop,A space,A spelling
+Which word is a day of the week and needs a capital letter?,English_Literacy,Easy,Monday,morning,month,monkey
+What is the opposite of hot?,English_Literacy,Easy,cold,warm,big,sad
+What is the opposite of fast?,English_Literacy,Easy,slow,quick,happy,loud
+What is the opposite of up?,English_Literacy,Easy,down,high,over,under
+What is the opposite of happy?,English_Literacy,Easy,sad,glad,silly,funny
+Which word means the same as big?,English_Literacy,Easy,large,small,tiny,little
+Which word means the same as quick?,English_Literacy,Easy,fast,slow,hard,soft
+What is more than one cat called?,English_Literacy,Easy,cats,cates,cat,catss
+What is more than one fox called?,English_Literacy,Easy,foxes,foxs,fox,foxess
+Which of these is a doing word (verb)?,English_Literacy,Easy,run,red,ball,happy
+Which of these is a doing word (verb)?,English_Literacy,Easy,jump,table,blue,sad
+Which of these is a naming word (noun)?,English_Literacy,Easy,tree,big,fast,jump
+Which of these is a naming word (noun)?,English_Literacy,Easy,car,run,yellow,quickly
+Which of these is a describing word (adjective)?,English_Literacy,Easy,blue,dog,jump,run
+Which of these is a describing word (adjective)?,English_Literacy,Easy,tall,eat,cat,boy
+How do you spell the word for a baby dog?,English_Literacy,Easy,puppy,pupy,puppey,pupey
+What is the missing letter? p_g (a pink farm animal),English_Literacy,Easy,i,a,o,e
+What is the missing letter? b_d (furniture you sleep in),English_Literacy,Easy,e,a,o,i
+Choose the correct spelling.,English_Literacy,Easy,apple,aple,appel,appl
+Which letter comes after A in the alphabet?,English_Literacy,Easy,B,C,D,E
+Which letter comes before Z in the alphabet?,English_Literacy,Easy,Y,X,W,V
+Which of these letters is a vowel?,English_Literacy,Easy,a,b,c,d
+Complete the sentence: The bird flew up into the...,English_Literacy,Easy,sky,ground,ocean,house
+Complete the sentence: I use a pencil to...,English_Literacy,Easy,write,eat,sleep,run
+Which word is a joining word (conjunction)?,English_Literacy,Hard,because,table,jump,quickly
+Complete the sentence: I wanted to play outside ___ it was raining.,English_Literacy,Hard,but,so,because,or
+What is the past tense of 'walk'?,English_Literacy,Hard,walked,walking,walks,walkked
+What is the past tense of 'run'?,English_Literacy,Hard,ran,runned,running,ranned
+What is the past tense of 'go'?,English_Literacy,Hard,went,goed,going,goned
+What is the plural (more than one) of 'child'?,English_Literacy,Hard,children,childs,childrens,childes
+What is the plural (more than one) of 'mouse'?,English_Literacy,Hard,mice,mouses,mices,mice's
+Which word is short for 'do not'?,English_Literacy,Hard,don't,dont,do'nt,dunnot
+Which word is short for 'I will'?,English_Literacy,Hard,I'll,I'w,Ill,I'l
+Which word correctly completes this sentence? I have ___ apples.,English_Literacy,Hard,two,to,too,tow
+Which word correctly completes this sentence? Look over ___!,English_Literacy,Hard,there,their,they're,thier
+Which punctuation mark is used to separate items in a list?,English_Literacy,Hard,A comma,A full stop,A question mark,An exclamation mark
+Which of these sentences is a command?,English_Literacy,Hard,Go and wash your hands.,I washed my hands.,Did you wash your hands?,How clean my hands are!
+Which punctuation mark ends this sentence? What a beautiful day it is,English_Literacy,Hard,An exclamation mark,A question mark,A full stop,A comma
+Add the correct ending: The elephant is the ___ animal in the zoo.,English_Literacy,Hard,largest,larger,large,largely
+Which word means 'full of care'?,English_Literacy,Hard,careful,careless,caring,cared
+Complete the sentence: The tortoise moved very ___.,English_Literacy,Hard,slowly,slow,slower,slowest
+If you are NOT happy you are...,English_Literacy,Hard,unhappy,inhappy,dishappy,nonhappy
+Which of these is an adverb (a word that describes a verb)?,English_Literacy,Hard,quickly,quick,table,blue
+Find the adjective in this sentence: The brave knight fought the dragon.,English_Literacy,Hard,brave,knight,fought,dragon
+Which of these is a noun (naming word)?,English_Literacy,Hard,castle,beautiful,singing,angrily
+Which phrase shows that the toy belongs to the dog?,English_Literacy,Hard,The dog's toy,The dogs toy,The dogs' toy,The dog toy's
+The sun shines during the day but at ___ it is dark.,English_Literacy,Hard,night,knight,nite,niet
+What is more than one 'baby' called?,English_Literacy,Hard,babies,babys,babyes,babis
+Which word is spelt correctly?,English_Literacy,Hard,because,becoz,becuz,becuase
+Which word means almost the same as 'scared'?,English_Literacy,Hard,frightened,brave,happy,excited
+Which of these is a compound word (two words joined together)?,English_Literacy,Hard,playground,running,beautiful,unhelpful
+Which of these is an asking sentence (a question)?,English_Literacy,Hard,Can I have a drink?,Get me a drink.,I want a drink.,What a lovely drink!
+Complete the sentence: Right now she is ___ a book.,English_Literacy,Hard,reading,read,reads,readed
+Which word comes first in alphabetical order?,English_Literacy,Hard,apple,banana,cat,dog
+What does 'Bore da' mean?,Welsh,Easy,Good morning,Good night,Good afternoon,Goodbye
+What is the Welsh word for 'dog'?,Welsh,Easy,ci,cath,aderyn,pysgodyn
+What number is 'dau'?,Welsh,Easy,2,1,3,4
+What colour is 'melyn'?,Welsh,Easy,Yellow,Red,Blue,Green
+How do you say 'Thank you' in Welsh?,Welsh,Easy,Diolch,Croeso,Hwyl fawr,Shwmae
+What is the Welsh word for 'cat'?,Welsh,Easy,cath,ci,mochyn,dafad
+What colour is 'glas'?,Welsh,Easy,Blue,Red,Green,Black
+What does 'Nos da' mean?,Welsh,Easy,Good night,Good morning,Hello,Please
+What number is 'un'?,Welsh,Easy,1,2,5,10
+How do you say 'Goodbye' in Welsh?,Welsh,Hard,Hwyl fawr,Shwmae,Croeso,Bore da
+What does 'Mae hi'n bwrw glaw' mean?,Welsh,Hard,It is raining,It is sunny,It is snowing,It is cold
+Which day of the week is 'Dydd Llun'?,Welsh,Hard,Monday,Tuesday,Friday,Sunday
+If someone asks 'Sut wyt ti?' what are they asking?,Welsh,Hard,How are you?,What is your name?,Where do you live?,How old are you?
+What number is 'wyth'?,Welsh,Hard,8,6,7,9
+What does 'Dw i'n hapus' mean?,Welsh,Hard,I am happy,I am sad,I am tired,I am cold
+What does 'Mae hi'n heulog' mean?,Welsh,Hard,It is sunny,It is raining,It is cloudy,It is windy
+Which day of the week is 'Dydd Gwener'?,Welsh,Hard,Friday,Wednesday,Thursday,Saturday
+What number is 'deg'?,Welsh,Hard,10,5,9,12
+How do you say 'Please' in Welsh?,Welsh,Hard,Os gwelwch yn dda,Diolch,Da iawn,Croeso
+What does the teacher mean when they say 'Eisteddwch'?,Welsh,Hard,Sit down,Stand up,Listen,Look
