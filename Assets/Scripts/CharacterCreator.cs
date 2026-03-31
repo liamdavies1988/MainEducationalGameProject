@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.IO;
-
+using UnityEngine.SceneManagement;
 public class CharacterCreator : MonoBehaviour
 {
     [Header("Sprite Options")]
@@ -17,9 +17,9 @@ public class CharacterCreator : MonoBehaviour
     public TMP_InputField nameInput;
 
     // Track which item we are looking at
-    private int currentHeadIndex = 0;
-    private int currentBodyIndex = 0;
-    private int currentLegsIndex = 0;
+    private int currentHeadIndex = 1;
+    private int currentBodyIndex = 1;
+    private int currentLegsIndex = 1;
 
     string filePath = folderPath + "SaveSlot_" + GameManager.Instance.selectedSlot + ".json"; // Construct the file path using the selected slot from GameManager
     private static string folderPath;
@@ -47,29 +47,42 @@ public class CharacterCreator : MonoBehaviour
 
     // --- SAVE FUNCTION ---
 
-    public void SavePlayer()
+    public void SaveAndGoToFarmSelect()
     {
-        // 1. Get the slot ID from the GameManager (0, 1, or 2)
-        int slotID = GameManager.Instance.selectedSlot;
+        string playerName = nameInput.text;
 
-        // 2. Create the filename (adds 1 so the file is called Slot 1, 2, or 3)
-        string fileName = "SaveSlot_" + (slotID + 1) + ".json";
-        string folderPath = Application.dataPath + "/Saves/";
-        string filePath = folderPath + fileName;
+        // 1. Basic validation: Don't let them proceed without a name
+        if (string.IsNullOrEmpty(playerName))
+        {
+            Debug.LogWarning("Player must enter a name before proceeding.");
+            // Optional: You could trigger a small shake animation on the name box here
+            return; 
+        }
 
-        // 3. Prepare the data
+        // 2. Prepare the data object
         PlayerSaveData data = new PlayerSaveData();
-        data.playerName = nameInput.text;
+        data.playerName = playerName;
         data.headID = currentHeadIndex;
         data.bodyID = currentBodyIndex;
         data.legsID = currentLegsIndex;
+        
+        // Ensure we carry over any coins from the GameManager
         data.coins = GameManager.Instance.totalCoins;
 
-        // 4. Save to the file
+        // 3. Save to the specific slot file
+        int slot = GameManager.Instance.selectedSlot;
+        string folderPath = Application.dataPath + "/Saves/";
+        if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+        
+        string filePath = folderPath + "SaveSlot_" + (slot + 1) + ".json";
         string json = JsonUtility.ToJson(data, true);
-        System.IO.File.WriteAllText(filePath, json);
+        File.WriteAllText(filePath, json);
 
-        Debug.Log("Saved to: " + fileName);
+        Debug.Log("Character Progress Saved. Moving to Farm Selection.");
+
+        // 4. Transition to the Farm Selection Scene
+        // Make sure you name your scene exactly "FarmSelection" in Unity
+        SceneManager.LoadScene("FarmSelection");
     }
 
     public void LoadPlayer()
@@ -102,6 +115,7 @@ public class CharacterCreator : MonoBehaviour
         {
             Debug.LogWarning("No save file found at: " + filePath);
         }
+        
     }
 }
 
@@ -112,5 +126,6 @@ public class PlayerSaveData
     public int headID;
     public int bodyID;
     public int legsID;
+    public int farmID;
     public int coins;
 }

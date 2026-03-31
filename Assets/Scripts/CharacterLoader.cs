@@ -15,50 +15,39 @@ public class CharacterLoader : MonoBehaviour
     public Image bodyDisplay;
     public Image legsDisplay;
     public TextMeshProUGUI nameLabel; // Optional: To show "Liam's Farm"
+    
+    [Header("Farm Layouts")]
+    public GameObject[] farmLayouts;
 
     void Start()
     {
-        LoadCharacterAppearance();
+        LoadPlayerAndWorld();
     }
 
-    public void LoadCharacterAppearance()
+    public void LoadPlayerAndWorld()
     {
-        if (GameManager.Instance == null)
-        {
-            Debug.LogError("DEBUG: GameManager is MISSING in this scene!");
-            return;
-        }
-
         int slotID = GameManager.Instance.selectedSlot;
-        string fileName = "SaveSlot_" + (slotID + 1) + ".json";
-        string filePath = Path.Combine(Application.dataPath, "Saves", fileName);
-
-        Debug.Log("DEBUG: Attempting to load from: " + filePath);
+        string filePath = Application.dataPath + "/Saves/SaveSlot_" + (slotID + 1) + ".json";
 
         if (File.Exists(filePath))
         {
             string json = File.ReadAllText(filePath);
-            Debug.Log("DEBUG: JSON Content found: " + json);
-
             PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
 
-            // Check if the arrays are empty
-            if (headOptions.Length == 0) Debug.LogError("DEBUG: Head Sprite array is EMPTY in the Inspector!");
-
-            // Update UI
+            // --- THE CHARACTER PART ---
             headDisplay.sprite = headOptions[data.headID];
             bodyDisplay.sprite = bodyOptions[data.bodyID];
             legsDisplay.sprite = legsOptions[data.legsID];
 
-            if (nameLabel != null)
+            // --- THE FARM PART (The loop we discussed) ---
+            // This turns off every farm except the one matching data.farmID
+            for (int i = 0; i < farmLayouts.Length; i++)
             {
-                nameLabel.text = data.playerName + "'s Farm";
-                Debug.Log("DEBUG: Name set to: " + data.playerName);
+                farmLayouts[i].SetActive(i == data.farmID);
             }
-        }
-        else
-        {
-            Debug.LogError("DEBUG: File NOT FOUND at " + filePath);
+
+            Debug.Log("World Reconstructed: Farm Type " + data.farmID);
         }
     }
+    
 }
