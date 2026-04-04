@@ -38,6 +38,7 @@ public class CharacterLoader : MonoBehaviour
             headDisplay.sprite = headOptions[data.headID];
             bodyDisplay.sprite = bodyOptions[data.bodyID];
             legsDisplay.sprite = legsOptions[data.legsID];
+            nameLabel.text = data.playerName + "'s Farm"; // Optional: Show the farm name
 
             // --- THE FARM PART (The loop we discussed) ---
             // This turns off every farm except the one matching data.farmID

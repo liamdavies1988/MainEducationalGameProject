@@ -1,7 +1,8 @@
 {
-    "playerName": "test",
+    "playerName": "Liams farm",
     "headID": 2,
-    "bodyID": 2,
-    "legsID": 2,
+    "bodyID": 0,
+    "legsID": 0,
+    "farmID": 2,
     "coins": 6
 }

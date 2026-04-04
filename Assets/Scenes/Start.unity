@@ -262,6 +262,7 @@ MonoBehaviour:
   selectedSubject: Maths
   selectedDifficulty: Easy
   difficultyPopup: {fileID: 0}
+  myPopup: {fileID: 0}
 --- !u!4 &797084607
 Transform:
   m_ObjectHideFlags: 0
@@ -759,11 +760,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7313615906249328973, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -455
+      value: -596
       objectReference: {fileID: 0}
     - target: {fileID: 7313615906249328973, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -176
       objectReference: {fileID: 0}
     - target: {fileID: 7313615906249328973, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

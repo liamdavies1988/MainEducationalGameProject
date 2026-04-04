@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 08e01d6fcea63da4793e18472da17e05
+guid: fac36381f80d94547a8c3745f4f7c21a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 831310098929673048
-    second: PrefabFarm2 test_0
+      213: -3302767260961459315
+    second: PrefabFarm3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PrefabFarm2 test_0
+      name: PrefabFarm3_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 995
-        height: 547
+        width: 932
+        height: 516
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 853e5e86128698b00800000000000000
-      internalID: 831310098929673048
+      spriteID: d833a9acca63a22d0800000000000000
+      internalID: -3302767260961459315
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PrefabFarm2 test_0: 831310098929673048
+      PrefabFarm3_0: -3302767260961459315
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
