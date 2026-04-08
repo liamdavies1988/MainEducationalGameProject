@@ -20,9 +20,15 @@ public class CharacterCreator : MonoBehaviour
     private int currentHeadIndex = 1;
     private int currentBodyIndex = 1;
     private int currentLegsIndex = 1;
+    
 
-    string filePath = folderPath + "SaveSlot_" + GameManager.Instance.selectedSlot + ".json"; // Construct the file path using the selected slot from GameManager
-    private static string folderPath;
+
+void Start()
+{
+    
+}
+
+    
 
     // --- ARROW FUNCTIONS ---
 
