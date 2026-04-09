@@ -1,92 +1,103 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System.Collections;
+using System.Collections.Generic;
 
 public class StyleManager : MonoBehaviour
 {
-    [Header("Prefabs & UI")]
+    [Header("UI References")]
     public GameObject woodButtonPrefab;
-    public GameObject popupWindow;
-    public GameObject hairScrollView;
-    public Transform hairGrid; // Ensure this is the 'Content' object in Unity
+    public GameObject popupWindow;      // The main wooden frame
+    public GameObject hairScrollView;   // MISSING VARIABLE ADDED HERE
+    public Transform itemGrid;          // The 'Content' of your single Scroll View
 
-    [Header("Character - HAIR (The 6 Hidden Boxes)")]
+    [Header("Character Containers")]
     public Transform hairContainer;
-
-    [Header("Folder Configuration")]
-    public string hairFolderPath = "CharacterItems/HairStyles";
+    public Transform topsContainer;
+    public Transform bottomsContainer;
 
     void Start()
     {
-        BuildSmartMenu();
-        CloseAll();
+        // Ensure the menu is closed when the game starts
+        CloseMenu();
     }
 
-    void BuildSmartMenu()
+    // --- UNIVERSAL MENU BUILDER ---
+    public void OpenMenu(string folderName)
     {
-        foreach (Transform child in hairGrid) { Destroy(child.gameObject); }
+        // 1. Clear old buttons
+        foreach (Transform child in itemGrid) { Destroy(child.gameObject); }
 
-        Sprite[] sprites = Resources.LoadAll<Sprite>(hairFolderPath);
-        Debug.Log("Found " + sprites.Length + " hair sprites.");
+        // 2. Map the Folder Name to the right Hierarchy Container
+        Transform activeContainer = null;
+        if (folderName == "HairStyles") activeContainer = hairContainer;
+        else if (folderName == "Tops") activeContainer = topsContainer;
+        else if (folderName == "Bottoms") activeContainer = bottomsContainer;
+
+        if (activeContainer == null)
+        {
+            Debug.LogError("Menu Error: No container found for " + folderName);
+            return;
+        }
+
+        // 3. Load the sprites from: Resources/Images/CharacterItems/...
+        Sprite[] sprites = Resources.LoadAll<Sprite>("Images/CharacterItems/" + folderName);
 
         foreach (Sprite s in sprites)
         {
-            // 1. Get the prefix (e.g., 'hairstyle1')
+            // --- THE SMART PREFIX LOGIC ---
             string prefix = s.name.Split('_')[0];
 
-            // 2. Find the matching object on the player
-            Transform targetBox = hairContainer.Find(prefix);
+            Transform targetBox = null;
+            foreach (Transform child in activeContainer)
+            {
+                if (child.name.ToLower() == prefix.ToLower())
+                {
+                    targetBox = child;
+                    break;
+                }
+            }
 
-            // SAFETY CHECK: If the name doesn't match an object in your Hierarchy, skip it!
             if (targetBox == null)
             {
-                Debug.LogWarning("Object " + prefix + " not found under HairContainer. Check your names!");
+                Debug.LogWarning("Skipping " + s.name + " - No matching box found in " + activeContainer.name);
                 continue;
             }
 
-            // 3. Create the Button
-            GameObject newBtn = Instantiate(woodButtonPrefab, hairGrid);
+            // 4. Create the Button
+            GameObject newBtn = Instantiate(woodButtonPrefab, itemGrid);
 
-            // Find the image on the button template (Assumes name is 'HairIcon')
+            // Set the icon (Assumes child inside prefab is named 'HairIcon')
             Image icon = newBtn.transform.Find("HairIcon").GetComponent<Image>();
             if (icon != null) icon.sprite = s;
 
-            // 4. THE CAPTURE FIX (Prevents clicking the wrong item)
+            // 5. Setup the Click Logic
             Sprite localSprite = s;
             GameObject localBox = targetBox.gameObject;
+            Transform localContainer = activeContainer;
 
             newBtn.GetComponent<Button>().onClick.AddListener(() => {
-                EquipSmartHair(localBox, localSprite);
+                EquipItem(localBox, localSprite, localContainer);
             });
         }
+
+        // Show the window
+        if (popupWindow != null) popupWindow.SetActive(true);
+        if (hairScrollView != null) hairScrollView.SetActive(true);
     }
 
-    void EquipSmartHair(GameObject box, Sprite hairSprite)
+    void EquipItem(GameObject box, Sprite itemSprite, Transform container)
     {
-        // Safety: ensure the box still exists
-        if (box == null) return;
-
-        // Hide all hair styles first
-        foreach (Transform t in hairContainer)
-        {
-            t.gameObject.SetActive(false);
-        }
-
-        // Show selected and update color
+        foreach (Transform t in container) { t.gameObject.SetActive(false); }
         box.SetActive(true);
         Image boxImage = box.GetComponent<Image>();
-        if (boxImage != null) boxImage.sprite = hairSprite;
+        if (boxImage != null) { boxImage.sprite = itemSprite; }
     }
 
-    public void OpenHairMenu()
-    {
-        popupWindow.SetActive(true);
-        hairScrollView.SetActive(true);
-    }
-
-    public void CloseAll()
+    // ONE MASTER CLOSE FUNCTION
+    public void CloseMenu()
     {
         if (popupWindow != null) popupWindow.SetActive(false);
+        if (hairScrollView != null) hairScrollView.SetActive(false);
+        Debug.Log("UI: Style Menu Closed.");
     }
 }
