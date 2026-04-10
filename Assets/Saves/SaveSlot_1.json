@@ -1,8 +1,12 @@
 {
-    "playerName": "Liams farm",
-    "headID": 2,
-    "bodyID": 0,
-    "legsID": 0,
-    "farmID": 2,
-    "coins": 6
+    "playerName": "Player1",
+    "coins": 6,
+    "farmID": 0,
+    "hairName": "hairstyle1__003_0",
+    "topName": "tshirt_6_0",
+    "bottomName": "shorts_4_0",
+    "skinName": "body_5_0",
+    "hasGlasses": false,
+    "hasHearingAid": false,
+    "hasCrutches": false
 }

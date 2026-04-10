@@ -158,9 +158,11 @@ public class GameManager : MonoBehaviour
     }
 
     // This variable holds the 'switch' to your pop-up
-public GameObject myPopup; 
+public GameObject myPopup;
+    internal int selectedFarmID;
+    internal int farmID;
 
-public void ShowThePopup()
+    public void ShowThePopup()
 {
     // This 'switches on' the lightbulb
     myPopup.SetActive(true); 

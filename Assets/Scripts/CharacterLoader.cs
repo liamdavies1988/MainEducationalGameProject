@@ -5,18 +5,19 @@ using System.IO;
 
 public class CharacterLoader : MonoBehaviour
 {
-    [Header("Sprite Lists (Must match Creator exactly)")]
-    public Sprite[] headOptions;
-    public Sprite[] bodyOptions;
-    public Sprite[] legsOptions;
+    [Header("UI Character Displays")]
+    public Transform hairContainer;
+    public Transform topsContainer;
+    public Transform bottomsContainer;
+    public Transform bodyContainer;
 
-    [Header("UI Displays in this Scene")]
-    public Image headDisplay;
-    public Image bodyDisplay;
-    public Image legsDisplay;
-    public TextMeshProUGUI nameLabel; // Optional: To show "Liam's Farm"
-    
-    [Header("Farm Layouts")]
+    [Header("Accessory Objects")]
+    public GameObject glassesObj;
+    public GameObject hearingAidObj;
+    public GameObject crutchesObj;
+
+    [Header("Other UI")]
+    public TextMeshProUGUI nameLabel;
     public GameObject[] farmLayouts;
 
     void Start()
@@ -34,21 +35,52 @@ public class CharacterLoader : MonoBehaviour
             string json = File.ReadAllText(filePath);
             PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
 
-            // --- THE CHARACTER PART ---
-            headDisplay.sprite = headOptions[data.headID];
-            bodyDisplay.sprite = bodyOptions[data.bodyID];
-            legsDisplay.sprite = legsOptions[data.legsID];
-            nameLabel.text = data.playerName + "'s Farm"; // Optional: Show the farm name
+            // 1. Set the Name
+            if (nameLabel != null) nameLabel.text = data.playerName + "'s Farm";
 
-            // --- THE FARM PART (The loop we discussed) ---
-            // This turns off every farm except the one matching data.farmID
+            // 2. Reconstruct the Clothes and Skin (Dynamic Loading)
+            ReconstructPart(hairContainer, "HairStyles", data.hairName);
+            ReconstructPart(topsContainer, "Tops", data.topName);
+            ReconstructPart(bottomsContainer, "Bottoms", data.bottomName);
+            ReconstructPart(bodyContainer, "SkinTone", data.skinName);
+
+            // 3. Set Accessories (Toggles)
+            if (glassesObj != null) glassesObj.SetActive(data.hasGlasses);
+            if (hearingAidObj != null) hearingAidObj.SetActive(data.hasHearingAid);
+            if (crutchesObj != null) crutchesObj.SetActive(data.hasCrutches);
+
+            // 4. Reconstruct the Farm
             for (int i = 0; i < farmLayouts.Length; i++)
             {
                 farmLayouts[i].SetActive(i == data.farmID);
             }
 
-            Debug.Log("World Reconstructed: Farm Type " + data.farmID);
+            Debug.Log("Character and World Reconstructed successfully.");
         }
     }
-    
+
+    // This logic mirrors your StyleManager 'Equip' logic
+    private void ReconstructPart(Transform container, string folder, string assetName)
+    {
+        if (string.IsNullOrEmpty(assetName)) return;
+
+        // Load the sprite from Resources
+        Sprite s = Resources.Load<Sprite>("Images/CharacterItems/" + folder + "/" + assetName);
+        if (s == null) return;
+
+        string prefix = assetName.Split('_')[0].ToLower();
+
+        foreach (Transform child in container)
+        {
+            if (child.name.ToLower() == prefix)
+            {
+                child.gameObject.SetActive(true);
+                child.GetComponent<Image>().sprite = s;
+            }
+            else if (folder != "SkinTone") // Don't hide the base body!
+            {
+                child.gameObject.SetActive(false);
+            }
+        }
+    }
 }
