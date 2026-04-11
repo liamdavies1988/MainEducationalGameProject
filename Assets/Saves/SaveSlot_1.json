@@ -1,12 +1,12 @@
 {
-    "playerName": "Player1",
-    "coins": 6,
-    "farmID": 0,
-    "hairName": "hairstyle1__003_0",
-    "topName": "tshirt_6_0",
-    "bottomName": "shorts_4_0",
-    "skinName": "body_5_0",
-    "hasGlasses": false,
-    "hasHearingAid": false,
-    "hasCrutches": false
+    "playerName": "liam",
+    "coins": 0,
+    "farmID": 2,
+    "hairName": "hairstyle1__000_0",
+    "topName": "tshirt_1_0",
+    "bottomName": "shorts_1_0",
+    "skinName": "body_0_0",
+    "hasGlasses": true,
+    "hasHearingAid": true,
+    "hasCrutches": true
 }

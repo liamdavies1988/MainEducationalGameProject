@@ -1,8 +1,10 @@
-using UnityEngine;
-using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CharacterStyleManager : MonoBehaviour
 {
@@ -29,6 +31,18 @@ public class CharacterStyleManager : MonoBehaviour
     public string defaultTopName = "tshirt_0"; 
     public string defaultBottomName = "shorts_0"; 
     public string defaultSkinToneName = "body_0"; 
+    
+    // --- RECONSTRUCTION LOGIC ---
+    [Header("Default Sprites (Drag and drop images here)")]
+    public Sprite defaultHairSprite; 
+    public Sprite defaultTopSprite; 
+    public Sprite defaultBottomSprite; 
+    public Sprite defaultSkinSprite;
+    
+    [Header("Identity")]
+    public TMP_InputField nameInput; // Drag your 'Type Your Name' box here
+    public TextMeshProUGUI warningText; // Optional: A small red text that says "Enter Name!"
+
 
     void Start()
     {
@@ -36,13 +50,6 @@ public class CharacterStyleManager : MonoBehaviour
         SetDefaultStyle();  
     }
 
-    // --- RECONSTRUCTION LOGIC ---
-
-    [Header("Default Sprites (Drag and drop images here)")]
-public Sprite defaultHairSprite; 
-public Sprite defaultTopSprite; 
-public Sprite defaultBottomSprite; 
-public Sprite defaultSkinSprite; 
 
 public void SetDefaultStyle()
 {
@@ -178,8 +185,77 @@ public void SetDefaultStyle()
 
         Debug.Log("SAVE SUCCESS: " + data.playerName + " stored in Slot " + (GameManager.Instance.selectedSlot + 1));
     }
+    // Combined and refined ConfirmNameAndContinue function
+    public void ConfirmNameAndContinue()
+    {
+        // 2. The Validation Check
+        // .Trim() removes accidental spaces.
+        if (string.IsNullOrWhiteSpace(nameInput.text))
+        {
+            Debug.LogWarning("Player tried to continue without a name!");
 
-    private string GetActiveSpriteName(Transform container)
+            // Start the visual feedback for empty name input
+            StartCoroutine(FlashNameBoxRed());
+            nameInput.GetComponent<Animator>().SetTrigger("Shake"); // Trigger the shake animation
+
+            // If you have a warning text, show it
+            if (warningText != null)
+            {
+                warningText.text = "Please enter a name!";
+                warningText.gameObject.SetActive(true);
+            }
+
+            // Optional: You could play a 'buzzer' sound effect here
+            return;
+        }
+
+        // 3. If they passed the check, Save and Move on!
+        // Update the GameManager with the player's name before saving
+        GameManager.Instance.playerName = nameInput.text.Trim();
+        SaveAndProceedToFarm();
+    }
+
+    // Coroutine to visually indicate an invalid name input by flashing the input field red.
+    IEnumerator FlashNameBoxRed()
+    {
+        // Store the original color to revert to
+        Color originalColor = nameInput.image.color;
+
+        // 1. Turn the box red
+        nameInput.image.color = Color.red;
+
+        // 2. Wait for a split second
+        yield return new WaitForSeconds(0.5f);
+
+        // 3. Smoothly fade back to the original color
+        float t = 0;
+        while (t < 1)
+        {
+            t += Time.deltaTime * 2f; // Speed of the fade
+            nameInput.image.color = Color.Lerp(Color.red, originalColor, t);
+            yield return null;
+        }
+        // Ensure the color is exactly the original color after the lerp
+        nameInput.image.color = originalColor;
+    }
+
+    // Saves the character choices and proceeds to the farm scene.
+    void SaveAndProceedToFarm()
+    {
+        // Ensure player name is saved to GameManager before saving to file
+        if (GameManager.Instance != null && string.IsNullOrWhiteSpace(GameManager.Instance.playerName))
+        {
+            GameManager.Instance.playerName = nameInput.text.Trim();
+        }
+
+        // Call the actual save logic
+        SaveCharacterChoices();
+
+        Debug.Log("Character " + nameInput.text.Trim() + " saved! Loading Farm...");
+        SceneManager.LoadScene("FarmSelection"); // Change this to your next scene name
+    }
+
+private string GetActiveSpriteName(Transform container)
     {
         foreach (Transform child in container)
         {
