@@ -44,36 +44,37 @@ public class QuestionSetup : MonoBehaviour
         }
 
         // 2. Get the current choices from the GameManager
-        string subject = GameManager.Instance.selectedSubject;     // e.g., "Welsh"
-        string difficulty = GameManager.Instance.selectedDifficulty; // e.g., "Easy"
+        
+        selectedTopic = GameManager.Instance.selectedSubject;
+        selectedDifficulty = GameManager.Instance.selectedDifficulty;
 
         // 3. Build the folder path to match your CSV output
-        // This looks for: Assets/Resources/Questions/Welsh/Easy
-        string path = "Questions/" + subject + "/" + difficulty;
+        string path = "Questions/" + selectedTopic + "/" + selectedDifficulty;
 
-        // 4. Load every QuestionData file in that specific folder
         QuestionData[] loadedQuestions = Resources.LoadAll<QuestionData>(path);
 
-        if (loadedQuestions.Length == 0)
-        {
-            Debug.LogError($"FATAL ERROR: No questions found at Resources/{path}. Check your folder names!");
+
+       if (loadedQuestions.Length == 0)
+            {
+                Debug.LogError($"FATAL ERROR: No questions found at Resources/{path}");
+            }
+            else
+            {
+                questions = new List<QuestionData>(loadedQuestions);
+            }
         }
-        else
-        {
-            questions = new List<QuestionData>(loadedQuestions);
-            Debug.Log($"Successfully loaded {questions.Count} {difficulty} {subject} questions.");
-        }
-    }
+    
 
     private void SelectNewQuestion()
     {
-        // Safety check to make sure we actually have questions in the folder
-        if (questions.Count > 0)
-        {
-            int randomQuestionIndex = Random.Range(0, questions.Count);
-            currentQuestion = questions[randomQuestionIndex];
-            questions.RemoveAt(randomQuestionIndex);
-        }
+    if (currentQuestion == null) return;
+
+    QuestionCountText.text = "Question " + currentQuestionNumber; 
+    QuestionText.text = currentQuestion.question;
+    
+    // --- FIX: Use your variables to update the UI labels ---
+    TopicDisplay.text = selectedTopic;
+    DifficultyDisplay.text = selectedDifficulty;
     }
 
     private void SetQuestionValues()

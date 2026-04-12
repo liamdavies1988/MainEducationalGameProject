@@ -110,10 +110,17 @@ public class MenuController : MonoBehaviour
 
     // Confirm loading an existing save slot.
     public void ConfirmLoad()
-    {
-        GameManager.Instance.selectedSlot = slotIndexToProcess;
-        SceneManager.LoadScene("MainMenu");
-    }
+{
+    // 1. Tell the GameManager which slot we are using
+    GameManager.Instance.selectedSlot = slotIndexToProcess;
+
+    // 2. TELL THE GAMEMANAGER TO LOAD THE DATA NOW
+    // This ensures coins and names are ready BEFORE the next scene loads
+    GameManager.Instance.LoadGameData();
+
+    // 3. Move to the next scene
+    SceneManager.LoadScene("TopicChoice"); 
+}
 
     // --- CURRICULUM LOGIC ---
 
@@ -132,7 +139,7 @@ public class MenuController : MonoBehaviour
     public void OnDifficultyClicked(string difficulty)
     {
         GameManager.Instance.selectedDifficulty = difficulty;
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("MultipleChoiceGame");
     }
 
     // --- GENERAL UI ---
