@@ -9,7 +9,7 @@ public class CSVToSOConverter
     [MenuItem("Tools/Convert ALL CSVs to Questions")]
     public static void GenerateQuestions()
     {
-        string inputPath = Application.dataPath + csvFolderPath;
+        string inputPath = Application.persistentDataPath + csvFolderPath;
         string baseOutputPath = "Assets/Resources/Questions"; 
 
         if (!Directory.Exists(inputPath)) {

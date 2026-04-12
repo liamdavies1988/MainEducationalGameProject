@@ -35,7 +35,7 @@ public class MenuController : MonoBehaviour
     {
         for (int i = 0; i < slotTexts.Length; i++)
         {
-            string path = Application.dataPath + "/Saves/SaveSlot_" + (i + 1) + ".json";
+            string path = Application.persistentDataPath + "/Saves/SaveSlot_" + (i + 1) + ".json";
 
             if (File.Exists(path))
             {
@@ -54,7 +54,7 @@ public class MenuController : MonoBehaviour
     public void OnSlotClicked(int id)
     {
         slotIndexToProcess = id; // Remember which slot is being processed.
-        string path = Application.dataPath + "/Saves/SaveSlot_" + (id + 1) + ".json";
+        string path = Application.persistentDataPath + "/Saves/SaveSlot_" + (id + 1) + ".json";
 
         if (File.Exists(path))
         {
@@ -93,7 +93,7 @@ public class MenuController : MonoBehaviour
     // Delete the selected save slot and refresh UI.
     public void ConfirmDelete()
     {
-        string path = Application.dataPath + "/Saves/SaveSlot_" + (slotIndexToProcess + 1) + ".json";
+        string path = Application.persistentDataPath + "/Saves/SaveSlot_" + (slotIndexToProcess + 1) + ".json";
 
         if (File.Exists(path))
         {

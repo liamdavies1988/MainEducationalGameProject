@@ -120,7 +120,9 @@ public void SetDefaultStyle()
 
         foreach (Sprite s in sprites)
         {
-            string prefix = s.name.Split('_')[0].ToLower();
+            string rawName = s.name;
+            string prefix = rawName.Split('_')[0].ToLower(); // Handles both 'hairstyle1_000' and 'hairstyle1_0' by taking the part before the underscore and making it lowercase
+            
             Transform targetBox = null;
             foreach (Transform child in activeContainer)
             {
@@ -130,15 +132,17 @@ public void SetDefaultStyle()
             if (targetBox == null) continue;
 
             GameObject newBtn = Instantiate(woodButtonPrefab, itemGrid);
+
             Image icon = newBtn.transform.Find("HairIcon").GetComponent<Image>();
             if (icon != null) icon.sprite = s;
 
             string spriteName = s.name;
-            if (spriteName.EndsWith("_0")) spriteName = spriteName.Substring(0, spriteName.Length - 2);
+            if (spriteName.EndsWith("_0")) spriteName = spriteName.Substring(0, spriteName.Length - 2); // Handles 'hairstyle1_0' -> 'hairstyle1'
+            
 
             GameObject localBox = targetBox.gameObject;
             newBtn.GetComponent<Button>().onClick.AddListener(() => {
-                EquipItem(localBox, spriteName, activeContainer, folderName);
+                EquipItem(localBox, spriteName, activeContainer, folderName); // Pass the original folderName to ensure correct path in EquipItem
             });
         }
     }
@@ -163,28 +167,32 @@ public void SetDefaultStyle()
     // --- SAVE LOGIC ---
 
     public void SaveCharacterChoices()
-    {
-        PlayerSaveData data = new PlayerSaveData();
+{
+    PlayerSaveData data = new PlayerSaveData();
 
-        data.playerName = GameManager.Instance.playerName;
+    // 1. Fill the data
+    data.playerName = GameManager.Instance.playerName;
         data.coins = GameManager.Instance.totalCoins;
-        data.farmID = GameManager.Instance.selectedSlot; 
+        data.farmID = 0; // You can set this based on the player's choice later
 
+    // 2. Get the clean names of what is currently equipped
         data.hairName = GetActiveSpriteName(hairContainer);
         data.topName = GetActiveSpriteName(topsContainer);
         data.bottomName = GetActiveSpriteName(bottomsContainer);
         data.skinName = GetActiveSpriteName(bodyContainer);
 
-        if (glassesObj != null) data.hasGlasses = glassesObj.activeSelf;
-        if (hearingAidObj != null) data.hasHearingAid = hearingAidObj.activeSelf;
-        if (crutchesObj != null) data.hasCrutches = crutchesObj.activeSelf;
+    // 3. Accessories
+        data.hasGlasses = (glassesObj != null) ? glassesObj.activeSelf : false;
+        data.hasHearingAid = (hearingAidObj != null) ? hearingAidObj.activeSelf : false;
+        data.hasCrutches = (crutchesObj != null) ? crutchesObj.activeSelf : false;
 
-        string json = JsonUtility.ToJson(data, true);
-        string path = Application.dataPath + "/Saves/SaveSlot_" + (GameManager.Instance.selectedSlot + 1) + ".json";
-        File.WriteAllText(path, json);
+    // 4. CALL THE MASTER SAVE (Instead of manual File writing)
+        // This uses the GameManager's SaveGame function we built earlier
+        GameManager.Instance.SaveGame(data);
 
-        Debug.Log("SAVE SUCCESS: " + data.playerName + " stored in Slot " + (GameManager.Instance.selectedSlot + 1));
-    }
+    Debug.Log("<color=green>CharacterStyleManager:</color> Character choices saved for " + data.playerName);
+}
+
     // Combined and refined ConfirmNameAndContinue function
     public void ConfirmNameAndContinue()
     {
@@ -262,7 +270,19 @@ private string GetActiveSpriteName(Transform container)
             if (child.gameObject.activeSelf)
             {
                 Image img = child.GetComponent<Image>();
-                if (img != null && img.sprite != null) return img.sprite.name;
+                if (img != null && img.sprite != null) 
+                {
+                    string rawName = img.sprite.name;
+
+                    // This removes the Unity-generated "_0" but keeps the variant number
+                    // e.g. "hairstyle1__003_0" becomes "hairstyle1__003"
+                    if (rawName.EndsWith("_0"))
+                    {
+                        return rawName.Substring(0, rawName.Length - 2);
+                    }
+
+                    return rawName; 
+                }
             }
         }
         return "";
@@ -271,19 +291,4 @@ private string GetActiveSpriteName(Transform container)
     public void ToggleLayer(GameObject layerObject) { layerObject.SetActive(!layerObject.activeSelf); }
     public void CloseMenu() { popupWindow.SetActive(false); if(hairScrollView != null) hairScrollView.SetActive(false); }
     public void ResetPlayerStyles() { SetDefaultStyle(); }
-}
-
-[System.Serializable]
-public class PlayerSaveData
-{
-    public string playerName;
-    public int coins;
-    public int farmID;
-    public string hairName;
-    public string topName;
-    public string bottomName;
-    public string skinName;
-    public bool hasGlasses;
-    public bool hasHearingAid;
-    public bool hasCrutches;
 }

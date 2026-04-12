@@ -43,7 +43,7 @@ public class FarmSelector : MonoBehaviour
     // 1. Ask GameManager which slot we are currently using
     int slot = GameManager.Instance.selectedSlot;
     string fileName = "SaveSlot_" + (slot + 1) + ".json";
-    string filePath = Application.dataPath + "/Saves/" + fileName;
+    string filePath = Application.persistentDataPath + "/Saves/" + fileName;
 
     if (File.Exists(filePath))
     {

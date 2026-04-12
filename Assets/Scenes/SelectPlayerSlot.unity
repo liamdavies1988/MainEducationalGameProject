@@ -437,7 +437,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3963935357370811136, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_text
-      value: 'Slot 2?
+      value: 'Slot 2
 
         ______________'
       objectReference: {fileID: 0}
@@ -588,7 +588,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3963935357370811136, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_text
-      value: 'Slot 3?
+      value: 'Slot 3
 
         ______________'
       objectReference: {fileID: 0}
@@ -2784,61 +2784,6 @@ PrefabInstance:
       addedObject: {fileID: 12650775}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f960d25c6764c141811077671281445, type: 3}
---- !u!1 &1790202212
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1790202214}
-  - component: {fileID: 1790202213}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1790202213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1790202212}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 390fd4d4190a73741855804c45a3ece0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  audioSource: {fileID: 0}
-  coinSound: {fileID: 0}
-  wrongAnswerSound: {fileID: 0}
-  totalCoins: 0
-  playerName: Player1
-  coinCountText: {fileID: 0}
-  selectedSlot: 0
-  selectedSubject: Maths
-  selectedDifficulty: Easy
-  difficultyPopup: {fileID: 0}
-  myPopup: {fileID: 0}
---- !u!4 &1790202214
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1790202212}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 510.60803, y: 297.91736, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1811544816
 GameObject:
   m_ObjectHideFlags: 0
@@ -2887,6 +2832,63 @@ RectTransform:
   m_AnchoredPosition: {x: 959.8891, y: 540.0623}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &1887106310
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6543491063017145736, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
+      propertyPath: m_Name
+      value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878406007848078448, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 685.6548
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878406007848078448, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 312.75427
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878406007848078448, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878406007848078448, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878406007848078448, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878406007848078448, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878406007848078448, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878406007848078448, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878406007848078448, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878406007848078448, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
 --- !u!1 &1909879113
 GameObject:
   m_ObjectHideFlags: 0
@@ -3049,7 +3051,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3963935357370811136, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_text
-      value: 'Slot 1?
+      value: 'Slot 1
 
         ______________'
       objectReference: {fileID: 0}
@@ -3492,8 +3494,8 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1292900520}
+  - {fileID: 1887106310}
   - {fileID: 1811544818}
   - {fileID: 1355595795}
-  - {fileID: 1790202214}
   - {fileID: 1015340807}
   - {fileID: 1295702870}

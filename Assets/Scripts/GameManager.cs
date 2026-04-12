@@ -2,6 +2,22 @@ using UnityEngine;
 using TMPro;
 using System;
 
+
+[System.Serializable] // This allows us to easily convert this class to JSON for saving and loading
+public class PlayerSaveData
+{
+    public string playerName;
+    public int coins;
+    public int farmID;
+    public string hairName;
+    public string topName;
+    public string bottomName;
+    public string skinName;
+    public bool hasGlasses;
+    public bool hasHearingAid;
+    public bool hasCrutches;
+}
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance; // Singleton instance for easy access from other scripts
@@ -30,6 +46,8 @@ public class GameManager : MonoBehaviour
     [Header("Difficulty Popup")]
     public GameObject difficultyPopup;
 
+    private PlayerSaveData currentSessionData;
+
     private void Awake()
     {
         if (Instance == null)
@@ -38,7 +56,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
 
             // Ensure the folder exists
-            string folderPath = Application.dataPath + "/Saves/";
+            string folderPath = Application.persistentDataPath + "/Saves/";
             if (!System.IO.Directory.Exists(folderPath))
             {
                 System.IO.Directory.CreateDirectory(folderPath);
@@ -52,7 +70,7 @@ public class GameManager : MonoBehaviour
         }
 
         // Now safe to load
-        LoadGame();
+        LoadGameData();
     }
 
     private void Start()
@@ -60,18 +78,17 @@ public class GameManager : MonoBehaviour
         UpdateCoinUI();
     }
 
-    public void AddCoin() // Call this whenever the player earns a coin (e.g., by answering correctly)
-    {
-        totalCoins += 1;
-        UpdateCoinUI();
-        Debug.Log("Coin added! New total: " + totalCoins);
-        SaveGame();
+    public void AddCoin() 
+{
+    totalCoins += 1;
+    UpdateCoinUI();
+    
+    // This calls the function we just updated!
+    SaveCurrentProgress(); 
 
-        if (audioSource != null && coinSound != null)
-        {
-            audioSource.PlayOneShot(coinSound);
-        }
-    }
+    if (audioSource != null && coinSound != null)
+        audioSource.PlayOneShot(coinSound);
+}
 
     public void PlayWrongSound() // Call this when the player selects a wrong answer
     {
@@ -81,26 +98,73 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SaveGame() // Call this whenever you want to save the current game state
+public void SaveCurrentProgress()
+{
+    // 1. Get the current data from the disk if memory is empty
+    if (currentSessionData == null)
     {
-        // Use the selectedSlot to name the file!
-        string filePath = Application.dataPath + "/PlayerSaveFiles/SaveSlot_" + selectedSlot + ".json";
-
-        PlayerPrefs.SetInt("SavedCoins_" + selectedSlot, totalCoins);
-        PlayerPrefs.SetString("SavedName_" + selectedSlot, playerName);
-        PlayerPrefs.Save();
-
-        Debug.Log("Game Saved to Slot " + selectedSlot);
-        Debug.Log("Game Saved! " + playerName + " has " + totalCoins + " coins remaining.");
+        currentSessionData = LoadGameData();
     }
 
-    public void LoadGame() // Call this at the start of the game to load saved data
+    // 2. SAFETY: If there is still no data (e.g., a brand new game with no file yet)
+    // create a fresh object so the game doesn't crash.
+    if (currentSessionData == null)
     {
-        // Make sure we load the coins and name for the specific student in this slot
-        totalCoins = PlayerPrefs.GetInt("SavedCoins_" + selectedSlot, 0);
-        playerName = PlayerPrefs.GetString("SavedName_" + selectedSlot, "Player1");
-        UpdateCoinUI();
+        currentSessionData = new PlayerSaveData();
+        currentSessionData.playerName = this.playerName; // Use the default "Player1"
     }
+
+    // 3. UPDATE THE GAMEPLAY DATA
+    // We only update what changes during the actual game levels
+    currentSessionData.coins = totalCoins;
+    currentSessionData.playerName = playerName;
+    
+    // Note: HairName, TopName, etc., stay as they were when loaded, 
+    // ensuring we don't "lose" the character's look during gameplay.
+
+    // 4. THE PATH (Consistent with your new system)
+    string folderPath = Application.persistentDataPath + "/Saves/";
+    if (!System.IO.Directory.Exists(folderPath)) System.IO.Directory.CreateDirectory(folderPath);
+
+    string filePath = folderPath + "SaveSlot_" + (selectedSlot + 1) + ".json";
+
+    // 5. WRITE TO DISK
+    string json = JsonUtility.ToJson(currentSessionData, true);
+    System.IO.File.WriteAllText(filePath, json);
+    
+    Debug.Log($"<color=green>Economy Saved:</color> Slot {selectedSlot + 1} updated with {totalCoins} coins.");
+}
+
+// Call this at the start of a scene to get the data back
+public PlayerSaveData LoadGameData()
+{
+    // 1. Consistent Path
+    string folderPath = Application.persistentDataPath + "/Saves/";
+    string filePath = folderPath + "SaveSlot_" + (selectedSlot + 1) + ".json";
+
+    if (System.IO.File.Exists(filePath))
+    {
+        // 2. Read and Convert
+        string json = System.IO.File.ReadAllText(filePath);
+        PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
+        
+        // 3. SYNC THE CACHE (The missing piece!)
+        // This ensures that when you call SaveCurrentProgress() later, 
+        // the GameManager already knows the Hair/Clothes from this file.
+        this.currentSessionData = data;
+
+        // 4. Sync the GameManager variables for immediate use
+        this.playerName = data.playerName;
+        this.totalCoins = data.coins;
+        
+        Debug.Log($"<color=cyan>GameManager:</color> Loaded data for {data.playerName} from Slot {selectedSlot + 1}");
+        
+        return data;
+    }
+
+    Debug.LogWarning("LoadGameData: No save file found at " + filePath);
+    return null; 
+}
 
     public void UpdateCoinUI() // Call this whenever the coin count changes to update the UI text
     {
@@ -121,19 +185,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ResetData() // Call this to clear all saved data and reset the game state
-    {
-        PlayerPrefs.DeleteAll();
-        totalCoins = 0;
-        playerName = "Player1";
-        UpdateCoinUI();
-        Debug.Log("Game data reset! All progress has been cleared.");
-    }
 
-    internal void WrongAnswerSound()
+    public void WrongAnswerSound()
     {
-        throw new NotImplementedException();
+    if (audioSource != null && wrongAnswerSound != null)
+    {
+        audioSource.PlayOneShot(wrongAnswerSound);
     }
+}
     public void SelectSubject(string subject)
     {
         selectedSubject = subject;
@@ -159,13 +218,27 @@ public class GameManager : MonoBehaviour
 
     // This variable holds the 'switch' to your pop-up
 public GameObject myPopup;
-    internal int selectedFarmID;
-    internal int farmID;
+    public int selectedFarmID;
+    public int farmID;
 
     public void ShowThePopup()
 {
     // This 'switches on' the lightbulb
     myPopup.SetActive(true); 
 }
+
+    public void SaveGame(PlayerSaveData data)
+    {
+    // 1. Update the 'Current Session' cache so the hair/clothes are remembered
+    this.currentSessionData = data;
+
+    // 2. Sync the basic variables
+    this.playerName = data.playerName;
+    this.totalCoins = data.coins;
+
+    // 3. Save the whole thing to the JSON file
+    SaveCurrentProgress();
     
+    Debug.Log("<color=green>MASTER SAVE:</color> All character and economy data synced to file.");
+}
 }
