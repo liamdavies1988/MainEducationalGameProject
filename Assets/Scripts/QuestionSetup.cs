@@ -136,7 +136,7 @@ public class QuestionSetup : MonoBehaviour
         {
             Debug.Log("Session Finished!");
             // Add your transition to Rewards or Main Menu here
-            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("RewardsScene");
         }
     }
 

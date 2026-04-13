@@ -4154,7 +4154,7 @@ MonoBehaviour:
   hairContainer: {fileID: 96162249}
   topsContainer: {fileID: 904293295}
   bottomsContainer: {fileID: 2126551036}
-  bodyContainer: {fileID: 1684939585}
+  bodyContainer: {fileID: 1219976734}
   glassesObj: {fileID: 833668251}
   hearingAidObj: {fileID: 884869837}
   crutchesObj: {fileID: 1331908006}

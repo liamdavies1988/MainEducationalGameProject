@@ -52,34 +52,50 @@ public class MenuController : MonoBehaviour
 
     // Called when a save slot is clicked.
     public void OnSlotClicked(int id)
+{
+    // 1. THIS IS THE FIX: Tell the popup which slot we are talking about!
+    slotIndexToProcess = id; 
+
+    // 2. Tell the Brain which slot we are using
+    GameManager.Instance.selectedSlot = id;
+
+    // 3. CRITICAL PATH FIX: Change 'dataPath' to 'persistentDataPath'
+    // If you don't do this, the popup will check the wrong folder!
+    string path = Application.persistentDataPath + "/Saves/SaveSlot_" + (id + 1) + ".json";
+
+    if (File.Exists(path))
     {
-        slotIndexToProcess = id; // Remember which slot is being processed.
-        string path = Application.persistentDataPath + "/Saves/SaveSlot_" + (id + 1) + ".json";
+        string json = File.ReadAllText(path);
+        PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
 
-        if (File.Exists(path))
-        {
-            // If a save exists, show the load confirmation pop-up.
-            string json = File.ReadAllText(path);
-            PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
-
-            if (loadPopupText != null)
-            {
-                loadPopupText.text = "Do you want to play as " + data.playerName + "?";
-            }
-
-            if (loadPopup != null)
-            {
-                loadPopup.SetActive(true);
-            }
-        }
-        else
-        {
-            // No save found: go directly to the player creation scene.
-            GameManager.Instance.selectedSlot = id;
-            SceneManager.LoadScene("PlayerCreation");
-        }
+        GameManager.Instance.totalCoins = data.coins;
+        GameManager.Instance.playerName = data.playerName;
+        GameManager.Instance.selectedFarmID = data.farmID;
+        
+        loadPopup.SetActive(true);
+        
+        Debug.Log("Popup showing for Slot: " + (id + 1));
     }
+    else
+    {
+        // New Game setup
+        GameManager.Instance.ResetData();
+        SceneManager.LoadScene("PlayerCreation");
+    }
+}
+  // Confirm loading an existing save slot.
+    public void ConfirmLoad()
+{
+    // Use the variable we just set in OnSlotClicked
+    GameManager.Instance.selectedSlot = slotIndexToProcess;
 
+    // Synchronize the Brain with the file
+    GameManager.Instance.LoadGameData();
+
+    Debug.Log("ConfirmLoad: Loading Data for Slot: " + (slotIndexToProcess + 1));
+
+    SceneManager.LoadScene("PlayerAndFarm"); 
+}
     // Show the delete confirmation pop-up for a slot.
     public void OpenDeleteConfirmation(int id)
     {
@@ -98,6 +114,9 @@ public class MenuController : MonoBehaviour
         if (File.Exists(path))
         {
             File.Delete(path);
+            Debug.Log("Deleted File: " + path);
+
+            GameManager.Instance.ResetData();
         }
 
         if (deletePopup != null)
@@ -108,19 +127,7 @@ public class MenuController : MonoBehaviour
         RefreshSlotLabels();
     }
 
-    // Confirm loading an existing save slot.
-    public void ConfirmLoad()
-{
-    // 1. Tell the GameManager which slot we are using
-    GameManager.Instance.selectedSlot = slotIndexToProcess;
-
-    // 2. TELL THE GAMEMANAGER TO LOAD THE DATA NOW
-    // This ensures coins and names are ready BEFORE the next scene loads
-    GameManager.Instance.LoadGameData();
-
-    // 3. Move to the next scene
-    SceneManager.LoadScene("TopicChoice"); 
-}
+  
 
     // --- CURRICULUM LOGIC ---
 

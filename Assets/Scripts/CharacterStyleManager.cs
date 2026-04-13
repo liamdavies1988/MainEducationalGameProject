@@ -171,9 +171,10 @@ public void SetDefaultStyle()
     PlayerSaveData data = new PlayerSaveData();
 
     // 1. Fill the data
-    data.playerName = GameManager.Instance.playerName;
+        data.playerName = GameManager.Instance.playerName;
         data.coins = GameManager.Instance.totalCoins;
-        data.farmID = 0; // You can set this based on the player's choice later
+
+        data.farmID = GameManager.Instance.selectedFarmID;
 
     // 2. Get the clean names of what is currently equipped
         data.hairName = GetActiveSpriteName(hairContainer);

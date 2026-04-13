@@ -1,22 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System;
-
-
-[System.Serializable] // This allows us to easily convert this class to JSON for saving and loading
-public class PlayerSaveData
-{
-    public string playerName;
-    public int coins;
-    public int farmID;
-    public string hairName;
-    public string topName;
-    public string bottomName;
-    public string skinName;
-    public bool hasGlasses;
-    public bool hasHearingAid;
-    public bool hasCrutches;
-}
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -139,8 +124,8 @@ public void SaveCurrentProgress()
 public PlayerSaveData LoadGameData()
 {
     // 1. Consistent Path
-    string folderPath = Application.persistentDataPath + "/Saves/";
-    string filePath = folderPath + "SaveSlot_" + (selectedSlot + 1) + ".json";
+    string filePath = Application.persistentDataPath + "/Saves/SaveSlot_" + (selectedSlot + 1) + ".json";
+    
 
     if (System.IO.File.Exists(filePath))
     {
@@ -149,15 +134,11 @@ public PlayerSaveData LoadGameData()
         PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
         
         // 3. SYNC THE CACHE (The missing piece!)
-        // This ensures that when you call SaveCurrentProgress() later, 
-        // the GameManager already knows the Hair/Clothes from this file.
-        this.currentSessionData = data;
-
-        // 4. Sync the GameManager variables for immediate use
         this.playerName = data.playerName;
         this.totalCoins = data.coins;
+        this.selectedFarmID = data.farmID;
         
-        Debug.Log($"<color=cyan>GameManager:</color> Loaded data for {data.playerName} from Slot {selectedSlot + 1}");
+        Debug.Log("GameManager: Brain synchronized with Slot " + (selectedSlot + 1));
         
         return data;
     }
@@ -232,18 +213,24 @@ public GameObject myPopup;
 }
 
     public void SaveGame(PlayerSaveData data)
-    {
-    // 1. Update the 'Current Session' cache so the hair/clothes are remembered
-    this.currentSessionData = data;
+{
+    // 1. Double check which slot we are using
+    int slot = selectedSlot + 1;
+    string path = Application.persistentDataPath + "/Saves/SaveSlot_" + slot + ".json";
 
-    // 2. Sync the basic variables
-    this.playerName = data.playerName;
-    this.totalCoins = data.coins;
-
-    // 3. Save the whole thing to the JSON file
-    SaveCurrentProgress();
+    // 2. Convert the object the StyleManager sent us into text
+    string json = JsonUtility.ToJson(data, true);
     
-    Debug.Log("<color=green>MASTER SAVE:</color> All character and economy data synced to file.");
+
+    // 3. Write it to the hard drive
+    System.IO.File.WriteAllText(path, json);
+
+    // Sync the Brain with the data just saved
+    this.totalCoins = data.coins;
+    this.playerName = data.playerName;
+    this.selectedFarmID = data.farmID; 
+
+    Debug.Log("<color=cyan>GameManager:</color> Successfully saved data to Slot " + slot);
 }
 public string GetQuestionPath()
 {
@@ -253,5 +240,34 @@ public string GetQuestionPath()
 
     return "Questions/" + selectedSubject + "/" + selectedDifficulty;
 }
+public void ResetData()
+{
+    // 1. Wipe the current session variables
+    totalCoins = 0;
+    playerName = "Player1";
+    selectedFarmID = 0;
 
+    // 2. Clear the 'Memory Cache' so it doesn't try to save old info
+    currentSessionData = null;
+
+    // 3. Refresh the UI to show 0 coins
+    UpdateCoinUI();
+
+    Debug.Log("<color=red>GameManager:</color> Current session memory has been wiped clean.");
+}
+}
+
+[System.Serializable] // This allows us to easily convert this class to JSON for saving and loading
+public class PlayerSaveData
+{
+    public string playerName;
+    public int coins;
+    public int farmID;
+    public string hairName;
+    public string topName;
+    public string bottomName;
+    public string skinName;
+    public bool hasGlasses;
+    public bool hasHearingAid;
+    public bool hasCrutches;
 }
