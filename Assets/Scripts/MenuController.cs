@@ -126,21 +126,23 @@ public class MenuController : MonoBehaviour
 
     // Called when the player chooses a subject.
     public void OnSubjectClicked(string subject)
-    {
-        GameManager.Instance.selectedSubject = subject;
+{
+    // We tell the GameManager (The Brain) to save this choice
+    GameManager.Instance.SetSubject(subject);
 
-        if (difficultyPopup != null)
-        {
-            difficultyPopup.SetActive(true);
-        }
-    }
-
-    // Called when the player chooses a difficulty.
-    public void OnDifficultyClicked(string difficulty)
+    // Then we show the difficulty popup
+    if (difficultyPopup != null)
     {
-        GameManager.Instance.selectedDifficulty = difficulty;
-        SceneManager.LoadScene("MultipleChoiceGame");
+        difficultyPopup.SetActive(true);
     }
+}
+
+// Called when the player chooses a difficulty (e.g., Easy)
+public void OnDifficultyClicked(string difficulty)
+{
+    // We tell the GameManager to save the difficulty and START THE GAME
+    GameManager.Instance.SelectDifficultyAndStart(difficulty);
+}
 
     // --- GENERAL UI ---
 

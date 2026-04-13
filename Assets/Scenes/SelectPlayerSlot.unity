@@ -1258,7 +1258,7 @@ PrefabInstance:
       objectReference: {fileID: 1015340806}
     - target: {fileID: 7941140392488612390, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnSlotClicked
+      value: OpenDeleteConfirmation
       objectReference: {fileID: 0}
     - target: {fileID: 7941140392488612390, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -1826,7 +1826,7 @@ PrefabInstance:
       objectReference: {fileID: 1015340806}
     - target: {fileID: 7941140392488612390, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnSlotClicked
+      value: OpenDeleteConfirmation
       objectReference: {fileID: 0}
     - target: {fileID: 7941140392488612390, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -1834,7 +1834,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7941140392488612390, guid: 6f960d25c6764c141811077671281445, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -2402,7 +2402,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Are you sure ??
+  m_text: Are you sure you want to delete??
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2429,7 +2429,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.05
+  m_fontSize: 18.2
   m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 1

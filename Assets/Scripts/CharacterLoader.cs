@@ -20,6 +20,9 @@ public class CharacterLoader : MonoBehaviour
     public TextMeshProUGUI nameLabel;
     public GameObject[] farmLayouts;
 
+    [Header("Economy UI")]
+    public TextMeshProUGUI coinLabel; 
+
     void Start()
     {
         LoadPlayerAndWorld();
@@ -35,8 +38,15 @@ public class CharacterLoader : MonoBehaviour
             string json = File.ReadAllText(filePath);
             PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
 
+            
+            if (coinLabel != null) 
+                    {
+                        coinLabel.text = data.coins.ToString();
+                    }
+            GameManager.Instance.totalCoins = data.coins;
+            GameManager.Instance.UpdateCoinUI();       
+            
             if (nameLabel != null) nameLabel.text = data.playerName;
-
             // --- THE HIDE/SHOW LOGIC ---
             // We tell each container: "Look at this image name and show the right box"
             ReconstructPart(hairContainer, "HairStyles", data.hairName);

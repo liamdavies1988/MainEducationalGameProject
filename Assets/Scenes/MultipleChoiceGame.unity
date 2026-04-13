@@ -1079,8 +1079,6 @@ MonoBehaviour:
   - {fileID: 166421635}
   - {fileID: 1579161275}
   - {fileID: 1044145863}
-  selectedTopic: Welsh
-  selectedDifficulty: Easy
   totalQuestionsPerSession: 3
 --- !u!1001 &380991121
 PrefabInstance:
@@ -2611,6 +2609,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7298600512937994139, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
+      propertyPath: coinCountText
+      value: 
+      objectReference: {fileID: 851583739}
     - target: {fileID: 7878406007848078448, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 685.6548
@@ -3838,8 +3840,6 @@ MonoBehaviour:
   - {fileID: 166421635}
   - {fileID: 1579161275}
   - {fileID: 1044145863}
-  selectedTopic: Welsh
-  selectedDifficulty: Easy
   totalQuestionsPerSession: 3
 --- !u!4 &2064242525
 Transform:
@@ -4154,12 +4154,13 @@ MonoBehaviour:
   hairContainer: {fileID: 96162249}
   topsContainer: {fileID: 904293295}
   bottomsContainer: {fileID: 2126551036}
-  bodyContainer: {fileID: 1219976734}
+  bodyContainer: {fileID: 1684939585}
   glassesObj: {fileID: 833668251}
   hearingAidObj: {fileID: 884869837}
   crutchesObj: {fileID: 1331908006}
   nameLabel: {fileID: 0}
   farmLayouts: []
+  coinLabel: {fileID: 851583739}
 --- !u!4 &2143037401
 Transform:
   m_ObjectHideFlags: 0

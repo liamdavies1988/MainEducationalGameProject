@@ -199,17 +199,21 @@ public PlayerSaveData LoadGameData()
         difficultyPopup.SetActive(true); // Show the Easy/Hard choice
     }
     public void SetSubject(string newSubject)
-    {
-        selectedSubject = newSubject;
-        Debug.Log("Subject changed to: " + selectedSubject);
-    }
+{
+    selectedSubject = newSubject;
+    Debug.Log("<color=green>GameManager:</color> Subject set to: " + selectedSubject);
+}
     public void SelectDifficultyAndStart(string difficulty)
-    {
-        selectedDifficulty = difficulty;
+{
+    selectedDifficulty = difficulty;
+    Debug.Log("<color=green>GameManager:</color> Difficulty set to: " + selectedDifficulty);
 
-        // Now that we have both Subject AND Difficulty, we can play!
-        UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
-    }
+    // Save the progress before switching scenes just in case
+    SaveCurrentProgress();
+
+    // CRITICAL: Make sure this name matches your scene exactly!
+    UnityEngine.SceneManagement.SceneManager.LoadScene("MultipleChoiceGame");
+}
     public void SetDifficulty(string newDifficulty)
     {
         selectedDifficulty = newDifficulty;
@@ -241,4 +245,13 @@ public GameObject myPopup;
     
     Debug.Log("<color=green>MASTER SAVE:</color> All character and economy data synced to file.");
 }
+public string GetQuestionPath()
+{
+    // If for some reason they are empty, return a default so the game doesn't crash
+    if (string.IsNullOrEmpty(selectedSubject)) selectedSubject = "Maths";
+    if (string.IsNullOrEmpty(selectedDifficulty)) selectedDifficulty = "Easy";
+
+    return "Questions/" + selectedSubject + "/" + selectedDifficulty;
+}
+
 }

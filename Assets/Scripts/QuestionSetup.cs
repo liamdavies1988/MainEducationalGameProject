@@ -5,123 +5,138 @@ using TMPro;
 
 public class QuestionSetup : MonoBehaviour
 {
-    [SerializeField] private List<QuestionData> questions;
+    [Header("Question Data")]
+    [SerializeField] private List<QuestionData> questions = new List<QuestionData>();
     private QuestionData currentQuestion;
 
+    [Header("UI Labels")]
     [SerializeField] private TextMeshProUGUI QuestionCountText;
     [SerializeField] private TextMeshProUGUI QuestionText;
     [SerializeField] private TextMeshProUGUI TopicDisplay;
     [SerializeField] private TextMeshProUGUI DifficultyDisplay;
+
+    [Header("Buttons")]
     [SerializeField] private AnswerButton[] answerbuttons;
-    [SerializeField] private string selectedTopic = "Welsh";
-    [SerializeField] private string selectedDifficulty = "Easy";
-    [SerializeField] private int totalQuestionsPerSession = 3;
+    
+    [Header("Settings")]
+    [SerializeField] private int totalQuestionsPerSession = 5;
 
     private int correctAnswerChoice;
-    private int currentQuestionNumber = 1; // Start at 1 for the UI
-
-    private void Awake()
-    {
-       
-    }
+    private int currentQuestionNumber = 1;
 
     private void Start()
     { 
-        
+        // 1. Load the questions from Resources
         GetQuestionAssets();
-        SelectNewQuestion();
-        SetQuestionValues();
-        SetAnswerValues();
+
+        // 2. SAFETY CHECK: Only proceed if we actually found questions
+        if (questions != null && questions.Count > 0)
+        {
+            // 3. THIS IS THE MISSING STEP: Pick the first question!
+            SelectNewQuestion();
+            
+            // 4. Update the UI
+            SetQuestionValues();
+            SetAnswerValues();
+        }
+        else
+        {
+            Debug.LogError("<color=red>GAME HALTED:</color> No questions loaded. Character is standing in an empty classroom!");
+        }
     }
 
     private void GetQuestionAssets()
     {
-        // 1. Safety Check: Make sure the GameManager exists
-        if (GameManager.Instance == null)
-        {
-            Debug.LogError("GameManager not found! Cannot load questions.");
-            return;
-        }
+        if (GameManager.Instance == null) return;
 
-        // 2. Get the current choices from the GameManager
-        
-        selectedTopic = GameManager.Instance.selectedSubject;
-        selectedDifficulty = GameManager.Instance.selectedDifficulty;
+        // Get choices from the Brain (GameManager)
+        string subject = GameManager.Instance.selectedSubject;     
+        string difficulty = GameManager.Instance.selectedDifficulty; 
 
-        // 3. Build the folder path to match your CSV output
-        string path = "Questions/" + selectedTopic + "/" + selectedDifficulty;
+        // Build the path: e.g. Questions/Mathematics/Easy
+        string path = "Questions/" + subject + "/" + difficulty;
+
+        Debug.Log("<color=cyan>LOADING QUESTIONS FROM:</color> Resources/" + path);
 
         QuestionData[] loadedQuestions = Resources.LoadAll<QuestionData>(path);
 
-
-       if (loadedQuestions.Length == 0)
-            {
-                Debug.LogError($"FATAL ERROR: No questions found at Resources/{path}");
-            }
-            else
-            {
-                questions = new List<QuestionData>(loadedQuestions);
-            }
+        if (loadedQuestions.Length > 0)
+        {
+            questions = new List<QuestionData>(loadedQuestions);
+            Debug.Log($"<color=green>SUCCESS:</color> Loaded {questions.Count} {subject} questions.");
         }
-    
+        else
+        {
+            Debug.LogError($"FATAL ERROR: No .asset files found in Resources/{path}.");
+        }
+    }
 
     private void SelectNewQuestion()
     {
-    if (currentQuestion == null) return;
-
-    QuestionCountText.text = "Question " + currentQuestionNumber; 
-    QuestionText.text = currentQuestion.question;
-    
-    // --- FIX: Use your variables to update the UI labels ---
-    TopicDisplay.text = selectedTopic;
-    DifficultyDisplay.text = selectedDifficulty;
+        if (questions.Count > 0)
+        {
+            int randomQuestionIndex = Random.Range(0, questions.Count);
+            currentQuestion = questions[randomQuestionIndex];
+            
+            // Remove it from the list so it doesn't repeat this session
+            questions.RemoveAt(randomQuestionIndex);
+            
+            Debug.Log("Selected Question: " + currentQuestion.question);
+        }
+        else
+        {
+            currentQuestion = null;
+        }
     }
 
     private void SetQuestionValues()
     {
-    // SAFETY CHECK: If no question was loaded, stop here!
-    if (currentQuestion == null) return;
+        if (currentQuestion == null) return;
 
-    QuestionCountText.text = "Question " + currentQuestionNumber; 
-    QuestionText.text = currentQuestion.question;
-    TopicDisplay.text = currentQuestion.topic;
-    DifficultyDisplay.text = GameManager.Instance.selectedDifficulty; // Get this from the GameManager!
-}
+        QuestionCountText.text = "Question " + currentQuestionNumber; 
+        QuestionText.text = currentQuestion.question;
+        TopicDisplay.text = currentQuestion.topic;
+        
+        if (GameManager.Instance != null)
+            DifficultyDisplay.text = GameManager.Instance.selectedDifficulty;
+    }
+
+    private void SetAnswerValues()
+    {
+        if (currentQuestion == null) return;
+
+        List<string> randomizedAnswers = RandomizeAnswers(new List<string>(currentQuestion.answers));
+
+        for (int i = 0; i < answerbuttons.Length; i++)
+        {
+            if (i < randomizedAnswers.Count)
+            {
+                answerbuttons[i].gameObject.SetActive(true);
+                bool isThisCorrect = (i == correctAnswerChoice);
+                answerbuttons[i].SetIsCorrect(isThisCorrect);
+                answerbuttons[i].SetAnswerText(randomizedAnswers[i]);
+            }
+            else
+            {
+                answerbuttons[i].gameObject.SetActive(false);
+            }
+        }
+    }
 
     public void StartNextQuestion()
     {
-        // CHECK: Have we reached the limit?
-        if (currentQuestionNumber < totalQuestionsPerSession)
+        if (currentQuestionNumber < totalQuestionsPerSession && questions.Count > 0)
         {
             currentQuestionNumber++;
-
             SelectNewQuestion();
             SetQuestionValues();
             SetAnswerValues();
         }
         else
         {
-            // END OF SESSION
-            Debug.Log("Session Finished! No more questions.");
-
-            // This stops the game in the editor for testing
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
-        }
-    }
-
-    private void SetAnswerValues()
-    {
-        List<string> randomizedAnswers = RandomizeAnswers(new List<string>(currentQuestion.answers));
-
-        for (int i = 0; i < answerbuttons.Length; i++)
-        {
-            bool isThisCorrect = (i == correctAnswerChoice);
-            answerbuttons[i].SetIsCorrect(isThisCorrect);
-            answerbuttons[i].SetAnswerText(randomizedAnswers[i]);
+            Debug.Log("Session Finished!");
+            // Add your transition to Rewards or Main Menu here
+            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
         }
     }
 
@@ -134,17 +149,14 @@ public class QuestionSetup : MonoBehaviour
         for (int i = 0; i < originalCount; i++)
         {
             int random = Random.Range(0, originalList.Count);
-
             if (random == 0 && !correctAnswerFound)
             {
                 correctAnswerChoice = i;
                 correctAnswerFound = true;
             }
-
             newList.Add(originalList[random]);
             originalList.RemoveAt(random);
         }
-
         return newList;
     }
 }
