@@ -1,0 +1,1023 @@
+fileFormatVersion: 2
+guid: ed45a2c4246fed04095cb49b6aae41cd
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6368793707121280599
+    second: RewardsAnimalSpritesheet_0
+  - first:
+      213: -8977675351662962130
+    second: RewardsAnimalSpritesheet_1
+  - first:
+      213: 4661253483305183219
+    second: RewardsAnimalSpritesheet_2
+  - first:
+      213: -7309222004530491769
+    second: RewardsAnimalSpritesheet_3
+  - first:
+      213: -4506478002456973636
+    second: RewardsAnimalSpritesheet_4
+  - first:
+      213: -5202636448122686203
+    second: RewardsAnimalSpritesheet_5
+  - first:
+      213: 21597295479384966
+    second: RewardsAnimalSpritesheet_6
+  - first:
+      213: -2614657533507076808
+    second: RewardsAnimalSpritesheet_7
+  - first:
+      213: 3173561175114868988
+    second: RewardsAnimalSpritesheet_8
+  - first:
+      213: 2089222931762668998
+    second: RewardsAnimalSpritesheet_9
+  - first:
+      213: -4640492893736503981
+    second: RewardsAnimalSpritesheet_10
+  - first:
+      213: 8944226079199201836
+    second: RewardsAnimalSpritesheet_11
+  - first:
+      213: -9166571104217471083
+    second: RewardsAnimalSpritesheet_12
+  - first:
+      213: -2658385934751022229
+    second: RewardsAnimalSpritesheet_13
+  - first:
+      213: 772571690231207217
+    second: RewardsAnimalSpritesheet_14
+  - first:
+      213: 7993121322199769990
+    second: RewardsAnimalSpritesheet_15
+  - first:
+      213: -3566090055117327821
+    second: RewardsAnimalSpritesheet_16
+  - first:
+      213: -3151449928042175458
+    second: RewardsAnimalSpritesheet_17
+  - first:
+      213: 8835305461520951654
+    second: RewardsAnimalSpritesheet_18
+  - first:
+      213: 5857796156133698880
+    second: RewardsAnimalSpritesheet_19
+  - first:
+      213: -3933372234862968748
+    second: RewardsAnimalSpritesheet_20
+  - first:
+      213: -3210481261472867463
+    second: RewardsAnimalSpritesheet_21
+  - first:
+      213: -1469738956708216621
+    second: RewardsAnimalSpritesheet_22
+  - first:
+      213: -4410327845758293737
+    second: RewardsAnimalSpritesheet_23
+  - first:
+      213: -2557279475813493996
+    second: RewardsAnimalSpritesheet_24
+  - first:
+      213: 5210325674879097085
+    second: RewardsAnimalSpritesheet_25
+  - first:
+      213: 4813421920216408903
+    second: RewardsAnimalSpritesheet_26
+  - first:
+      213: -4617377486664497457
+    second: RewardsAnimalSpritesheet_27
+  - first:
+      213: 7186623065984702346
+    second: RewardsAnimalSpritesheet_28
+  - first:
+      213: -6800887620493537593
+    second: RewardsAnimalSpritesheet_29
+  - first:
+      213: 3976344005710115175
+    second: RewardsAnimalSpritesheet_30
+  - first:
+      213: 1467715775999250917
+    second: RewardsAnimalSpritesheet_31
+  - first:
+      213: 6859382741887651201
+    second: RewardsAnimalSpritesheet_32
+  - first:
+      213: 9193779107540377698
+    second: RewardsAnimalSpritesheet_33
+  - first:
+      213: -6762295809672343252
+    second: RewardsAnimalSpritesheet_34
+  - first:
+      213: 212356185475089312
+    second: RewardsAnimalSpritesheet_35
+  - first:
+      213: 77808891088528501
+    second: RewardsAnimalSpritesheet_36
+  - first:
+      213: -6320418483077868422
+    second: RewardsAnimalSpritesheet_37
+  - first:
+      213: 7827139330130740484
+    second: RewardsAnimalSpritesheet_38
+  - first:
+      213: -5806160719141263661
+    second: RewardsAnimalSpritesheet_39
+  - first:
+      213: -3716704109548670714
+    second: RewardsAnimalSpritesheet_40
+  - first:
+      213: 8196899246733231125
+    second: RewardsAnimalSpritesheet_41
+  - first:
+      213: -2772590385739226382
+    second: RewardsAnimalSpritesheet_42
+  - first:
+      213: 6118279371050774088
+    second: RewardsAnimalSpritesheet_43
+  - first:
+      213: 1358887148689647965
+    second: RewardsAnimalSpritesheet_44
+  - first:
+      213: 9087352084085477081
+    second: RewardsAnimalSpritesheet_45
+  - first:
+      213: -4848521226115184035
+    second: RewardsAnimalSpritesheet_46
+  - first:
+      213: -36320444015848412
+    second: RewardsAnimalSpritesheet_47
+  - first:
+      213: 8491421962751863693
+    second: RewardsAnimalSpritesheet_48
+  - first:
+      213: 214011942590869799
+    second: RewardsAnimalSpritesheet_49
+  - first:
+      213: 9204584582392520591
+    second: RewardsAnimalSpritesheet_50
+  - first:
+      213: -2269979536698293633
+    second: RewardsAnimalSpritesheet_51
+  - first:
+      213: -4303531595482551450
+    second: RewardsAnimalSpritesheet_52
+  - first:
+      213: -3029903500444830650
+    second: RewardsAnimalSpritesheet_53
+  - first:
+      213: 7380270073538874815
+    second: RewardsAnimalSpritesheet_54
+  - first:
+      213: 8494256912750264341
+    second: RewardsAnimalSpritesheet_55
+  - first:
+      213: 100159904863465022
+    second: RewardsAnimalSpritesheet_56
+  - first:
+      213: -8002490917888488648
+    second: RewardsAnimalSpritesheet_57
+  - first:
+      213: -75547690121101650
+    second: RewardsAnimalSpritesheet_58
+  - first:
+      213: -5992658115606155568
+    second: RewardsAnimalSpritesheet_59
+  - first:
+      213: -2675683377468482269
+    second: RewardsAnimalSpritesheet_60
+  - first:
+      213: -441407521368295052
+    second: RewardsAnimalSpritesheet_61
+  - first:
+      213: 7305010265893021696
+    second: RewardsAnimalSpritesheet_62
+  - first:
+      213: 7099500340242144101
+    second: RewardsAnimalSpritesheet_63
+  - first:
+      213: 6726391165314304248
+    second: RewardsAnimalSpritesheet_64
+  - first:
+      213: -320329922336357581
+    second: RewardsAnimalSpritesheet_65
+  - first:
+      213: -4473588689948552164
+    second: RewardsAnimalSpritesheet_66
+  - first:
+      213: 6685985731174176002
+    second: RewardsAnimalSpritesheet_67
+  - first:
+      213: -2312270700126378613
+    second: RewardsAnimalSpritesheet_68
+  - first:
+      213: 7563903335214851651
+    second: RewardsAnimalSpritesheet_69
+  - first:
+      213: -6780495206225781936
+    second: RewardsAnimalSpritesheet_70
+  - first:
+      213: 4239406697381988992
+    second: RewardsAnimalSpritesheet_71
+  - first:
+      213: 6331980015946975173
+    second: RewardsAnimalSpritesheet_72
+  - first:
+      213: -7365308428789267675
+    second: RewardsAnimalSpritesheet_73
+  - first:
+      213: 3110353518992348568
+    second: RewardsAnimalSpritesheet_74
+  - first:
+      213: 3970833528575292188
+    second: RewardsAnimalSpritesheet_75
+  - first:
+      213: -2577025568909329291
+    second: RewardsAnimalSpritesheet_76
+  - first:
+      213: 3140373935101813863
+    second: RewardsAnimalSpritesheet_77
+  - first:
+      213: -9148691386115904083
+    second: RewardsAnimalSpritesheet_78
+  - first:
+      213: -7775504625120671337
+    second: RewardsAnimalSpritesheet_79
+  - first:
+      213: -8642133166263277159
+    second: RewardsAnimalSpritesheet_80
+  - first:
+      213: -19322947529766172
+    second: RewardsAnimalSpritesheet_81
+  - first:
+      213: 8698197062689294239
+    second: RewardsAnimalSpritesheet_82
+  - first:
+      213: 5712085391824953394
+    second: RewardsAnimalSpritesheet_83
+  - first:
+      213: -5579959578123045726
+    second: RewardsAnimalSpritesheet_84
+  - first:
+      213: 8890375608420593953
+    second: RewardsAnimalSpritesheet_85
+  - first:
+      213: 3664444691603433266
+    second: RewardsAnimalSpritesheet_86
+  - first:
+      213: 1196428175889013535
+    second: RewardsAnimalSpritesheet_87
+  - first:
+      213: 6850368768175797084
+    second: RewardsAnimalSpritesheet_88
+  - first:
+      213: -1693371315589424391
+    second: RewardsAnimalSpritesheet_89
+  - first:
+      213: -1990232437072128062
+    second: RewardsAnimalSpritesheet_90
+  - first:
+      213: 2132301965131857607
+    second: RewardsAnimalSpritesheet_91
+  - first:
+      213: -5595465414904041284
+    second: RewardsAnimalSpritesheet_92
+  - first:
+      213: 7460902968737198555
+    second: RewardsAnimalSpritesheet_93
+  - first:
+      213: 8070667942442838813
+    second: RewardsAnimalSpritesheet_94
+  - first:
+      213: -3896737220347844636
+    second: RewardsAnimalSpritesheet_95
+  - first:
+      213: 516251339904161463
+    second: RewardsAnimalSpritesheet_96
+  - first:
+      213: -3685485580604713229
+    second: RewardsAnimalSpritesheet_97
+  - first:
+      213: 2558788602714906177
+    second: RewardsAnimalSpritesheet_98
+  - first:
+      213: -9207327925959559739
+    second: RewardsAnimalSpritesheet_99
+  - first:
+      213: -7033589103964319124
+    second: RewardsAnimalSpritesheet_100
+  - first:
+      213: -2361736933380866061
+    second: RewardsAnimalSpritesheet_101
+  - first:
+      213: 1500285618096319150
+    second: RewardsAnimalSpritesheet_102
+  - first:
+      213: 8193708058552219298
+    second: RewardsAnimalSpritesheet_103
+  - first:
+      213: -4498476653664215803
+    second: RewardsAnimalSpritesheet_104
+  - first:
+      213: 8070353977121541219
+    second: RewardsAnimalSpritesheet_105
+  - first:
+      213: -1247726718963519240
+    second: RewardsAnimalSpritesheet_106
+  - first:
+      213: -7784939874829248958
+    second: RewardsAnimalSpritesheet_107
+  - first:
+      213: 2685590174059187115
+    second: RewardsAnimalSpritesheet_108
+  - first:
+      213: -8184188549238554494
+    second: RewardsAnimalSpritesheet_109
+  - first:
+      213: -6299497478652770804
+    second: RewardsAnimalSpritesheet_110
+  - first:
+      213: 561231562400988611
+    second: RewardsAnimalSpritesheet_111
+  - first:
+      213: 5902569512140932996
+    second: RewardsAnimalSpritesheet_112
+  - first:
+      213: -5340837309857080024
+    second: RewardsAnimalSpritesheet_113
+  - first:
+      213: 3422442758197831466
+    second: RewardsAnimalSpritesheet_114
+  - first:
+      213: 8946601082627402174
+    second: RewardsAnimalSpritesheet_115
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: animal_chicken
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 2172
+        width: 322
+        height: 468
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a9fa4fdddf7d97a0800000000000000
+      internalID: -6368793707121280599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_duck
+      rect:
+        serializedVersion: 2
+        x: 759
+        y: 2172
+        width: 322
+        height: 405
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2a595b55d3e86380800000000000000
+      internalID: -8977675351662962130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_rabbit
+      rect:
+        serializedVersion: 2
+        x: 1276
+        y: 2172
+        width: 375
+        height: 499
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f72570c85910b040800000000000000
+      internalID: 4661253483305183219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_mouse
+      rect:
+        serializedVersion: 2
+        x: 1785
+        y: 2172
+        width: 375
+        height: 393
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78ecd73105d609a90800000000000000
+      internalID: -7309222004530491769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_cat
+      rect:
+        serializedVersion: 2
+        x: 2284
+        y: 2172
+        width: 375
+        height: 414
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbea0731226c571c0800000000000000
+      internalID: -4506478002456973636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_seagul
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 1558
+        width: 322
+        height: 369
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 761fa1d3ecfce2730800000000000000
+      internalID: 3976344005710115175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_tiger
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 1558
+        width: 401
+        height: 371
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e11ca3d8bf5e5410800000000000000
+      internalID: 1467715775999250917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_crow
+      rect:
+        serializedVersion: 2
+        x: 1302
+        y: 1558
+        width: 322
+        height: 369
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18d88acd24c613f50800000000000000
+      internalID: 6859382741887651201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_fox
+      rect:
+        serializedVersion: 2
+        x: 1772
+        y: 1558
+        width: 400
+        height: 377
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2602a58336dd69f70800000000000000
+      internalID: 9193779107540377698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_bear
+      rect:
+        serializedVersion: 2
+        x: 2277
+        y: 1558
+        width: 389
+        height: 377
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c211e5e0acf7722a0800000000000000
+      internalID: -6762295809672343252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_lion
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 860
+        width: 456
+        height: 482
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3eaf1e17e6d36100800000000000000
+      internalID: 100159904863465022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_moose
+      rect:
+        serializedVersion: 2
+        x: 601
+        y: 860
+        width: 644
+        height: 437
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83b87f0c8e071f090800000000000000
+      internalID: -8002490917888488648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_pig
+      rect:
+        serializedVersion: 2
+        x: 1294
+        y: 860
+        width: 338
+        height: 375
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eaefabea6c993fef0800000000000000
+      internalID: -75547690121101650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_owl
+      rect:
+        serializedVersion: 2
+        x: 1804
+        y: 860
+        width: 336
+        height: 369
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0deeeeeb13dc5dca0800000000000000
+      internalID: -5992658115606155568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_monkey
+      rect:
+        serializedVersion: 2
+        x: 2310
+        y: 860
+        width: 323
+        height: 380
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32dd29205201edad0800000000000000
+      internalID: -2675683377468482269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_frog
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 178
+        width: 322
+        height: 387
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9701fbb42436b870800000000000000
+      internalID: 8698197062689294239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_cow
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 178
+        width: 448
+        height: 414
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 230ac626667654f40800000000000000
+      internalID: 5712085391824953394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_penguin
+      rect:
+        serializedVersion: 2
+        x: 1299
+        y: 178
+        width: 322
+        height: 369
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a4ffecd3500092b0800000000000000
+      internalID: -5579959578123045726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_polarbear
+      rect:
+        serializedVersion: 2
+        x: 1798
+        y: 178
+        width: 349
+        height: 376
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 121f4bb3385f06b70800000000000000
+      internalID: 8890375608420593953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animal_hamster
+      rect:
+        serializedVersion: 2
+        x: 2284
+        y: 178
+        width: 375
+        height: 393
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 237a61e2809bad230800000000000000
+      internalID: 3664444691603433266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: d10d0757e79891b4d98588d020504bea
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      RewardsAnimalSpritesheet_10: -4640492893736503981
+      RewardsAnimalSpritesheet_100: -7033589103964319124
+      RewardsAnimalSpritesheet_101: -2361736933380866061
+      RewardsAnimalSpritesheet_102: 1500285618096319150
+      RewardsAnimalSpritesheet_103: 8193708058552219298
+      RewardsAnimalSpritesheet_104: -4498476653664215803
+      RewardsAnimalSpritesheet_105: 8070353977121541219
+      RewardsAnimalSpritesheet_106: -1247726718963519240
+      RewardsAnimalSpritesheet_107: -7784939874829248958
+      RewardsAnimalSpritesheet_108: 2685590174059187115
+      RewardsAnimalSpritesheet_109: -8184188549238554494
+      RewardsAnimalSpritesheet_11: 8944226079199201836
+      RewardsAnimalSpritesheet_110: -6299497478652770804
+      RewardsAnimalSpritesheet_111: 561231562400988611
+      RewardsAnimalSpritesheet_112: 5902569512140932996
+      RewardsAnimalSpritesheet_113: -5340837309857080024
+      RewardsAnimalSpritesheet_114: 3422442758197831466
+      RewardsAnimalSpritesheet_115: 8946601082627402174
+      RewardsAnimalSpritesheet_116: -2001875012
+      RewardsAnimalSpritesheet_117: -806423067
+      RewardsAnimalSpritesheet_12: -9166571104217471083
+      RewardsAnimalSpritesheet_13: -2658385934751022229
+      RewardsAnimalSpritesheet_14: 772571690231207217
+      RewardsAnimalSpritesheet_15: 7993121322199769990
+      RewardsAnimalSpritesheet_16: -3566090055117327821
+      RewardsAnimalSpritesheet_17: -3151449928042175458
+      RewardsAnimalSpritesheet_18: 8835305461520951654
+      RewardsAnimalSpritesheet_19: 5857796156133698880
+      RewardsAnimalSpritesheet_20: -3933372234862968748
+      RewardsAnimalSpritesheet_21: -3210481261472867463
+      RewardsAnimalSpritesheet_22: -1469738956708216621
+      RewardsAnimalSpritesheet_23: -4410327845758293737
+      RewardsAnimalSpritesheet_24: -2557279475813493996
+      RewardsAnimalSpritesheet_25: 5210325674879097085
+      RewardsAnimalSpritesheet_26: 4813421920216408903
+      RewardsAnimalSpritesheet_27: -4617377486664497457
+      RewardsAnimalSpritesheet_28: 7186623065984702346
+      RewardsAnimalSpritesheet_29: -6800887620493537593
+      RewardsAnimalSpritesheet_35: 212356185475089312
+      RewardsAnimalSpritesheet_36: 77808891088528501
+      RewardsAnimalSpritesheet_37: -6320418483077868422
+      RewardsAnimalSpritesheet_38: 7827139330130740484
+      RewardsAnimalSpritesheet_39: -5806160719141263661
+      RewardsAnimalSpritesheet_40: -3716704109548670714
+      RewardsAnimalSpritesheet_41: 8196899246733231125
+      RewardsAnimalSpritesheet_42: -2772590385739226382
+      RewardsAnimalSpritesheet_43: 6118279371050774088
+      RewardsAnimalSpritesheet_44: 1358887148689647965
+      RewardsAnimalSpritesheet_45: 9087352084085477081
+      RewardsAnimalSpritesheet_46: -4848521226115184035
+      RewardsAnimalSpritesheet_47: -36320444015848412
+      RewardsAnimalSpritesheet_48: 8491421962751863693
+      RewardsAnimalSpritesheet_49: 214011942590869799
+      RewardsAnimalSpritesheet_5: -5202636448122686203
+      RewardsAnimalSpritesheet_50: 9204584582392520591
+      RewardsAnimalSpritesheet_51: -2269979536698293633
+      RewardsAnimalSpritesheet_52: -4303531595482551450
+      RewardsAnimalSpritesheet_53: -3029903500444830650
+      RewardsAnimalSpritesheet_54: 7380270073538874815
+      RewardsAnimalSpritesheet_55: 8494256912750264341
+      RewardsAnimalSpritesheet_6: 21597295479384966
+      RewardsAnimalSpritesheet_61: -441407521368295052
+      RewardsAnimalSpritesheet_62: 7305010265893021696
+      RewardsAnimalSpritesheet_63: 7099500340242144101
+      RewardsAnimalSpritesheet_64: 6726391165314304248
+      RewardsAnimalSpritesheet_65: -320329922336357581
+      RewardsAnimalSpritesheet_66: -4473588689948552164
+      RewardsAnimalSpritesheet_67: 6685985731174176002
+      RewardsAnimalSpritesheet_68: -2312270700126378613
+      RewardsAnimalSpritesheet_69: 7563903335214851651
+      RewardsAnimalSpritesheet_7: -2614657533507076808
+      RewardsAnimalSpritesheet_70: -6780495206225781936
+      RewardsAnimalSpritesheet_71: 4239406697381988992
+      RewardsAnimalSpritesheet_72: 6331980015946975173
+      RewardsAnimalSpritesheet_73: -7365308428789267675
+      RewardsAnimalSpritesheet_74: 3110353518992348568
+      RewardsAnimalSpritesheet_75: 3970833528575292188
+      RewardsAnimalSpritesheet_76: -2577025568909329291
+      RewardsAnimalSpritesheet_77: 3140373935101813863
+      RewardsAnimalSpritesheet_78: -9148691386115904083
+      RewardsAnimalSpritesheet_79: -7775504625120671337
+      RewardsAnimalSpritesheet_8: 3173561175114868988
+      RewardsAnimalSpritesheet_80: -8642133166263277159
+      RewardsAnimalSpritesheet_81: -19322947529766172
+      RewardsAnimalSpritesheet_87: 1196428175889013535
+      RewardsAnimalSpritesheet_88: 6850368768175797084
+      RewardsAnimalSpritesheet_89: -1693371315589424391
+      RewardsAnimalSpritesheet_9: 2089222931762668998
+      RewardsAnimalSpritesheet_90: -1990232437072128062
+      RewardsAnimalSpritesheet_91: 2132301965131857607
+      RewardsAnimalSpritesheet_92: -5595465414904041284
+      RewardsAnimalSpritesheet_93: 7460902968737198555
+      RewardsAnimalSpritesheet_94: 8070667942442838813
+      RewardsAnimalSpritesheet_95: -3896737220347844636
+      RewardsAnimalSpritesheet_96: 516251339904161463
+      RewardsAnimalSpritesheet_97: -3685485580604713229
+      RewardsAnimalSpritesheet_98: 2558788602714906177
+      RewardsAnimalSpritesheet_99: -9207327925959559739
+      animal_bear: -6762295809672343252
+      animal_cat: -4506478002456973636
+      animal_chicken: -6368793707121280599
+      animal_cow: 5712085391824953394
+      animal_crow: 6859382741887651201
+      animal_duck: -8977675351662962130
+      animal_fox: 9193779107540377698
+      animal_frog: 8698197062689294239
+      animal_hamster: 3664444691603433266
+      animal_lion: 100159904863465022
+      animal_monkey: -2675683377468482269
+      animal_moose: -8002490917888488648
+      animal_mouse: -7309222004530491769
+      animal_owl: -5992658115606155568
+      animal_penguin: -5579959578123045726
+      animal_pig: -75547690121101650
+      animal_polarbear: 8890375608420593953
+      animal_rabbit: 4661253483305183219
+      animal_seagul: 3976344005710115175
+      animal_tiger: 1467715775999250917
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
