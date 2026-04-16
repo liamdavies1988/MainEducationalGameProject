@@ -75,10 +75,10 @@ public class MenuController : MonoBehaviour
         loadPopup.SetActive(true);
         
         Debug.Log("Popup showing for Slot: " + (id + 1));
+    if(loadPopupText != null) loadPopupText.text = "Do you want to load " + data.playerName + "?";
     }
     else
     {
-        // New Game setup
         GameManager.Instance.ResetData();
         SceneManager.LoadScene("PlayerCreation");
     }
@@ -168,3 +168,4 @@ public void OnDifficultyClicked(string difficulty)
         Debug.Log("UI: All pop-ups closed.");
     }
 }
+// --- RECENTLY EDITED FILES ---

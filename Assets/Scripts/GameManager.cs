@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -103,6 +104,7 @@ public void SaveCurrentProgress()
     // We only update what changes during the actual game levels
     currentSessionData.coins = totalCoins;
     currentSessionData.playerName = playerName;
+    currentSessionData.activeAnimals = new List<string>(this.activeAnimals);
     
     // Note: HairName, TopName, etc., stay as they were when loaded, 
     // ensuring we don't "lose" the character's look during gameplay.
@@ -205,6 +207,7 @@ public PlayerSaveData LoadGameData()
 public GameObject myPopup;
     public int selectedFarmID;
     public int farmID;
+    internal List<string> activeAnimals = new List<string>();
 
     public void ShowThePopup()
 {
@@ -229,7 +232,7 @@ public GameObject myPopup;
     this.totalCoins = data.coins;
     this.playerName = data.playerName;
     this.selectedFarmID = data.farmID; 
-
+    this.activeAnimals = data.activeAnimals;
     Debug.Log("<color=cyan>GameManager:</color> Successfully saved data to Slot " + slot);
 }
 public string GetQuestionPath()
@@ -255,6 +258,10 @@ public void ResetData()
 
     Debug.Log("<color=red>GameManager:</color> Current session memory has been wiped clean.");
 }
+
+    internal class Instance
+    {
+    }
 }
 
 [System.Serializable] // This allows us to easily convert this class to JSON for saving and loading
@@ -270,4 +277,7 @@ public class PlayerSaveData
     public bool hasGlasses;
     public bool hasHearingAid;
     public bool hasCrutches;
+    public List<string> activeAnimals;
 }
+
+// --- RECENTLY EDITED FILES ---

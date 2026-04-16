@@ -29,42 +29,63 @@ public class CharacterLoader : MonoBehaviour
     }
 
     public void LoadPlayerAndWorld()
+{
+    int slotID = GameManager.Instance.selectedSlot;
+    string filePath = Application.persistentDataPath + "/Saves/SaveSlot_" + (slotID + 1) + ".json";
+
+    if (File.Exists(filePath))
     {
-        int slotID = GameManager.Instance.selectedSlot;
-        string filePath = Application.persistentDataPath + "/Saves/SaveSlot_" + (slotID + 1) + ".json";
+        string json = File.ReadAllText(filePath);
+        PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
 
-        if (File.Exists(filePath))
+        // 1. Sync Economy
+        if (coinLabel != null) coinLabel.text = data.coins.ToString();
+        GameManager.Instance.totalCoins = data.coins;
+        GameManager.Instance.UpdateCoinUI();       
+        
+        // 2. Sync Identity
+        if (nameLabel != null) nameLabel.text = data.playerName;
+
+        // 3. Reconstruct Visuals
+        ReconstructPart(hairContainer, "HairStyles", data.hairName);
+        ReconstructPart(topsContainer, "Tops", data.topName);
+        ReconstructPart(bottomsContainer, "Bottoms", data.bottomName);
+        ReconstructPart(bodyContainer, "SkinTone", data.skinName);
+
+        // 4. Set Accessories
+        if (glassesObj != null) glassesObj.SetActive(data.hasGlasses);
+        if (hearingAidObj != null) hearingAidObj.SetActive(data.hasHearingAid);
+        if (crutchesObj != null) crutchesObj.SetActive(data.hasCrutches);
+
+        // 5. Set Farm World
+        for (int i = 0; i < farmLayouts.Length; i++)
         {
-            string json = File.ReadAllText(filePath);
-            PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
+            farmLayouts[i].SetActive(i == data.farmID);
+        }
 
-            
-            if (coinLabel != null) 
-                    {
-                        coinLabel.text = data.coins.ToString();
-                    }
-            GameManager.Instance.totalCoins = data.coins;
-            GameManager.Instance.UpdateCoinUI();       
-            
-            if (nameLabel != null) nameLabel.text = data.playerName;
-            // --- THE HIDE/SHOW LOGIC ---
-            // We tell each container: "Look at this image name and show the right box"
-            ReconstructPart(hairContainer, "HairStyles", data.hairName);
-            ReconstructPart(topsContainer, "Tops", data.topName);
-            ReconstructPart(bottomsContainer, "Bottoms", data.bottomName);
-            ReconstructPart(bodyContainer, "SkinTone", data.skinName);
+        // 6. --- THE SAFETY FIX: SPAWN ANIMALS ---
+        // Find the manager ONCE before the loop (better performance)
+        RewardsManager rm = Object.FindFirstObjectByType<RewardsManager>();
 
-            if (glassesObj != null) glassesObj.SetActive(data.hasGlasses);
-            if (hearingAidObj != null) hearingAidObj.SetActive(data.hasHearingAid);
-            if (crutchesObj != null) crutchesObj.SetActive(data.hasCrutches);
-
-            for (int i = 0; i < farmLayouts.Length; i++)
+        // Check if the list exists to prevent the "Zoom/Crash"
+        if (data.activeAnimals != null && rm != null) 
+        {
+            foreach(string animalSpriteName in data.activeAnimals) 
             {
-                farmLayouts[i].SetActive(i == data.farmID);
+                rm.SpawnAnimalWithData("Animal", animalSpriteName); 
             }
+            Debug.Log("Loader: Successfully spawned " + data.activeAnimals.Count + " animals.");
+        }
+        else if (rm == null)
+        {
+            Debug.LogWarning("Loader: RewardsManager not found. Skipping animal spawning.");
         }
     }
-
+    else
+    {
+        Debug.LogWarning("No save file found at " + filePath);
+    }
+}
     private void ReconstructPart(Transform container, string folder, string assetName)
 {
     if (container == null || string.IsNullOrEmpty(assetName)) return;
@@ -107,3 +128,5 @@ public class CharacterLoader : MonoBehaviour
     }
 }
 }
+
+// --- RECENTLY EDITED FILES ---

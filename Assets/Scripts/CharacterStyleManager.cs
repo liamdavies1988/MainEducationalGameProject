@@ -187,7 +187,10 @@ public void SetDefaultStyle()
         data.hasHearingAid = (hearingAidObj != null) ? hearingAidObj.activeSelf : false;
         data.hasCrutches = (crutchesObj != null) ? crutchesObj.activeSelf : false;
 
-    // 4. CALL THE MASTER SAVE (Instead of manual File writing)
+    // 4. Active Animals (For consistency)
+        data.activeAnimals = new List<string>(GameManager.Instance.activeAnimals);
+
+    // 5. CALL THE MASTER SAVE (Instead of manual File writing)
         // This uses the GameManager's SaveGame function we built earlier
         GameManager.Instance.SaveGame(data);
 
@@ -293,3 +296,5 @@ private string GetActiveSpriteName(Transform container)
     public void CloseMenu() { popupWindow.SetActive(false); if(hairScrollView != null) hairScrollView.SetActive(false); }
     public void ResetPlayerStyles() { SetDefaultStyle(); }
 }
+
+// --- RECENTLY EDITED FILES ---

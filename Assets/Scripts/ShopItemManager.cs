@@ -78,3 +78,5 @@ public class ShopItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         Debug.Log("<color=blue>[ShopItem]</color> Item returned to original parent and position");
     }
 }
+
+// --- RECENTLY EDITED FILES ---

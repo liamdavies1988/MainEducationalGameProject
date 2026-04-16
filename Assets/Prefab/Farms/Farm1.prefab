@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 765644624378888656}
   - component: {fileID: 176506047316260779}
   - component: {fileID: 1169216833608065877}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Fence&Building_layer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2157,7 +2157,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3648183658748919828}
   - component: {fileID: 6458088820331882137}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Farm1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2204,7 +2204,7 @@ GameObject:
   - component: {fileID: 6560190381316761330}
   - component: {fileID: 3282237920825504711}
   - component: {fileID: 3733316530555806055}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground_Layer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
