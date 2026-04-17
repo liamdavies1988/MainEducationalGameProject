@@ -29,63 +29,52 @@ public class CharacterLoader : MonoBehaviour
     }
 
     public void LoadPlayerAndWorld()
-{
-    int slotID = GameManager.Instance.selectedSlot;
-    string filePath = Application.persistentDataPath + "/Saves/SaveSlot_" + (slotID + 1) + ".json";
-
-    if (File.Exists(filePath))
     {
-        string json = File.ReadAllText(filePath);
-        PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
+        int slotID = GameManager.Instance.selectedSlot;
+        string fileName = "SaveSlot_" + (slotID + 1) + ".json";
+        string filePath = Path.Combine(Application.persistentDataPath, "Saves", fileName);
 
-        // 1. Sync Economy
-        if (coinLabel != null) coinLabel.text = data.coins.ToString();
-        GameManager.Instance.totalCoins = data.coins;
-        GameManager.Instance.UpdateCoinUI();       
-        
-        // 2. Sync Identity
-        if (nameLabel != null) nameLabel.text = data.playerName;
-
-        // 3. Reconstruct Visuals
-        ReconstructPart(hairContainer, "HairStyles", data.hairName);
-        ReconstructPart(topsContainer, "Tops", data.topName);
-        ReconstructPart(bottomsContainer, "Bottoms", data.bottomName);
-        ReconstructPart(bodyContainer, "SkinTone", data.skinName);
-
-        // 4. Set Accessories
-        if (glassesObj != null) glassesObj.SetActive(data.hasGlasses);
-        if (hearingAidObj != null) hearingAidObj.SetActive(data.hasHearingAid);
-        if (crutchesObj != null) crutchesObj.SetActive(data.hasCrutches);
-
-        // 5. Set Farm World
-        for (int i = 0; i < farmLayouts.Length; i++)
+        if (File.Exists(filePath))
         {
-            farmLayouts[i].SetActive(i == data.farmID);
-        }
+            string json = File.ReadAllText(filePath);
+            PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
 
-        // 6. --- THE SAFETY FIX: SPAWN ANIMALS ---
-        // Find the manager ONCE before the loop (better performance)
-        RewardsManager rm = Object.FindFirstObjectByType<RewardsManager>();
+            // 1. Reconstruct Name and Coins
+            if (nameLabel != null) nameLabel.text = data.playerName;
+            if (coinLabel != null) coinLabel.text = data.coins.ToString();
+            GameManager.Instance.totalCoins = data.coins;
 
-        // Check if the list exists to prevent the "Zoom/Crash"
-        if (data.activeAnimals != null && rm != null) 
-        {
-            foreach(string animalSpriteName in data.activeAnimals) 
+            // 2. Reconstruct Visuals (Clothing/Skin)
+            ReconstructPart(hairContainer, "HairStyles", data.hairName);
+            ReconstructPart(topsContainer, "Tops", data.topName);
+            ReconstructPart(bottomsContainer, "Bottoms", data.bottomName);
+            ReconstructPart(bodyContainer, "SkinTone", data.skinName);
+
+            // 3. Reconstruct Environment
+            if (farmLayouts != null && farmLayouts.Length > 0)
             {
-                rm.SpawnAnimalWithData("Animal", animalSpriteName); 
+                for (int i = 0; i < farmLayouts.Length; i++)
+                {
+                    farmLayouts[i].SetActive(i == data.farmID);
+                }
             }
-            Debug.Log("Loader: Successfully spawned " + data.activeAnimals.Count + " animals.");
-        }
-        else if (rm == null)
-        {
-            Debug.LogWarning("Loader: RewardsManager not found. Skipping animal spawning.");
+
+            // 4. THE ANIMAL FIX (Stop the Zoom/Crash)
+            RewardsManager rm = Object.FindFirstObjectByType<RewardsManager>();
+
+            // GUARD: Only loop if the list exists and isn't empty
+            if (data.activeAnimals != null && data.activeAnimals.Count > 0 && rm != null)
+            {
+                foreach (string animalSpriteName in data.activeAnimals)
+                {
+                    // We use "SavedAnimal" as the name to distinguish it from a fresh buy
+                    rm.SpawnAnimalWithData("SavedAnimal", animalSpriteName);
+                }
+                Debug.Log("<color=green>Loader:</color> Successfully restored " + data.activeAnimals.Count + " animals.");
+            }
         }
     }
-    else
-    {
-        Debug.LogWarning("No save file found at " + filePath);
-    }
-}
+
     private void ReconstructPart(Transform container, string folder, string assetName)
 {
     if (container == null || string.IsNullOrEmpty(assetName)) return;
