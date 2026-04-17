@@ -22,7 +22,9 @@ public class RewardsManager : MonoBehaviour
 
     // This uses the class defined at the bottom
     private List<AnimalData> shopInventory = new List<AnimalData>();
-
+    
+    [Header("Limits")]
+    public int maxAnimals = 20; // Set your limit here
     void Start()
     {
         Debug.Log("<color=cyan>[RewardsManager]</color> Initializing Rewards Manager...");
@@ -110,6 +112,13 @@ public class RewardsManager : MonoBehaviour
 
     public void TryBuyAnimal(string animalName, int cost, string spriteName)
     {
+        // 1. CHECK THE LIMIT FIRST
+    if (GameManager.Instance.activeAnimals.Count >= maxAnimals)
+    {
+        Debug.LogWarning("<color=orange>FARM FULL:</color> Cannot buy more animals!");
+        // Optional: Trigger a UI message saying "Farm is full!"
+        return; 
+    }
         if (GameManager.Instance.totalCoins >= cost)
         {
             GameManager.Instance.totalCoins -= cost;

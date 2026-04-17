@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Difficulty Popup")]
     public GameObject difficultyPopup;
+    
 
     //private PlayerSaveData currentSessionData;
 
