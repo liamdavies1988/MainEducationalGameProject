@@ -404,11 +404,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 301505908}
   m_CullTransparentMesh: 1
---- !u!1 &334731227 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2041639313822950638, guid: 32f92523106dce54da3adb1506e77d02, type: 3}
-  m_PrefabInstance: {fileID: 1607536994}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &334731228 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3648183658748919828, guid: 32f92523106dce54da3adb1506e77d02, type: 3}
@@ -3493,11 +3488,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 910025891355334264, guid: 8bf002e8ec8051742a54f4544143e5f8, type: 3}
   m_PrefabInstance: {fileID: 593549934}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &654532398 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2041639313822950638, guid: c5d1d2ea70431764c8bbcf15adde12f0, type: 3}
-  m_PrefabInstance: {fileID: 1332335332}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &654532399 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3648183658748919828, guid: c5d1d2ea70431764c8bbcf15adde12f0, type: 3}
@@ -4996,7 +4986,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!114 &997781734
 MonoBehaviour:
@@ -5017,12 +5007,15 @@ MonoBehaviour:
   glassesObj: {fileID: 895355281}
   hearingAidObj: {fileID: 750050185}
   crutchesObj: {fileID: 669532459}
+  sceneSmile: {fileID: 0}
+  sceneSad: {fileID: 0}
   nameLabel: {fileID: 1852404501}
-  farmLayouts:
-  - {fileID: 334731227}
-  - {fileID: 654532398}
-  - {fileID: 2111044611}
   coinLabel: {fileID: 760198686}
+  farmPrefabs:
+  - {fileID: 2041639313822950638, guid: 32f92523106dce54da3adb1506e77d02, type: 3}
+  - {fileID: 2041639313822950638, guid: c5d1d2ea70431764c8bbcf15adde12f0, type: 3}
+  - {fileID: 2041639313822950638, guid: c90b92161c247ef4ca9c620d0185f830, type: 3}
+  farmStudioParent: {fileID: 212619018}
 --- !u!4 &997781735
 Transform:
   m_ObjectHideFlags: 0
@@ -7563,11 +7556,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2091470362}
   m_CullTransparentMesh: 1
---- !u!1 &2111044611 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2041639313822950638, guid: c90b92161c247ef4ca9c620d0185f830, type: 3}
-  m_PrefabInstance: {fileID: 565871481}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2111044612 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3648183658748919828, guid: c90b92161c247ef4ca9c620d0185f830, type: 3}

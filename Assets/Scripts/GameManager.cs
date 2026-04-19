@@ -18,7 +18,6 @@ public class GameManager : MonoBehaviour
 
     [Header("Economy")]
     public int totalCoins = 0;
-   
 
     [Header("Player Data")]
     public string playerName = "Player1";
@@ -33,13 +32,18 @@ public class GameManager : MonoBehaviour
     private Color originalCoinColor = Color.white; 
     private bool isFlashing = false;
 
+    [Header("Character Feedback UI")]
+    public GameObject smileFace; // These will be filled by the CharacterLoader
+    public GameObject sadFace;
+
     [Header("Topic Settings")]
     public string selectedSubject = "Maths";
     public string selectedDifficulty = "Easy";
 
     [Header("Difficulty Popup")]
     public GameObject difficultyPopup;
-    
+
+
 
     //private PlayerSaveData currentSessionData;
 
@@ -83,46 +87,49 @@ public class GameManager : MonoBehaviour
         if (audioSource != null && coinSound != null)
             audioSource.PlayOneShot(coinSound);
     }
+
     private void SetupCoinColor()
-{
-    if (coinCountText != null)
-        originalCoinColor = coinCountText.color;
-}
-public void TriggerCoinFlash()
-{
-    // Prevent multiple flashes from fighting each other
-    if (isFlashing) return;
-    
-    // Ensure we have the current scene's text reference
-    if (coinCountText == null)
     {
-        GameObject textObj = GameObject.Find("CoinCountText");
-        if (textObj != null) coinCountText = textObj.GetComponent<TextMeshProUGUI>();
+        if (coinCountText != null)
+            originalCoinColor = coinCountText.color;
     }
 
-    if (coinCountText != null)
+    public void TriggerCoinFlash()
     {
-        StartCoroutine(FlashCoinsRoutine());
-    }
-}
+        // Prevent multiple flashes from fighting each other
+        if (isFlashing) return;
 
-IEnumerator FlashCoinsRoutine()
-{
-    isFlashing = true;
-    // Store the color of the text in THIS scene
-    Color normalColor = coinCountText.color;
+        // Ensure we have the current scene's text reference
+        if (coinCountText == null)
+        {
+            GameObject textObj = GameObject.Find("CoinCountText");
+            if (textObj != null) coinCountText = textObj.GetComponent<TextMeshProUGUI>();
+        }
 
-    // Flash Red 3 times
-    for (int i = 0; i < 3; i++)
-    {
-        coinCountText.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
-        coinCountText.color = normalColor;
-        yield return new WaitForSeconds(0.1f);
+        if (coinCountText != null)
+        {
+            StartCoroutine(FlashCoinsRoutine());
+        }
     }
 
-    isFlashing = false;
-}
+    IEnumerator FlashCoinsRoutine()
+    {
+        isFlashing = true;
+        // Store the color of the text in THIS scene
+        Color normalColor = coinCountText.color;
+
+        // Flash Red 3 times
+        for (int i = 0; i < 3; i++)
+        {
+            coinCountText.color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+            coinCountText.color = normalColor;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        isFlashing = false;
+    }
+
     public void PlayWrongSound()
     {
         if (audioSource != null && wrongAnswerSound != null)
@@ -160,6 +167,41 @@ IEnumerator FlashCoinsRoutine()
         this.activeAnimals = data.activeAnimals;
 
         Debug.Log("<color=cyan>GameManager:</color> Successfully saved data to Slot " + slot);
+    }
+
+    public void ShowReaction(bool isCorrect)
+    {
+        Debug.Log($"<color=cyan>GameManager:</color> ShowReaction called. isCorrect: {isCorrect}");
+
+        // Stop any existing timers
+        StopCoroutine("HideReactions");
+
+        if (isCorrect)
+        {
+            if (smileFace != null) {
+                smileFace.SetActive(true);
+                Debug.Log("GameManager: smileFace activated.");
+            } else Debug.LogError("GameManager: smileFace is NULL! Check if sceneSmile is assigned in CharacterLoader.");
+
+            if (sadFace != null) sadFace.SetActive(false);
+        }
+        else
+        {
+            if (smileFace != null) smileFace.SetActive(false);
+            if (sadFace != null) {
+                sadFace.SetActive(true);
+                Debug.Log("GameManager: sadFace activated.");
+            } else Debug.LogError("GameManager: sadFace is NULL! Check if sceneSad is assigned in CharacterLoader.");
+        }
+
+        StartCoroutine(HideReactions());
+    }
+
+    IEnumerator HideReactions()
+    {
+        yield return new WaitForSeconds(1.5f);
+        if (smileFace != null) smileFace.SetActive(false);
+        if (sadFace != null) sadFace.SetActive(false);
     }
 
     public PlayerSaveData LoadGameData()
@@ -221,6 +263,7 @@ IEnumerator FlashCoinsRoutine()
         UpdateCoinUI();
         Debug.Log("<color=red>GameManager:</color> Session memory wiped.");
     }
+    
 }
 
 [System.Serializable] // This allows us to easily convert this class to JSON for saving and loading

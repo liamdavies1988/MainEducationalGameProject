@@ -1410,6 +1410,10 @@ PrefabInstance:
       propertyPath: crossIcon
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6096258876563319587, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
+      propertyPath: m_Name
+      value: Text
+      objectReference: {fileID: 0}
     - target: {fileID: 7096337172415229305, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1721,6 +1725,10 @@ PrefabInstance:
     - target: {fileID: 5617617047804635269, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
       propertyPath: crossIcon
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6096258876563319587, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
+      propertyPath: m_Name
+      value: Text
       objectReference: {fileID: 0}
     - target: {fileID: 7096337172415229305, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
       propertyPath: m_Pivot.x
@@ -2281,6 +2289,10 @@ PrefabInstance:
     - target: {fileID: 5617617047804635269, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
       propertyPath: crossIcon
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6096258876563319587, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
+      propertyPath: m_Name
+      value: Text
       objectReference: {fileID: 0}
     - target: {fileID: 7096337172415229305, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
       propertyPath: m_Pivot.x
@@ -2921,6 +2933,8 @@ MonoBehaviour:
   glassesObj: {fileID: 0}
   hearingAidObj: {fileID: 0}
   crutchesObj: {fileID: 0}
+  sceneSmile: {fileID: 0}
+  sceneSad: {fileID: 0}
   nameLabel: {fileID: 0}
   farmLayouts: []
   coinLabel: {fileID: 38813039}
