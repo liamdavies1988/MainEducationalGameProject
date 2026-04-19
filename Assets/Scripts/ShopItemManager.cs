@@ -13,6 +13,7 @@ public class ShopItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private Vector2 startPosition;
     private Transform originalParent;
     public string prefabToSpawn;
+    private int originalSiblingIndex;
 
     private void Awake() {
         Debug.Log("<color=cyan>[ShopItem]</color> Initializing " + gameObject.name);
@@ -26,13 +27,14 @@ public class ShopItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     }
 
     public void OnBeginDrag(PointerEventData eventData) {
+        originalParent = transform.parent;
         Debug.Log("<color=yellow>[ShopItem]</color> Begin drag: " + animalType + " (Price: " + price + ")");
         startPosition = rectTransform.anchoredPosition;
-        originalParent = transform.parent;
+        originalSiblingIndex = transform.GetSiblingIndex(); 
         Debug.Log("<color=yellow>[ShopItem]</color> Start position saved: " + startPosition);
         
         // Move it to the root Canvas so it's not cut off by the ScrollView mask
-        transform.SetParent(transform.root);
+        transform.SetParent(transform.root, true);
         Debug.Log("<color=yellow>[ShopItem]</color> Moved to root canvas");
         canvasGroup.alpha = 0.6f;
         canvasGroup.blocksRaycasts = false; // Mouse "sees through" this to the FarmBox
@@ -74,6 +76,7 @@ public class ShopItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
 
         transform.SetParent(originalParent);
+         transform.SetSiblingIndex(originalSiblingIndex);
         rectTransform.anchoredPosition = startPosition;
         Debug.Log("<color=blue>[ShopItem]</color> Item returned to original parent and position");
     }

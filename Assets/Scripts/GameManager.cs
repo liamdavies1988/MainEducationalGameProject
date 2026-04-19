@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.IO;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Economy")]
     public int totalCoins = 0;
+   
 
     [Header("Player Data")]
     public string playerName = "Player1";
@@ -26,6 +28,10 @@ public class GameManager : MonoBehaviour
 
     [Header("UI Reference")]
     public TextMeshProUGUI coinCountText;
+
+    [Header("UI Animation Settings")]
+    private Color originalCoinColor = Color.white; 
+    private bool isFlashing = false;
 
     [Header("Topic Settings")]
     public string selectedSubject = "Maths";
@@ -59,11 +65,13 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        
     }
 
     private void Start()
     {
         UpdateCoinUI();
+        SetupCoinColor();
     }
 
     public void AddCoin()
@@ -75,7 +83,46 @@ public class GameManager : MonoBehaviour
         if (audioSource != null && coinSound != null)
             audioSource.PlayOneShot(coinSound);
     }
+    private void SetupCoinColor()
+{
+    if (coinCountText != null)
+        originalCoinColor = coinCountText.color;
+}
+public void TriggerCoinFlash()
+{
+    // Prevent multiple flashes from fighting each other
+    if (isFlashing) return;
+    
+    // Ensure we have the current scene's text reference
+    if (coinCountText == null)
+    {
+        GameObject textObj = GameObject.Find("CoinCountText");
+        if (textObj != null) coinCountText = textObj.GetComponent<TextMeshProUGUI>();
+    }
 
+    if (coinCountText != null)
+    {
+        StartCoroutine(FlashCoinsRoutine());
+    }
+}
+
+IEnumerator FlashCoinsRoutine()
+{
+    isFlashing = true;
+    // Store the color of the text in THIS scene
+    Color normalColor = coinCountText.color;
+
+    // Flash Red 3 times
+    for (int i = 0; i < 3; i++)
+    {
+        coinCountText.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        coinCountText.color = normalColor;
+        yield return new WaitForSeconds(0.1f);
+    }
+
+    isFlashing = false;
+}
     public void PlayWrongSound()
     {
         if (audioSource != null && wrongAnswerSound != null)

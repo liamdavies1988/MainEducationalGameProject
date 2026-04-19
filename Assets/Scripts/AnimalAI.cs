@@ -3,23 +3,28 @@ using UnityEngine;
 public class AnimalAI : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public float moveSpeed = 1.5f;
-    public float moveTime = 2.5f;
-    public float waitTime = 3.0f;
+    public float moveSpeed;
+    public float moveTime; 
+    public float waitTime; 
 
     [Header("Deletion Settings")]
-    public float holdTimeThreshold = 1.5f;
+    public float holdTimeThreshold = 1f;
     private float currentHoldTimer = 0f;
     private bool isBeingHeld = false;
 
     private Rigidbody2D rb;
-    private SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer;
     private bool isMoving;
     private Vector2 moveDirection;
     private float timer;
 
     void Start()
     {
+        // Randomize movement parameters for more natural behavior (once per animal)
+        moveSpeed = Random.Range(0.5f, 3.5f); // Randomize speed for more natural behavior
+        moveTime = Random.Range(0.5f, 1.5f); // Randomize move time for more natural behavior
+        waitTime = Random.Range(0.5f, 3f); // Randomize wait time for more natural behavior
+
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb.gravityScale = 0;
@@ -27,39 +32,55 @@ public class AnimalAI : MonoBehaviour
         timer = waitTime; 
     }
 
-    private void OnMouseDown()
+    public void OnMouseDown()
     {
-        isBeingHeld = true;
-        currentHoldTimer = 0f;
         
-        // --- THE FIX: STOP MOVEMENT IMMEDIATELY ---
-        rb.linearVelocity = Vector2.zero; 
-        Debug.Log("Animal frozen for deletion check...");
+        isBeingHeld = true;
+            currentHoldTimer = 0f;
+            rb.linearVelocity = Vector2.zero; 
+            Debug.Log("Animal hit via Viewport!");
     }
 
-    private void OnMouseUp()
+    public void OnMouseUp()
     {
         isBeingHeld = false;
         currentHoldTimer = 0f;
         
-        // Reset scale in case it was shrinking
-        transform.localScale = Vector3.one;
     }
+    public void ResetAnimal()
+{
+    isBeingHeld = false;
+    currentHoldTimer = 0f;
+    transform.localScale = Vector3.one + Vector3.one; // Reset scale to normal
+    spriteRenderer.color = Color.white; // Reset color to normal
+    isMoving = false; // Stay still for a moment
+}
+
+void RemoveAnimal()
+{
+    // Instead of destroying immediately, tell the manager to show the popup
+    RewardsManager rm = Object.FindFirstObjectByType<RewardsManager>();
+    if (rm != null)
+    {
+        rm.RequestAnimalDeletion(this);
+    }
+}
 
     void Update()
     {
+        
         // 1. Handle Deletion Logic
         if (isBeingHeld)
         {
-            currentHoldTimer += Time.deltaTime;
-            
-            // Visual feedback: Shrink the animal to show it's being deleted
-            transform.localScale = Vector3.one * (1.1f - (currentHoldTimer / holdTimeThreshold) * 0.4f);
+            currentHoldTimer += Time.deltaTime; //
 
             if (currentHoldTimer >= holdTimeThreshold)
             {
+                spriteRenderer.color = new Color(1, 0, 0); // Red color
+
                 RemoveAnimal();
             }
+            
             
             return; // SKIP movement logic while being held
         }
@@ -73,6 +94,7 @@ public class AnimalAI : MonoBehaviour
 
             if (isMoving)
             {
+
                 float dirX = Random.Range(-1f, 1f);
                 float dirY = Random.Range(-1f, 1f);
                 moveDirection = new Vector2(dirX, dirY).normalized;
@@ -87,6 +109,7 @@ public class AnimalAI : MonoBehaviour
 
     void FixedUpdate()
     {
+        
         // Only move if NOT being held by the mouse
         if (isMoving && !isBeingHeld)
         {
@@ -97,17 +120,7 @@ public class AnimalAI : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
         }
     }
-
-    void RemoveAnimal()
-    {
-        string mySpriteName = GetComponent<SpriteRenderer>().sprite.name;
-        
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.activeAnimals.Remove(mySpriteName);
-            GameManager.Instance.SaveCurrentProgress();
-        }
-
-        Destroy(gameObject);
     }
-}
+
+
+   

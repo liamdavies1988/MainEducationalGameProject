@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class RewardsManager : MonoBehaviour
 {
@@ -19,6 +21,10 @@ public class RewardsManager : MonoBehaviour
     [Header("Safe Spawn Zone")]
     public Transform topLeftMarker;
     public Transform bottomRightMarker;
+
+    [Header("Deletion UI")]
+    public GameObject animalDeletePopup;
+    private AnimalAI pendingAnimalToDelete; // Remembers which animal we clicked
 
     // This uses the class defined at the bottom
     private List<AnimalData> shopInventory = new List<AnimalData>();
@@ -71,7 +77,8 @@ public class RewardsManager : MonoBehaviour
             Debug.LogError($"<color=red>[PATH ERROR]</color> Found {allSprites.Length} sprites. Check folder name and Sprite Mode!");
             return;
         }
-
+        shopInventory = shopInventory.OrderBy(animal => animal.price).ToList();
+        
         // 3. Build buttons
         foreach (AnimalData data in shopInventory)
         {
@@ -81,7 +88,8 @@ public class RewardsManager : MonoBehaviour
             newBtn.transform.Find("Animal Image/AnimalText").GetComponent<TextMeshProUGUI>().text = data.name.ToUpper();
             newBtn.transform.Find("PriceCoin/PriceText1").GetComponent<TextMeshProUGUI>().text = data.price.ToString();
             newBtn.transform.Find("PriceCoin/PriceText2").GetComponent<TextMeshProUGUI>().text = data.price.ToString();
-
+            Debug.Log("<color=magenta>[RewardsManager]</color> Shop UI built and sorted by price!");
+            
             // 4. Find and set the button Icon
             Image icon = newBtn.transform.Find("Animal Image").GetComponent<Image>();
             foreach (Sprite s in allSprites)
@@ -135,6 +143,9 @@ public class RewardsManager : MonoBehaviour
         else
         {
             Debug.Log("<color=red>FAILED:</color> Not enough coins!");
+            // Optional: Trigger a UI message saying "Not enough coins!"
+            GameManager.Instance.TriggerCoinFlash();
+            GameManager.Instance.PlayWrongSound(); 
         }
     }
     public void SpawnAnimalWithData(string animalName, string spriteName)
@@ -197,9 +208,69 @@ public class RewardsManager : MonoBehaviour
 
         Debug.Log($"<color=green>SUCCESS:</color> Spawned {animalName} at {newAnimal.transform.localPosition}");
     }
+
+    public void RequestAnimalDeletion(AnimalAI animal)
+    {
+        pendingAnimalToDelete = animal;
+        animalDeletePopup.SetActive(true);
+    }
+
+   
+    public void ConfirmAnimalDelete() // Called by the YES button
+    {
+        if (pendingAnimalToDelete != null)
+        {
+            // 1. Get the sprite name to remove it from the save list
+            string spriteName = pendingAnimalToDelete.GetComponent<SpriteRenderer>().sprite.name;
+            
+            if (GameManager.Instance.activeAnimals.Contains(spriteName))
+            {
+                GameManager.Instance.activeAnimals.Remove(spriteName);
+                GameManager.Instance.SaveCurrentProgress();
+            }
+
+            // 2. Physically remove it from the farm
+            StartCoroutine(ShrinkAndDestroy(pendingAnimalToDelete.gameObject));
+            pendingAnimalToDelete = null;
+        }
+        
+        animalDeletePopup.SetActive(false);
+    }
+
+    private IEnumerator ShrinkAndDestroy(GameObject target)
+    {
+        if (target == null) yield break;
+
+        float duration = 2f; // How long the shrink takes
+        float elapsed = 0f;
+        Vector3 startScale = target.transform.localScale;
+
+        while (elapsed < duration)
+        {
+            if (target == null) yield break;
+            elapsed += Time.deltaTime;
+            target.transform.localScale = Vector3.Lerp(startScale, Vector3.zero, elapsed / duration);
+            yield return null;
+        }
+
+        Destroy(target);
+    }
+
+    
+    public void CancelAnimalDelete() // Called by the NO button
+    {
+        if (pendingAnimalToDelete != null)
+        {
+            pendingAnimalToDelete.ResetAnimal();
+            
+            
+        }
+        animalDeletePopup.SetActive(false);
+    }
 }
-    // --- THE FIX: CHANGED 'internal' TO 'public' ---
-    [System.Serializable]
+    
+
+[System.Serializable]
 public class AnimalData
 {
     public string name;
@@ -207,5 +278,3 @@ public class AnimalData
     public string spritePath;
     public string prefabPath;
 }
-
-// --- RECENTLY EDITED FILES ---
