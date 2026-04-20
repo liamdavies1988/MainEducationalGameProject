@@ -17,6 +17,9 @@ public class MenuController : MonoBehaviour
     public GameObject loadPopup;
     public TextMeshProUGUI loadPopupText;
 
+    [Header("Question Amount UI")]
+    public GameObject amountPopup; // Drag your 'QuestionAmount' object here
+
     private int slotIndexToProcess; // Remembers which slot was clicked
 
     private void Start()
@@ -26,6 +29,26 @@ public class MenuController : MonoBehaviour
         {
             RefreshSlotLabels();
         }
+    }
+
+
+    // 1. Updated: Called when the student clicks Maths/Spelling
+    public void OnSubjectClicked(string subject)
+    {
+        GameManager.Instance.selectedSubject = subject;
+
+        // Switch: Show the Amount popup first
+        if (amountPopup != null) amountPopup.SetActive(true);
+    }
+
+    // 2. NEW: Called by the 5, 10, 15, 20 buttons
+    public void OnAmountSelected(int amount)
+    {
+        GameManager.Instance.SetQuestionAmount(amount);
+
+        // Hide this popup and show the Difficulty popup
+        if (amountPopup != null) amountPopup.SetActive(false);
+        if (difficultyPopup != null) difficultyPopup.SetActive(true);
     }
 
     // --- SAVE SLOT LOGIC ---
@@ -133,18 +156,7 @@ public class MenuController : MonoBehaviour
 
     // --- CURRICULUM LOGIC ---
 
-    // Called when the player chooses a subject.
-    public void OnSubjectClicked(string subject)
-{
-    // We tell the GameManager (The Brain) to save this choice
-    GameManager.Instance.SetSubject(subject);
-
-    // Then we show the difficulty popup
-    if (difficultyPopup != null)
-    {
-        difficultyPopup.SetActive(true);
-    }
-}
+   
 
 // Called when the player chooses a difficulty (e.g., Easy)
 public void OnDifficultyClicked(string difficulty)

@@ -38,6 +38,7 @@ public class QuestionSetup : MonoBehaviour
             // 4. Update the UI
             SetQuestionValues();
             SetAnswerValues();
+
         }
         else
         {

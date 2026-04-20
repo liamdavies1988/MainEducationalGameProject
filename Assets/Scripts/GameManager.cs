@@ -40,8 +40,13 @@ public class GameManager : MonoBehaviour
     public string selectedSubject = "Maths";
     public string selectedDifficulty = "Easy";
 
+    [Header("Session Settings")]
+    public int totalQuestionsRequested = 10; // Default to 10
+
     [Header("Difficulty Popup")]
     public GameObject difficultyPopup;
+
+
 
 
 
@@ -128,6 +133,12 @@ public class GameManager : MonoBehaviour
         }
 
         isFlashing = false;
+    }
+
+    public void SetQuestionAmount(int amount)
+    {
+        totalQuestionsRequested = amount;
+        Debug.Log("<color=green>GameManager:</color> Question amount set to: " + amount);
     }
 
     public void PlayWrongSound()
