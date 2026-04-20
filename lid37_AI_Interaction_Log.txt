@@ -1,0 +1,34 @@
+AI INTERACTION LOG: GAMIFYING THE CURRICULUM (MMP)
+Student: Liam Davies (lid37)
+Assistant: Google Gemini (via API and Web Interface)
+Period: February 5, 2026 – April 21, 2026
+SECTION 1: PROJECT INITIATION & RESEARCH (FEB 5 - FEB 10)
+Prompt Summary: Create a project outline template based on Aberystwyth CS guidelines. Generate anonymous survey questions for primary school teachers regarding curriculum "pain points."
+Logic Provided:
+4-page report structure (Title, Description, Tasks, Deliverables, Annotated Bibliography).
+6-question survey targeting KS1/KS2 demographics, hardware constraints, and subject difficulty.
+Tone advice for professional teacher outreach.
+SECTION 2: ARCHITECTURE & ENGINE SETUP (FEB 15 - MAR 5)
+Prompt Summary: Configure Unity 2022.3 LTS and GitHub. Solve "Files too large" error during push. Create a central "Brain" (GameManager) for the game.
+Logic Provided:
+Unity-specific .gitignore setup to exclude /Library and /Temp folders.
+Singleton Pattern implementation for GameManager.cs to handle DontDestroyOnLoad.
+Initial coin reward logic and TextMeshPro UI integration.
+SECTION 3: AUTOMATED CONTENT PIPELINE (FEB 15 - MAR 21)
+Prompt Summary: Automate the creation of 160+ quiz questions from an Excel sheet. Support nested folders for Subjects (Maths/Spelling) and Difficulty (Easy/Hard).
+Logic Provided:
+Script: CSVToSOConverter.cs (Editor Script).
+Functionality: Parsed CSV rows into QuestionData ScriptableObjects using System.IO and AssetDatabase.
+Refinement: Added string manipulation (Split('_')) to automatically create subject-specific sub-directories in the Resources folder.
+SECTION 4: DATA PERSISTENCE & JSON SERIALIZATION (MAR 5 - APR 20)
+Prompt Summary: Build a multi-slot save system that remembers student names, coins, and 7 layers of character customization.
+Logic Provided:
+Script: PlayerData (Serializable Class) and SaveGame/LoadGame logic.
+Serialization: Transitioned from PlayerPrefs to JSON Serialization via JsonUtility.
+Pathing: Implemented Application.persistentDataPath for OS-standard secure data storage.
+Bug Fix (The Master Cache): Developed a Master Profile Cache in the GameManager to perform "Selective Property Updates," preventing coins earned in the classroom from overwriting character customization data.
+SECTION 5: INCLUSIVE CUSTOMIZATION ENGINE (MAR 21 - APR 20)
+Prompt Summary: Create a dynamic "Paper Doll" character creator. Handle 61 hairstyles and medical accessories (wheelchairs, hearing aids).
+Logic Provided:
+Script: CharacterStyleManager.cs and CharacterLoader.cs.
+Logic: "Smart Prefix Match
