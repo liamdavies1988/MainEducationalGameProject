@@ -1,3 +1,21 @@
+// =================================================================================================
+// File: AnimalAI.cs
+// Author: Liam Davies (lid37)
+// Supervisor: Helen Miles (hem23)
+// Project: Gamifying the Curriculum: An Educational Application for Primary Education
+// Date Created: April 10, 2026
+// Last Modified: April 20, 2026
+//
+// Description:
+// Handles the autonomous wandering behavior and interaction logic for farm animals, 
+// facilitating movement randomization and deletion through sustained user interaction.
+//
+// Third-Party Assets / Code:
+// - Logic assistance and structural debugging provided by Google Gemini API.
+// - UI Assets sourced from Kenney.nl and Vecteezy (see Appendix B of report).
+// - Sound assets sourced from Pixabay.
+// =================================================================================================
+
 using UnityEngine;
 
 public class AnimalAI : MonoBehaviour
@@ -11,90 +29,60 @@ public class AnimalAI : MonoBehaviour
     public float holdTimeThreshold = 1f;
     private float currentHoldTimer = 0f;
     private bool isBeingHeld = false;
-
+    
+    // Internal Components & State
     private Rigidbody2D rb;
     public SpriteRenderer spriteRenderer;
     private bool isMoving;
     private Vector2 moveDirection;
     private float timer;
 
+    // --- Unity Callbacks ---
+
     void Start()
     {
-        // Randomize movement parameters for more natural behavior (once per animal)
-        moveSpeed = Random.Range(0.5f, 3.5f); // Randomize speed for more natural behavior
-        moveTime = Random.Range(0.5f, 1.5f); // Randomize move time for more natural behavior
-        waitTime = Random.Range(0.5f, 3f); // Randomize wait time for more natural behavior
+        // Randomize behavior parameters to make each animal feel unique
+        moveSpeed = Random.Range(0.5f, 3.5f);
+        moveTime = Random.Range(0.5f, 1.5f);
+        waitTime = Random.Range(0.5f, 3f);
 
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        
+        // Setup physics defaults
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        
         timer = waitTime; 
     }
 
-    public void OnMouseDown()
-    {
-        
-        isBeingHeld = true;
-            currentHoldTimer = 0f;
-            rb.linearVelocity = Vector2.zero; 
-            Debug.Log("Animal hit via Viewport!");
-    }
-
-    public void OnMouseUp()
-    {
-        isBeingHeld = false;
-        currentHoldTimer = 0f;
-        
-    }
-    public void ResetAnimal()
-{
-    isBeingHeld = false;
-    currentHoldTimer = 0f;
-    transform.localScale = Vector3.one + Vector3.one; // Reset scale to normal
-    spriteRenderer.color = Color.white; // Reset color to normal
-    isMoving = false; // Stay still for a moment
-}
-
-void RemoveAnimal()
-{
-    // Instead of destroying immediately, tell the manager to show the popup
-    RewardsManager rm = Object.FindFirstObjectByType<RewardsManager>();
-    if (rm != null)
-    {
-        rm.RequestAnimalDeletion(this);
-    }
-}
-
     void Update()
     {
-        
-        // 1. Handle Deletion Logic
+        // If the player is currently holding the animal (for deletion)
         if (isBeingHeld)
         {
-            currentHoldTimer += Time.deltaTime; //
-
+            currentHoldTimer += Time.deltaTime;
+            
             if (currentHoldTimer >= holdTimeThreshold)
             {
-                spriteRenderer.color = new Color(1, 0, 0); // Red color
+                spriteRenderer.color = new Color(1, 0, 0);
 
                 RemoveAnimal();
             }
             
-            
-            return; // SKIP movement logic while being held
+            return;
         }
 
-        // 2. Standard Wander Logic
+        // Autonomous wandering logic
         timer -= Time.deltaTime;
         if (timer <= 0)
         {
             isMoving = !isMoving;
             timer = isMoving ? moveTime : waitTime;
+            // Switch between moving state and waiting state
 
-            if (isMoving)
+            if (isMoving) // Calculate new direction when starting to move
             {
-
                 float dirX = Random.Range(-1f, 1f);
                 float dirY = Random.Range(-1f, 1f);
                 moveDirection = new Vector2(dirX, dirY).normalized;
@@ -109,8 +97,7 @@ void RemoveAnimal()
 
     void FixedUpdate()
     {
-        
-        // Only move if NOT being held by the mouse
+        // Handle movement through the physics engine
         if (isMoving && !isBeingHeld)
         {
             rb.linearVelocity = moveDirection * moveSpeed;
@@ -120,7 +107,41 @@ void RemoveAnimal()
             rb.linearVelocity = Vector2.zero;
         }
     }
+
+    // --- Interaction Logic ---
+
+    public void OnMouseDown()
+    {
+        // Stop movement and start the hold timer
+        isBeingHeld = true;
+        currentHoldTimer = 0f;
+        rb.linearVelocity = Vector2.zero; 
     }
 
+    public void OnMouseUp()
+    {
+        isBeingHeld = false;
+        currentHoldTimer = 0f;
+    }
 
-   
+    public void ResetAnimal()
+    // Restores animal state if deletion is cancelled
+    {
+        // Return the animal to its normal visual and physical state
+        isBeingHeld = false;
+        currentHoldTimer = 0f;
+        transform.localScale = Vector3.one + Vector3.one; 
+        spriteRenderer.color = Color.white;
+        isMoving = false;
+    }
+
+    void RemoveAnimal()
+    {
+        // Notify the RewardsManager to show the deletion confirmation UI
+        RewardsManager rm = Object.FindFirstObjectByType<RewardsManager>();
+        if (rm != null)
+        {
+            rm.RequestAnimalDeletion(this);
+        }
+    }
+}

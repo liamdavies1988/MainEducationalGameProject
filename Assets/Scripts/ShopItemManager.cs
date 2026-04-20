@@ -1,85 +1,97 @@
+// =================================================================================================
+// File: ShopItemManager.cs
+// Author: Liam Davies (lid37)
+// Supervisor: Helen Miles (hem23)
+// Project: Gamifying the Curriculum: An Educational Application for Primary Education
+// Date Created: April 6, 2026
+// Last Modified: April 20, 2026
+//
+// Description:
+// Handles the drag-and-drop behavior for shop items, facilitating the purchase 
+// flow by detecting valid drop targets within the farm environment.
+//
+// Third-Party Assets / Code:
+// - Logic assistance and structural debugging provided by Google Gemini API.
+// - UI Assets sourced from Kenney.nl and Vecteezy (see Appendix B of report).
+// - Sound assets sourced from Pixabay.
+// =================================================================================================
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
-public class ShopItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class ShopItemManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [HideInInspector] public string animalType;
     [HideInInspector] public int price;
+    public string prefabToSpawn;
 
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
     private Vector2 startPosition;
     private Transform originalParent;
-    public string prefabToSpawn;
     private int originalSiblingIndex;
 
-    private void Awake() {
-        Debug.Log("<color=cyan>[ShopItem]</color> Initializing " + gameObject.name);
+    // --- Unity Callbacks ---
+
+    private void Awake()
+    {
+        // Cache component references and ensure CanvasGroup exists for drag logic
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
-        if (canvasGroup == null) {
+
+        if (canvasGroup == null)
+        {
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
-            Debug.Log("<color=cyan>[ShopItem]</color> CanvasGroup added to " + gameObject.name);
         }
-        Debug.Log("<color=cyan>[ShopItem]</color> Setup complete for " + gameObject.name);
     }
 
-    public void OnBeginDrag(PointerEventData eventData) {
+    // --- Interaction Logic ---
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        // Store current position and parent to allow for item return if purchase fails
         originalParent = transform.parent;
-        Debug.Log("<color=yellow>[ShopItem]</color> Begin drag: " + animalType + " (Price: " + price + ")");
         startPosition = rectTransform.anchoredPosition;
-        originalSiblingIndex = transform.GetSiblingIndex(); 
-        Debug.Log("<color=yellow>[ShopItem]</color> Start position saved: " + startPosition);
-        
-        // Move it to the root Canvas so it's not cut off by the ScrollView mask
+        originalSiblingIndex = transform.GetSiblingIndex();
+
+        // Move item to root canvas to avoid being masked by the ScrollView during movement
         transform.SetParent(transform.root, true);
-        Debug.Log("<color=yellow>[ShopItem]</color> Moved to root canvas");
+
+        // Provide visual feedback and allow mouse detection to pass through to the environment
         canvasGroup.alpha = 0.6f;
-        canvasGroup.blocksRaycasts = false; // Mouse "sees through" this to the FarmBox
-        Debug.Log("<color=yellow>[ShopItem]</color> Alpha set to 0.6, raycasts disabled");
+        canvasGroup.blocksRaycasts = false;
     }
 
-    public void OnDrag(PointerEventData eventData) {
+    public void OnDrag(PointerEventData eventData)
+    {
+        // Update the UI position to follow the pointer
         rectTransform.position = eventData.position;
-        Debug.Log("<color=magenta>[ShopItem]</color> Dragging " + animalType + " to position: " + eventData.position);
     }
 
-    public void OnEndDrag(PointerEventData eventData) {
-        Debug.Log("<color=blue>[ShopItem]</color> End drag: " + animalType);
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        // Restore visual state and physics detection
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
 
         GameObject droppedOn = eventData.pointerEnter;
-        Debug.Log("<color=blue>[ShopItem]</color> Dropped on: " + (droppedOn != null ? droppedOn.name : "nothing"));
-        
-        // Ensure your wooden frame is named "FarmBox" or "RawImage"
-        if (droppedOn != null && (droppedOn.name == "FarmBox" || droppedOn.name == "RawImage")) {
-            Debug.Log("<color=green>[ShopItem]</color> Valid drop target detected: " + droppedOn.name);
-            
-            // Call the manager to process the buy
+
+        // Check if the item was dropped onto the valid farm area
+        if (droppedOn != null && (droppedOn.name == "FarmBox" || droppedOn.name == "RawImage"))
+        {
             RewardsManager rm = Object.FindFirstObjectByType<RewardsManager>();
             if (rm != null)
             {
-                Debug.Log("<color=green>[ShopItem]</color> RewardsManager found. Processing purchase...");
+                // Initiate the purchase flow via the RewardsManager
                 rm.TryBuyAnimal(animalType, price, prefabToSpawn);
             }
-            else
-            {
-                Debug.LogError("<color=red>[ShopItem]</color> RewardsManager not found in scene!");
-            }
-        }
-        else
-        {
-            Debug.Log("<color=orange>[ShopItem]</color> Invalid drop target or no target found. Returning item to original position.");
         }
 
+        // Return the UI item to its original slot in the shop grid
         transform.SetParent(originalParent);
-         transform.SetSiblingIndex(originalSiblingIndex);
+        transform.SetSiblingIndex(originalSiblingIndex);
         rectTransform.anchoredPosition = startPosition;
-        Debug.Log("<color=blue>[ShopItem]</color> Item returned to original parent and position");
     }
 }
-
-// --- RECENTLY EDITED FILES ---

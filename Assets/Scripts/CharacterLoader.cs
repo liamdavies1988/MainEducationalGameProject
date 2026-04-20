@@ -1,3 +1,21 @@
+// =================================================================================================
+// File: CharacterLoader.cs
+// Author: Liam Davies (lid37)
+// Supervisor: Helen Miles (hem23)
+// Project: Gamifying the Curriculum: An Educational Application for Primary Education
+// Date Created: March 20, 2026
+// Last Modified: April 20, 2026
+//
+// Description:
+// Responsible for reconstructing the player character's visual appearance and spawning 
+// the selected farm environment upon scene load using persistent JSON save data.
+//
+// Third-Party Assets / Code:
+// - Logic assistance and structural debugging provided by Google Gemini API.
+// - UI Assets sourced from Kenney.nl and Vecteezy (see Appendix B of report).
+// - Sound assets sourced from Pixabay.
+// =================================================================================================
+
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
@@ -30,13 +48,19 @@ public class CharacterLoader : MonoBehaviour
     public GameObject[] farmPrefabs; // Drag your 3 blue prefab assets here
     public Transform farmStudioParent; // Drag your 'FARM_STUDIO' object here (at X:1000)
 
+    // --- Unity Callbacks ---
+
     void Start()
     {
-        Invoke(nameof(LoadPlayerAndWorld), 0.1f); // Delay to ensure GameManager is ready and has the selected slot info
+        // Brief delay ensures the GameManager has finished its internal initialization
+        Invoke(nameof(LoadPlayerAndWorld), 0.1f); 
     }
+
+    // --- Loading Logic ---
 
     public void LoadPlayerAndWorld()
     {
+        // Locate the save file based on the slot selected in the menu
         int slotID = GameManager.Instance.selectedSlot;
         string fileName = "SaveSlot_" + (slotID + 1) + ".json";
         string filePath = Path.Combine(Application.persistentDataPath, "Saves", fileName);
@@ -46,41 +70,39 @@ public class CharacterLoader : MonoBehaviour
             string json = File.ReadAllText(filePath);
             PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
 
-            // 1. Sync Text and GameManager
+            // Sync UI text elements and update GameManager session data
             if (nameLabel != null) nameLabel.text = data.playerName;
             if (coinLabel != null) coinLabel.text = data.coins.ToString();
             GameManager.Instance.totalCoins = data.coins;
             GameManager.Instance.playerName = data.playerName;
             GameManager.Instance.selectedFarmID = data.farmID;
 
-            // 2. Register Faces with the Brain
+            // Connect local face objects to the GameManager for feedback animations
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.smileFace = sceneSmile;
                 GameManager.Instance.sadFace = sceneSad;
             }
 
-            // 3. Reconstruct Visuals
+            // Apply the saved character appearance
             ReconstructPart(hairContainer, "HairStyles", data.hairName);
             ReconstructPart(topsContainer, "Tops", data.topName);
             ReconstructPart(bottomsContainer, "Bottoms", data.bottomName);
             ReconstructPart(bodyContainer, "SkinTone", data.skinName);
 
-            // 4. Set Accessories
+            // Toggle accessory visibility based on save data
             if (glassesObj != null) glassesObj.SetActive(data.hasGlasses);
             if (hearingAidObj != null) hearingAidObj.SetActive(data.hasHearingAid);
             if (crutchesObj != null) crutchesObj.SetActive(data.hasCrutches);
 
-            // 5. THE PREFAB FIX: Spawn the farm world
+            // Instantiate the correct farm environment based on the saved ID
             if (farmPrefabs != null && farmPrefabs.Length > data.farmID)
             {
-                // Create the farm as a child of the Studio at X:1000
                 GameObject activeFarm = Instantiate(farmPrefabs[data.farmID], farmStudioParent);
-                activeFarm.transform.localPosition = Vector3.zero; // Center it
-                Debug.Log("<color=green>Loader:</color> Spawned Farm Type " + data.farmID);
+                activeFarm.transform.localPosition = Vector3.zero;
             }
 
-            // 6. Spawn the Animals
+            // Repopulate the farm with previously purchased animals
             RewardsManager rm = Object.FindFirstObjectByType<RewardsManager>();
             if (data.activeAnimals != null && rm != null)
             {
@@ -96,18 +118,16 @@ public class CharacterLoader : MonoBehaviour
     {
         if (container == null || string.IsNullOrEmpty(assetName)) return;
 
-        // 1. Find the "Box" (hairstyle1__000_0 -> hairstyle1)
+        // Extract the base prefix to identify which transform "box" to activate
         string prefix = assetName.Split('_')[0].ToLower();
 
-        // 2. CLEAN the asset name for loading (hairstyle1__000_0 -> hairstyle1__000)
-        // We remove the very last "_0" which Unity adds to the sprite object name
+        // Remove Unity's internal naming suffix for Resource loading compatibility
         string cleanAssetName = assetName;
         if (assetName.EndsWith("_0"))
         {
             cleanAssetName = assetName.Substring(0, assetName.Length - 2);
         }
 
-        // 3. LOAD the sprite using the clean name
         string path = "Images/CharacterItems/" + folder + "/" + cleanAssetName;
         Sprite s = Resources.Load<Sprite>(path);
 
@@ -123,8 +143,7 @@ public class CharacterLoader : MonoBehaviour
                 }
                 else
                 {
-                    // This will tell you if the path is still slightly wrong
-                    Debug.LogError("LOADER: Image not found at Resources/" + path);
+                    Debug.LogError("CharacterLoader: Image not found at Resources/" + path);
                 }
             }
             else if (folder != "SkinTone")

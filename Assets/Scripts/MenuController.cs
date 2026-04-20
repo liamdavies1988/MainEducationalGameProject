@@ -1,3 +1,21 @@
+// =================================================================================================
+// File: MenuController.cs
+// Author: Liam Davies (lid37)
+// Supervisor: Helen Miles (hem23)
+// Project: Gamifying the Curriculum: An Educational Application for Primary Education
+// Date Created: March 12, 2026
+// Last Modified: April 20, 2026
+//
+// Description:
+// Manages main menu navigation, save slot interactions, and the curriculum selection flow, 
+// interfacing with the GameManager for persistent state transitions and UI pop-up management.
+//
+// Third-Party Assets / Code:
+// - Logic assistance and structural debugging provided by Google Gemini API.
+// - UI Assets sourced from Kenney.nl and Vecteezy (see Appendix B of report).
+// - Sound assets sourced from Pixabay.
+// =================================================================================================
+
 using UnityEngine;
 using TMPro;
 using System.IO;
@@ -182,4 +200,3 @@ public void OnDifficultyClicked(string difficulty)
         Debug.Log("UI: All pop-ups closed.");
     }
 }
-// --- RECENTLY EDITED FILES ---

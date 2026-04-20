@@ -1,3 +1,21 @@
+// =================================================================================================
+// File: RewardsManager.cs
+// Author: Liam Davies (lid37)
+// Supervisor: Helen Miles (hem23)
+// Project: Gamifying the Curriculum: An Educational Application for Primary Education
+// Date Created: April 5, 2026
+// Last Modified: April 20, 2026
+//
+// Description:
+// Manages the rewards shop system, including CSV data parsing for inventory, 
+// animal purchasing logic, randomized world spawning, and persistent deletion.
+//
+// Third-Party Assets / Code:
+// - Logic assistance and structural debugging provided by Google Gemini API.
+// - UI Assets sourced from Kenney.nl and Vecteezy (see Appendix B of report).
+// - Sound assets sourced from Pixabay.
+// =================================================================================================
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -26,26 +44,30 @@ public class RewardsManager : MonoBehaviour
     public GameObject animalDeletePopup;
     private AnimalAI pendingAnimalToDelete; // Remembers which animal we clicked
 
-    // This uses the class defined at the bottom
     private List<AnimalData> shopInventory = new List<AnimalData>();
     
     [Header("Limits")]
-    public int maxAnimals = 20; // Set your limit here
+    public int maxAnimals = 20;
+
+    // --- Unity Callbacks ---
+
     void Start()
     {
-        Debug.Log("<color=cyan>[RewardsManager]</color> Initializing Rewards Manager...");
         LoadShopData();
         BuildShopUI();
-        Debug.Log("<color=cyan>[RewardsManager]</color> Initialization complete!");
     }
+
+    // --- Data Loading & UI Generation ---
 
     void LoadShopData()
     {
+        // Load and parse the CSV from Resources containing names, prices, and paths
         TextAsset csvFile = Resources.Load<TextAsset>(csvFileName);
         if (csvFile == null) { Debug.LogError("<color=red>[RewardsManager]</color> CSV not found at Resources/" + csvFileName); return; }
 
         string[] lines = csvFile.text.Split('\n');
 
+        // Skip the header and parse each row
         for (int i = 1; i < lines.Length; i++)
         {
             if (string.IsNullOrWhiteSpace(lines[i])) continue;
@@ -88,7 +110,6 @@ public class RewardsManager : MonoBehaviour
             newBtn.transform.Find("Animal Image/AnimalText").GetComponent<TextMeshProUGUI>().text = data.name.ToUpper();
             newBtn.transform.Find("PriceCoin/PriceText1").GetComponent<TextMeshProUGUI>().text = data.price.ToString();
             newBtn.transform.Find("PriceCoin/PriceText2").GetComponent<TextMeshProUGUI>().text = data.price.ToString();
-            Debug.Log("<color=magenta>[RewardsManager]</color> Shop UI built and sorted by price!");
             
             // 4. Find and set the button Icon
             Image icon = newBtn.transform.Find("Animal Image").GetComponent<Image>();
@@ -102,71 +123,60 @@ public class RewardsManager : MonoBehaviour
                 }
             }
 
-            // 5. THE FIX: Link the Drag Logic to the Sprite Name
-            ShopItem dragScript = newBtn.GetComponent<ShopItem>();
-            if (dragScript == null) dragScript = newBtn.AddComponent<ShopItem>();
+            ShopItemManager dragScript = newBtn.GetComponent<ShopItemManager>();
+            if (dragScript == null) dragScript = newBtn.AddComponent<ShopItemManager>();
 
+            // Pass sprite data to the drag script for the purchase logic
             dragScript.animalType = data.name;
             dragScript.price = data.price;
-
-            // --- CRITICAL CHANGE HERE ---
-            // We tell the drag script to pass the SPRITE name (e.g. animal_bear)
-            // to the spawner, NOT the sheet name.
             dragScript.prefabToSpawn = data.spritePath;
-            // ----------------------------
         }
-        Debug.Log("<color=magenta>[RewardsManager]</color> Shop UI built successfully!");
+        Debug.Log("<color=magenta>[RewardsManager]</color> Shop UI built and sorted by price!");
     }
+
+    // --- Shop Interaction Logic ---
 
     public void TryBuyAnimal(string animalName, int cost, string spriteName)
     {
-        // 1. CHECK THE LIMIT FIRST
-    if (GameManager.Instance.activeAnimals.Count >= maxAnimals)
-    {
-        Debug.LogWarning("<color=orange>FARM FULL:</color> Cannot buy more animals!");
-        // Optional: Trigger a UI message saying "Farm is full!"
-        return; 
-    }
+        // Enforce the animal population limit
+        if (GameManager.Instance.activeAnimals.Count >= maxAnimals)
+        {
+            Debug.LogWarning("FARM FULL: Cannot buy more animals!");
+            return; 
+        }
+
+        // Validate currency before completing purchase
         if (GameManager.Instance.totalCoins >= cost)
         {
             GameManager.Instance.totalCoins -= cost;
             GameManager.Instance.UpdateCoinUI();
 
+            // Spawn the animal and register it in the session save data
             SpawnAnimalWithData(animalName, spriteName);
-
-            // Register the purchase in the GameManager's list for JSON saving
             GameManager.Instance.activeAnimals.Add(spriteName);
             GameManager.Instance.SaveCurrentProgress();
-
-            Debug.Log("<color=green>SUCCESS:</color> Bought " + animalName);
         }
         else
         {
-            Debug.Log("<color=red>FAILED:</color> Not enough coins!");
-            // Optional: Trigger a UI message saying "Not enough coins!"
             GameManager.Instance.TriggerCoinFlash();
             GameManager.Instance.PlayWrongSound(); 
         }
     }
+
+    // --- Spawning System ---
+
     public void SpawnAnimalWithData(string animalName, string spriteName)
     {
-        // 1. SAFETY CHECKS
         if (animalTemplatePrefab == null || farmWorldParent == null)
         {
-            Debug.LogError("REWARDS: Prefab or Parent not assigned in Inspector!");
             return;
         }
 
-        if (topLeftMarker == null || bottomRightMarker == null)
-        {
-            Debug.LogError("REWARDS: Spawn markers not assigned! Using default (0,0).");
-        }
-
-        // 2. CREATE THE ANIMAL
+        // Create a new instance from the template and rename it
         GameObject newAnimal = Instantiate(animalTemplatePrefab, farmWorldParent);
         newAnimal.name = "Farmer_" + animalName;
 
-        // 3. FIND THE SPRITE IN THE SHEET
+        // Locate the specific sprite within the animal sheet
         string sheetPath = "Images/CharacterItems/Animals/RewardsAnimalSpritesheet";
         Sprite[] allSprites = Resources.LoadAll<Sprite>(sheetPath);
         Sprite targetSprite = null;
@@ -180,47 +190,43 @@ public class RewardsManager : MonoBehaviour
             }
         }
 
-        // 4. APPLY VISUALS
+        // Set up the renderer with the correct sorting and sprite
         SpriteRenderer sr = newAnimal.GetComponent<SpriteRenderer>();
         if (sr != null && targetSprite != null)
         {
             sr.sprite = targetSprite;
-            sr.sortingLayerName = "Animals"; // Ensure this layer exists in Unity!
-            sr.sortingOrder = 10;            // High number to stay in front
-        }
-        else
-        {
-            Debug.LogWarning("REWARDS: Could not apply sprite " + spriteName);
+            sr.sortingLayerName = "Animals"; 
+            sr.sortingOrder = 10;            
         }
 
-        // 5. CALCULATE SAFE SPAWN POSITION
+        // Calculate a randomized position between the boundary markers
         float spawnX = 0;
         float spawnY = 0;
 
         if (topLeftMarker != null && bottomRightMarker != null)
         {
             spawnX = Random.Range(topLeftMarker.localPosition.x, bottomRightMarker.localPosition.x);
-            spawnY = Random.Range(bottomRightMarker.localPosition.x, topLeftMarker.localPosition.y);
-            // Note: Adjust .x/.y above if markers are placed differently
+            spawnY = Random.Range(bottomRightMarker.localPosition.y, topLeftMarker.localPosition.y);
         }
 
         newAnimal.transform.localPosition = new Vector3(spawnX, spawnY, -1f);
-
-        Debug.Log($"<color=green>SUCCESS:</color> Spawned {animalName} at {newAnimal.transform.localPosition}");
     }
+
+    // --- Deletion & Confirmation System ---
 
     public void RequestAnimalDeletion(AnimalAI animal)
     {
+        // Store the target animal and show the confirmation prompt
         pendingAnimalToDelete = animal;
         animalDeletePopup.SetActive(true);
     }
-
    
-    public void ConfirmAnimalDelete() // Called by the YES button
+    public void ConfirmAnimalDelete()
     {
+        // Triggered by the "YES" button in the deletion UI
         if (pendingAnimalToDelete != null)
         {
-            // 1. Get the sprite name to remove it from the save list
+            // Identify the sprite to remove it from the persistent save list
             string spriteName = pendingAnimalToDelete.GetComponent<SpriteRenderer>().sprite.name;
             
             if (GameManager.Instance.activeAnimals.Contains(spriteName))
@@ -229,47 +235,43 @@ public class RewardsManager : MonoBehaviour
                 GameManager.Instance.SaveCurrentProgress();
             }
 
-            // 2. Physically remove it from the farm
+            // Start the visual removal sequence
             StartCoroutine(ShrinkAndDestroy(pendingAnimalToDelete.gameObject));
             pendingAnimalToDelete = null;
         }
-        
+        animalDeletePopup.SetActive(false);
+    }
+
+    public void CancelAnimalDelete()
+    {
+        // Triggered by the "NO" button; restores the animal to normal behavior
+        if (pendingAnimalToDelete != null)
+        {
+            pendingAnimalToDelete.ResetAnimal();
+        }
         animalDeletePopup.SetActive(false);
     }
 
     private IEnumerator ShrinkAndDestroy(GameObject target)
     {
+        // Coroutine to animate the animal scaling down before destruction
         if (target == null) yield break;
 
-        float duration = 2f; // How long the shrink takes
+        float duration = 2f; 
         float elapsed = 0f;
         Vector3 startScale = target.transform.localScale;
 
         while (elapsed < duration)
         {
-            if (target == null) yield break;
+            if (target == null) yield break; // Safety check if destroyed elsewhere
             elapsed += Time.deltaTime;
             target.transform.localScale = Vector3.Lerp(startScale, Vector3.zero, elapsed / duration);
             yield return null;
         }
-
         Destroy(target);
-    }
-
-    
-    public void CancelAnimalDelete() // Called by the NO button
-    {
-        if (pendingAnimalToDelete != null)
-        {
-            pendingAnimalToDelete.ResetAnimal();
-            
-            
-        }
-        animalDeletePopup.SetActive(false);
     }
 }
     
-
 [System.Serializable]
 public class AnimalData
 {

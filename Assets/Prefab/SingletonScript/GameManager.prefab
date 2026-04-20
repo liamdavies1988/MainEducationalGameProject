@@ -50,12 +50,16 @@ MonoBehaviour:
   wrongAnswerSound: {fileID: 8300000, guid: 9075fc1e024289044bb1eefb186334e4, type: 3}
   totalCoins: 0
   playerName: 
-  coinCountText: {fileID: 0}
   selectedSlot: 0
+  selectedFarmID: 0
+  activeAnimals: []
+  coinCountText: {fileID: 0}
+  smileFace: {fileID: 0}
+  sadFace: {fileID: 0}
   selectedSubject: 
   selectedDifficulty: 
+  totalQuestionsRequested: 10
   difficultyPopup: {fileID: 0}
-  myPopup: {fileID: 0}
 --- !u!82 &8215755174188626224
 AudioSource:
   m_ObjectHideFlags: 0
@@ -71,7 +75,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

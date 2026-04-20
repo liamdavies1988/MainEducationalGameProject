@@ -1,3 +1,21 @@
+// =================================================================================================
+// File: GameManager.cs
+// Author: Liam Davies (lid37)
+// Supervisor: Helen Miles (hem23)
+// Project: Gamifying the Curriculum: An Educational Application for Primary Education
+// Date Created: February 15, 2026
+// Last Modified: April 20, 2026
+//
+// Description:
+// Acts as the central hub for the game, managing global state including economy, 
+// player profiles, persistent data serialization, and session-specific settings.
+//
+// Third-Party Assets / Code:
+// - Logic assistance and structural debugging provided by Google Gemini API.
+// - UI Assets sourced from Kenney.nl and Vecteezy (see Appendix B of report).
+// - Sound assets sourced from Pixabay.
+// =================================================================================================
+
 using UnityEngine;
 using TMPro;
 using System;
@@ -8,7 +26,6 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    // ONLY ONE INSTANCE DEFINITION HERE
     public static GameManager Instance;
 
     [Header("Audio")]
@@ -30,7 +47,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI coinCountText;
 
     [Header("UI Animation Settings")]
-    private Color originalCoinColor = Color.white; 
+    private Color originalCoinColor = Color.white;
     private bool isFlashing = false;
 
     [Header("Character Feedback UI")]
@@ -42,40 +59,33 @@ public class GameManager : MonoBehaviour
     public string selectedDifficulty = "Easy";
 
     [Header("Session Settings")]
-    public int totalQuestionsRequested = 10; // Default to 10
+    public int totalQuestionsRequested = 10;
 
     [Header("Difficulty Popup")]
     public GameObject difficultyPopup;
 
-
-
-
-
-    //private PlayerSaveData currentSessionData;
+    // --- Unity Callbacks ---
 
     private void Awake()
     {
-        // SINGLETON LOGIC
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            // Ensure the folder exists
             string folderPath = Application.persistentDataPath + "/Saves/";
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
 
-            LoadGameData(); // Initial load
+            LoadGameData();
         }
         else
         {
             Destroy(gameObject);
             return;
         }
-        
     }
 
     private void Start()
@@ -84,145 +94,126 @@ public class GameManager : MonoBehaviour
         SetupCoinColor();
     }
 
-    public void AddCoin() 
-{
-    // --- THE DYNAMIC REWARD FIX ---
-    // If the difficulty is set to "Hard", give 2 coins. 
-    // For anything else (Easy/Medium), give 1.
-    int rewardAmount = (selectedDifficulty == "Hard") ? 2 : 1;
-    
-    totalCoins += rewardAmount;
-    // ------------------------------
+    // --- Core Game Logic ---
 
-    UpdateCoinUI();
-    SaveCurrentProgress(); 
-
-    if (audioSource != null && coinSound != null)
+    public void AddCoin()
     {
-        audioSource.PlayOneShot(coinSound);
-    }
-    
-    Debug.Log($"<color=yellow>Economy:</color> Awarded {rewardAmount} coins for {selectedDifficulty} mode.");
-}
+        // Award more coins for higher difficulty settings
+        int rewardAmount = (selectedDifficulty == "Hard") ? 2 : 1;
+        totalCoins += rewardAmount;
 
-    private void SetupCoinColor()
-    {
-        if (coinCountText != null)
-            originalCoinColor = coinCountText.color;
-    }
+        UpdateCoinUI();
+        SaveCurrentProgress();
 
-    public void TriggerCoinFlash()
-    {
-        // Prevent multiple flashes from fighting each other
-        if (isFlashing) return;
-
-        // Ensure we have the current scene's text reference
-        if (coinCountText == null)
+        if (audioSource != null && coinSound != null)
         {
-            GameObject textObj = GameObject.Find("CoinCountText");
-            if (textObj != null) coinCountText = textObj.GetComponent<TextMeshProUGUI>();
+            audioSource.PlayOneShot(coinSound);
         }
-
-        if (coinCountText != null)
-        {
-            StartCoroutine(FlashCoinsRoutine());
-        }
-    }
-
-    IEnumerator FlashCoinsRoutine()
-    {
-        isFlashing = true;
-        // Store the color of the text in THIS scene
-        Color normalColor = coinCountText.color;
-
-        // Flash Red 3 times
-        for (int i = 0; i < 3; i++)
-        {
-            coinCountText.color = Color.red;
-            yield return new WaitForSeconds(0.1f);
-            coinCountText.color = normalColor;
-            yield return new WaitForSeconds(0.1f);
-        }
-
-        isFlashing = false;
     }
 
     public void SetQuestionAmount(int amount)
     {
         totalQuestionsRequested = amount;
-        Debug.Log("<color=green>GameManager:</color> Question amount set to: " + amount);
     }
 
-    public void PlayWrongSound()
+    public void SetSubject(string newSubject)
     {
-        if (audioSource != null && wrongAnswerSound != null)
+        selectedSubject = newSubject;
+    }
+
+    public void SelectDifficultyAndStart(string difficulty)
+    {
+        selectedDifficulty = difficulty;
+        SaveCurrentProgress();
+        SceneManager.LoadScene("MultipleChoiceGame");
+    }
+
+    // --- Data Persistence ---
+
+    public void SaveCurrentProgress()
+    {
+        // Ensure the cache is initialized before updating values
+        if (masterCachedProfile == null) masterCachedProfile = LoadGameData();
+
+        if (masterCachedProfile != null)
         {
-            audioSource.PlayOneShot(wrongAnswerSound);
+            masterCachedProfile.coins = totalCoins;
+            masterCachedProfile.playerName = playerName;
+            masterCachedProfile.farmID = selectedFarmID;
+            masterCachedProfile.activeAnimals = new List<string>(this.activeAnimals);
+
+            string json = JsonUtility.ToJson(masterCachedProfile, true);
+            string path = Application.persistentDataPath + "/Saves/SaveSlot_" + (selectedSlot + 1) + ".json";
+            File.WriteAllText(path, json);
         }
     }
 
-    public void SaveCurrentProgress()
-{
-    if (masterCachedProfile == null) masterCachedProfile = LoadGameData();
-
-    if (masterCachedProfile != null)
-    {
-        masterCachedProfile.coins = totalCoins;
-        masterCachedProfile.playerName = playerName;
-        masterCachedProfile.farmID = selectedFarmID;
-
-        // CRITICAL: Put the live list BACK into the profile before saving
-        // This stops the Quiz from saving an empty list over your farm!
-        masterCachedProfile.activeAnimals = new List<string>(this.activeAnimals);
-
-        string json = JsonUtility.ToJson(masterCachedProfile, true);
-        string path = Application.persistentDataPath + "/Saves/SaveSlot_" + (selectedSlot + 1) + ".json";
-        File.WriteAllText(path, json);
-        
-        Debug.Log("<color=cyan>GameManager:</color> Save successful. Animals preserved.");
-    }
-}
-
     public void SaveGame(PlayerSaveData data)
     {
+        // Serialize a complete data object to the current slot
         int slot = selectedSlot + 1;
         string path = Application.persistentDataPath + "/Saves/SaveSlot_" + slot + ".json";
 
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(path, json);
 
-        // Sync internal Brain
+        // Sync internal state with the saved data
         this.totalCoins = data.coins;
         this.playerName = data.playerName;
         this.selectedFarmID = data.farmID;
         this.activeAnimals = data.activeAnimals;
-
-        Debug.Log("<color=cyan>GameManager:</color> Successfully saved data to Slot " + slot);
     }
+
+    public PlayerSaveData LoadGameData()
+    {
+        string filePath = Application.persistentDataPath + "/Saves/SaveSlot_" + (selectedSlot + 1) + ".json";
+
+        if (File.Exists(filePath))
+        {
+            // Deserialize the profile and sync live variables
+            string json = File.ReadAllText(filePath);
+            masterCachedProfile = JsonUtility.FromJson<PlayerSaveData>(json);
+            
+            this.playerName = masterCachedProfile.playerName;
+            this.totalCoins = masterCachedProfile.coins;
+            this.selectedFarmID = masterCachedProfile.farmID;
+
+            this.activeAnimals = masterCachedProfile.activeAnimals != null ? 
+                new List<string>(masterCachedProfile.activeAnimals) : new List<string>();
+
+            UpdateCoinUI();
+            return masterCachedProfile;
+        }
+        return null;
+    }
+
+    public void ResetData()
+    {
+        // Clear all session memory and UI
+        totalCoins = 0;
+        playerName = "Player1";
+        selectedFarmID = 0;
+        activeAnimals.Clear();
+        masterCachedProfile = null; 
+        UpdateCoinUI();
+    }
+
+    // --- UI & Feedback Logic ---
 
     public void ShowReaction(bool isCorrect)
     {
-        Debug.Log($"<color=cyan>GameManager:</color> ShowReaction called. isCorrect: {isCorrect}");
+        StopCoroutine(nameof(HideReactions));
 
-        // Stop any existing timers
-        StopCoroutine("HideReactions");
-
+        // Activate appropriate face reaction based on answer accuracy
         if (isCorrect)
         {
-            if (smileFace != null) {
-                smileFace.SetActive(true);
-                Debug.Log("GameManager: smileFace activated.");
-            } else Debug.LogError("GameManager: smileFace is NULL! Check if sceneSmile is assigned in CharacterLoader.");
-
+            if (smileFace != null) smileFace.SetActive(true);
             if (sadFace != null) sadFace.SetActive(false);
         }
         else
         {
             if (smileFace != null) smileFace.SetActive(false);
-            if (sadFace != null) {
-                sadFace.SetActive(true);
-                Debug.Log("GameManager: sadFace activated.");
-            } else Debug.LogError("GameManager: sadFace is NULL! Check if sceneSad is assigned in CharacterLoader.");
+            if (sadFace != null) sadFace.SetActive(true);
         }
 
         StartCoroutine(HideReactions());
@@ -230,39 +221,41 @@ public class GameManager : MonoBehaviour
 
     IEnumerator HideReactions()
     {
+        // Deactivate feedback faces after a brief delay
         yield return new WaitForSeconds(1.5f);
         if (smileFace != null) smileFace.SetActive(false);
         if (sadFace != null) sadFace.SetActive(false);
     }
 
-    public PlayerSaveData LoadGameData()
-{
-    string filePath = Application.persistentDataPath + "/Saves/SaveSlot_" + (selectedSlot + 1) + ".json";
-
-    if (File.Exists(filePath))
+    public void TriggerCoinFlash()
     {
-        string json = File.ReadAllText(filePath);
-        masterCachedProfile = JsonUtility.FromJson<PlayerSaveData>(json);
-        
-        // --- THE SYNC FIX ---
-        this.playerName = masterCachedProfile.playerName;
-        this.totalCoins = masterCachedProfile.coins;
-        this.selectedFarmID = masterCachedProfile.farmID;
+        if (isFlashing) return;
 
-        // CRITICAL: Fill the live list from the file so the Brain 'remembers' them in the Quiz
-        if (masterCachedProfile.activeAnimals != null) {
-            this.activeAnimals = new List<string>(masterCachedProfile.activeAnimals);
-        } else {
-            this.activeAnimals = new List<string>();
+        // Find the coin text if it's not currently cached
+        if (coinCountText == null)
+        {
+            GameObject textObj = GameObject.Find("CoinCountText");
+            if (textObj != null) coinCountText = textObj.GetComponent<TextMeshProUGUI>();
         }
-        // --------------------
 
-        UpdateCoinUI();
-        Debug.Log("GameManager: Brain synchronized with " + activeAnimals.Count + " animals.");
-        return masterCachedProfile;
+        if (coinCountText != null) StartCoroutine(FlashCoinsRoutine());
     }
-    return null;
-}
+
+    IEnumerator FlashCoinsRoutine()
+    {
+        isFlashing = true;
+        Color normalColor = coinCountText.color;
+
+        // Toggle text color to red to indicate insufficient funds
+        for (int i = 0; i < 3; i++)
+        {
+            coinCountText.color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+            coinCountText.color = normalColor;
+            yield return new WaitForSeconds(0.1f);
+        }
+        isFlashing = false;
+    }
 
     public void UpdateCoinUI()
     {
@@ -278,33 +271,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetSubject(string newSubject)
+    private void SetupCoinColor()
     {
-        selectedSubject = newSubject;
-        Debug.Log("<color=green>GameManager:</color> Subject set to: " + selectedSubject);
+        if (coinCountText != null)
+            originalCoinColor = coinCountText.color;
     }
 
-    public void SelectDifficultyAndStart(string difficulty)
+    public void PlayWrongSound()
     {
-        selectedDifficulty = difficulty;
-        SaveCurrentProgress();
-        SceneManager.LoadScene("MultipleChoiceGame");
+        if (audioSource != null && wrongAnswerSound != null)
+        {
+            audioSource.PlayOneShot(wrongAnswerSound);
+        }
     }
-
-    public void ResetData()
-    {
-        totalCoins = 0;
-        playerName = "Player1";
-        selectedFarmID = 0;
-        activeAnimals.Clear();
-        masterCachedProfile = null; // Clear the cache so we start fresh next time we load
-        UpdateCoinUI();
-        Debug.Log("<color=red>GameManager:</color> Session memory wiped.");
-    }
-    
 }
 
-[System.Serializable] // This allows us to easily convert this class to JSON for saving and loading
+[System.Serializable]
 public class PlayerSaveData
 {
     public string playerName;
@@ -319,5 +301,3 @@ public class PlayerSaveData
     public bool hasCrutches;
     public List<string> activeAnimals;
 }
-
-// --- RECENTLY EDITED FILES ---

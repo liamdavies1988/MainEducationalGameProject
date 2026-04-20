@@ -1,3 +1,21 @@
+// =================================================================================================
+// File: AnswerButtons.cs
+// Author: Liam Davies (lid37)
+// Supervisor: Helen Miles (hem23)
+// Project: Gamifying the Curriculum: An Educational Application for Primary Education
+// Date Created: February 15, 2026
+// Last Modified: April 20, 2026
+//
+// Description:
+// Manages individual answer button logic, providing visual feedback (ticks/crosses), 
+// handling currency rewards via the GameManager, and triggering session progression.
+//
+// Third-Party Assets / Code:
+// - Logic assistance and structural debugging provided by Google Gemini API.
+// - UI Assets sourced from Kenney.nl and Vecteezy (see Appendix B of report).
+// - Sound assets sourced from Pixabay.
+// =================================================================================================
+
 using UnityEngine;
 using TMPro;
 using System.Collections;
@@ -5,10 +23,9 @@ using System.Collections;
 public class AnswerButton : MonoBehaviour
 {
     private bool isCorrectAnswer;
-    
 
-    [Header("UI References")]
-    [SerializeField] private TextMeshProUGUI AnswerText;
+    [Header("UI Components")]
+    [SerializeField] private TextMeshProUGUI AnswerText; 
 
     [Header("Button Feedback Icons")]
     [SerializeField] private GameObject tickIcon;
@@ -16,80 +33,83 @@ public class AnswerButton : MonoBehaviour
 
     
 
-    // Called by QuestionSetup to update the text on the button
+    // --- Initialization Methods ---
+
+    // Updates the text displayed on the button
     public void SetAnswerText(string answer)
     {
+        // Check if the TextMeshPro component is assigned before updating
         if (AnswerText != null)
         {
             AnswerText.text = answer;
         }
     }
 
-    // Called by QuestionSetup to tell the button if it is the right answer
+    // Configures whether this button represents the correct answer
     public void SetIsCorrect(bool correct)
     {
+        // Store the state passed from QuestionSetup
         isCorrectAnswer = correct;
     }
    
+    // --- Interaction Logic ---
 
+    // Triggered by the Button component's onClick event
     public void OnClick()
     {
         if (isCorrectAnswer)
         {
-            Debug.Log("Correct!");
-
-            // 1. Visual Feedback: Show Tick, hide Text
+            // Show the tick icon for visual confirmation
             if (tickIcon != null) tickIcon.SetActive(true);
 
-            // 3. Manager Handshakes
             if (GameManager.Instance != null)
             {
+                // Notify GameManager to award currency and show positive feedback
                 GameManager.Instance.AddCoin();
                 GameManager.Instance.ShowReaction(true);
-                Debug.Log("AnswerButton: Sent 'Correct' signal to GameManager.");
             }
             else
             {
                 Debug.LogError("AnswerButton: GameManager.Instance is NULL!");
             }
 
-            // 4. Cleanup and Progression
+            // Clean up UI and move to the next question
             StartCoroutine(ResetButtonUI());
-            StartCoroutine(NextQuestionDelay());     // MOVE TO NEXT QUESTION
+            StartCoroutine(NextQuestionDelay());
         }
         else
         {
-            Debug.Log("Wrong!");
-
-            // 1. Visual Feedback: Show Cross, hide Text
+            // Show the cross icon and hide the text to indicate a wrong choice
             if (crossIcon != null) crossIcon.SetActive(true);
             if (AnswerText != null) AnswerText.gameObject.SetActive(false);    
-            // 2. Animation & Sound
+
             if (GameManager.Instance != null)
             {
+                // Trigger negative feedback audio and visuals
                 GameManager.Instance.PlayWrongSound();
                 GameManager.Instance.ShowReaction(false);
-                Debug.Log("AnswerButton: Sent 'Wrong' signal to GameManager.");
             }
             else
             {
                 Debug.LogError("AnswerButton: GameManager.Instance is NULL!");
             }
 
-            // 3. THE FIX: Reset the UI but DO NOT call NextQuestionDelay
-            // This brings the text back and hides the 'X' so they can try again!
+            // Save progress and proceed
             GameManager.Instance.SaveCurrentProgress(); 
             StartCoroutine(ResetButtonUI());
-            StartCoroutine(NextQuestionDelay());     // MOVE TO NEXT QUESTION
+            StartCoroutine(NextQuestionDelay());
         }
     }
 
+    // --- Feedback & Progression Coroutines ---
+
+    // Delays the transition to the next question to allow feedback to be seen
     IEnumerator NextQuestionDelay()
     {
-        // Wait so the child can see the reward/animation
+        // Pause briefly so the player can process the feedback icons
         yield return new WaitForSeconds(1.0f);
 
-        // Find the QuestionSetup script and load the next question
+        // Find the setup controller in the scene and trigger the next question
         QuestionSetup qs = Object.FindFirstObjectByType<QuestionSetup>();
         if (qs != null)
         {
@@ -97,12 +117,13 @@ public class AnswerButton : MonoBehaviour
         }
     }
 
+    // Restores the button's visual state for the next question
     IEnumerator ResetButtonUI()
     {
-        // Wait for the same time as your animation
+        // Match the delay of the question transition
         yield return new WaitForSeconds(1.0f);
 
-        // Turn everything back to normal for the next question
+        // Hide feedback icons and restore text visibility for the next round
         if (tickIcon != null) tickIcon.SetActive(false);
         if (crossIcon != null) crossIcon.SetActive(false);
         if (AnswerText != null) AnswerText.gameObject.SetActive(true);

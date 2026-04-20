@@ -1,3 +1,21 @@
+// =================================================================================================
+// File: FarmSelector.cs
+// Author: Liam Davies (lid37)
+// Supervisor: Helen Miles (hem23)
+// Project: Gamifying the Curriculum: An Educational Application for Primary Education
+// Date Created: March 20, 2026
+// Last Modified: April 20, 2026
+//
+// Description:
+// Manages the farm selection interface, allowing users to cycle through available 
+// farm environments and saving the choice to their persistent profile.
+//
+// Third-Party Assets / Code:
+// - Logic assistance and structural debugging provided by Google Gemini API.
+// - UI Assets sourced from Kenney.nl and Vecteezy (see Appendix B of report).
+// - Sound assets sourced from Pixabay.
+// =================================================================================================
+
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
@@ -11,60 +29,69 @@ public class FarmSelector : MonoBehaviour
 
     private int currentFarmIndex = 0;
 
+    // --- Unity Callbacks ---
+
     void Start()
     {
-        // Default to the first preview
-        if(farmOptions.Length > 0) displayImage.sprite = farmOptions[0];
+        // Set the initial preview image if options are available
+        if (farmOptions.Length > 0)
+        {
+            displayImage.sprite = farmOptions[0];
+        }
     }
 
-    // --- NAVIGATION LOGIC ---
+    // --- Navigation Logic ---
+
     public void NextFarm()
     {
+        // Increment index and wrap around to the start if necessary
         currentFarmIndex++;
-        if (currentFarmIndex >= farmOptions.Length) currentFarmIndex = 0;
+        if (currentFarmIndex >= farmOptions.Length)
+        {
+            currentFarmIndex = 0;
+        }
         UpdateUI();
     }
 
     public void PrevFarm()
     {
+        // Decrement index and wrap around to the end if necessary
         currentFarmIndex--;
-        if (currentFarmIndex < 0) currentFarmIndex = farmOptions.Length - 1;
+        if (currentFarmIndex < 0)
+        {
+            currentFarmIndex = farmOptions.Length - 1;
+        }
         UpdateUI();
     }
 
     private void UpdateUI()
     {
+        // Apply the selected sprite to the display component
         displayImage.sprite = farmOptions[currentFarmIndex];
     }
 
-    // --- SAVING LOGIC ---
+    // --- Data Persistence ---
+
     public void ConfirmAndStartGame()
-{
-    // 1. Ask GameManager which slot we are currently using
-    int slot = GameManager.Instance.selectedSlot;
-    string fileName = "SaveSlot_" + (slot + 1) + ".json";
-    string filePath = Application.persistentDataPath + "/Saves/" + fileName;
-
-    if (File.Exists(filePath))
     {
-        // 2. Read the existing file (which has your Name and Character info)
-        string json = File.ReadAllText(filePath);
-        PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
+        // Identify the current save slot and prepare the file path
+        int slot = GameManager.Instance.selectedSlot;
+        string fileName = "SaveSlot_" + (slot + 1) + ".json";
+        string filePath = Path.Combine(Application.persistentDataPath, "Saves", fileName);
 
-        // 3. Update the farmID with the one the student just picked
-        data.farmID = currentFarmIndex;
+        if (File.Exists(filePath))
+        {
+            // Load existing profile data to append the farm choice
+            string json = File.ReadAllText(filePath);
+            PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
 
-        // 4. Save the "Updated" file back to the folder
-        string updatedJson = JsonUtility.ToJson(data, true);
-        File.WriteAllText(filePath, updatedJson);
+            // Update the farm ID and save the modified JSON back to disk
+            data.farmID = currentFarmIndex;
+            string updatedJson = JsonUtility.ToJson(data, true);
+            File.WriteAllText(filePath, updatedJson);
 
-        Debug.Log("Farm details added to " + fileName + ". Now moving to Rewards Scene.");
-
-        // 5. THIS IS THE LINE THAT CHANGES THE SCREEN
-       
-        SceneManager.LoadScene("PlayerAndFarm");
+            // Transition to the main game environment scene
+            SceneManager.LoadScene("PlayerAndFarm");
+        }
     }
 }
-}
-
-// --- RECENTLY EDITED FILES ---
