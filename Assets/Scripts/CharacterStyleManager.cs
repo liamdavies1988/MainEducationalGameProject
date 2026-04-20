@@ -166,35 +166,36 @@ public void SetDefaultStyle()
 
     // --- SAVE LOGIC ---
 
-    public void SaveCharacterChoices()
+
+public void SaveCharacterChoices()
 {
     PlayerSaveData data = new PlayerSaveData();
 
-    // 1. Fill the data
-        data.playerName = GameManager.Instance.playerName;
-        data.coins = GameManager.Instance.totalCoins;
+    // 1. Sync from the Brain (GameManager)
+    data.playerName = GameManager.Instance.playerName;
+    data.coins = GameManager.Instance.totalCoins;
+    
+    // FIX: Get the actual Farm ID from the brain
+    data.farmID = GameManager.Instance.selectedFarmID; 
 
-        data.farmID = GameManager.Instance.selectedFarmID;
+    // 2. Capture the visuals
+    data.hairName = GetActiveSpriteName(hairContainer, "Hair");
+    data.topName = GetActiveSpriteName(topsContainer, "Top");
+    data.bottomName = GetActiveSpriteName(bottomsContainer, "Bottom");
+    data.skinName = GetActiveSpriteName(bodyContainer, "Skin");
 
-    // 2. Get the clean names of what is currently equipped
-        data.hairName = GetActiveSpriteName(hairContainer);
-        data.topName = GetActiveSpriteName(topsContainer);
-        data.bottomName = GetActiveSpriteName(bottomsContainer);
-        data.skinName = GetActiveSpriteName(bodyContainer);
+    // 3. Capture Accessories
+    data.hasGlasses = (glassesObj != null) && glassesObj.activeSelf;
+    data.hasHearingAid = (hearingAidObj != null) && hearingAidObj.activeSelf;
+    data.hasCrutches = (crutchesObj != null) && crutchesObj.activeSelf;
 
-    // 3. Accessories
-        data.hasGlasses = (glassesObj != null) ? glassesObj.activeSelf : false;
-        data.hasHearingAid = (hearingAidObj != null) ? hearingAidObj.activeSelf : false;
-        data.hasCrutches = (crutchesObj != null) ? crutchesObj.activeSelf : false;
+    // 4. Capture Animals (Carry over existing animals)
+    data.activeAnimals = new List<string>(GameManager.Instance.activeAnimals);
 
-    // 4. Active Animals (For consistency)
-        data.activeAnimals = new List<string>(GameManager.Instance.activeAnimals);
+    // 5. SEND TO BRAIN TO WRITE FILE
+    GameManager.Instance.SaveGame(data);
 
-    // 5. CALL THE MASTER SAVE (Instead of manual File writing)
-        // This uses the GameManager's SaveGame function we built earlier
-        GameManager.Instance.SaveGame(data);
-
-    Debug.Log("<color=green>CharacterStyleManager:</color> Character choices saved for " + data.playerName);
+    Debug.Log("<color=green>SUCCESS:</color> Character choices captured for " + data.playerName);
 }
 
     // Combined and refined ConfirmNameAndContinue function
@@ -267,30 +268,53 @@ public void SetDefaultStyle()
         SceneManager.LoadScene("FarmSelection"); // Change this to your next scene name
     }
 
-private string GetActiveSpriteName(Transform container)
+private string GetActiveSpriteName(Transform container, string category)
+{
+    if (container == null) 
     {
-        foreach (Transform child in container)
-        {
-            if (child.gameObject.activeSelf)
-            {
-                Image img = child.GetComponent<Image>();
-                if (img != null && img.sprite != null) 
-                {
-                    string rawName = img.sprite.name;
-
-                    // This removes the Unity-generated "_0" but keeps the variant number
-                    // e.g. "hairstyle1__003_0" becomes "hairstyle1__003"
-                    if (rawName.EndsWith("_0"))
-                    {
-                        return rawName.Substring(0, rawName.Length - 2);
-                    }
-
-                    return rawName; 
-                }
-            }
-        }
+        Debug.LogError("SAVE ERROR: " + category + " container is missing in the Inspector!");
         return "";
     }
+
+    foreach (Transform child in container)
+    {
+        // We only care about the box that is currently visible on the player
+        if (child.gameObject.activeSelf)
+        {
+            Image img = child.GetComponent<Image>();
+            
+            if (img != null && img.sprite != null) 
+            {
+                string rawName = img.sprite.name;
+
+                // THE FIX: Unity adds _0 to sprites loaded from Resources.
+                if (rawName.EndsWith("_0")) 
+                {
+                    // If we are saving the Skin, we KEEP the _0 (e.g., body_0)
+                    // If we are saving Clothes/Hair, we STRIP it (e.g., tshirt_1)
+                    if (category.ToLower().Contains("skin")) 
+                    {
+                        Debug.Log("SAVE: Found active Skin (Keeping suffix): " + rawName);
+                        return rawName; 
+                    }
+                    else 
+                    {
+                        string strippedName = rawName.Substring(0, rawName.Length - 2);
+                        Debug.Log("SAVE: Found active " + category + " (Stripping suffix): " + strippedName);
+                        return strippedName;
+                    }
+                }
+
+                // If the name doesn't have a suffix, just return it as is
+                Debug.Log("SAVE: Found active " + category + ": " + rawName);
+                return rawName; 
+            }
+        }
+    }
+    
+    Debug.LogWarning("SAVE WARNING: No active object found in " + category + " container!");
+    return "";
+}
 
     public void ToggleLayer(GameObject layerObject) { layerObject.SetActive(!layerObject.activeSelf); }
     public void CloseMenu() { popupWindow.SetActive(false); if(hairScrollView != null) hairScrollView.SetActive(false); }

@@ -32,7 +32,7 @@ public class CharacterLoader : MonoBehaviour
 
     void Start()
     {
-        LoadPlayerAndWorld();
+        Invoke(nameof(LoadPlayerAndWorld), 0.1f); // Delay to ensure GameManager is ready and has the selected slot info
     }
 
     public void LoadPlayerAndWorld()

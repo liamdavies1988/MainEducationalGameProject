@@ -25,26 +25,20 @@ public class QuestionSetup : MonoBehaviour
     private int currentQuestionNumber = 1;
 
     private void Start()
-    { 
-        // 1. Load the questions from Resources
-        GetQuestionAssets();
-
-        // 2. SAFETY CHECK: Only proceed if we actually found questions
-        if (questions != null && questions.Count > 0)
-        {
-            // 3. THIS IS THE MISSING STEP: Pick the first question!
-            SelectNewQuestion();
-            
-            // 4. Update the UI
-            SetQuestionValues();
-            SetAnswerValues();
-
-        }
-        else
-        {
-            Debug.LogError("<color=red>GAME HALTED:</color> No questions loaded. Character is standing in an empty classroom!");
-        }
+   {
+    // --- THE FIX: SYNC THE LIMITS ---
+    // This overwrites your local '5' or '10' with the button choice from the menu
+    if (GameManager.Instance != null)
+    {
+        this.totalQuestionsPerSession = GameManager.Instance.totalQuestionsRequested;
+        Debug.Log("Game Scene: Session limit set to " + totalQuestionsPerSession);
     }
+
+    GetQuestionAssets();
+    SelectNewQuestion();
+    SetQuestionValues();
+    SetAnswerValues();
+}
 
     private void GetQuestionAssets()
     {
@@ -161,5 +155,3 @@ public class QuestionSetup : MonoBehaviour
         return newList;
     }
 }
-
-// --- RECENTLY EDITED FILES ---

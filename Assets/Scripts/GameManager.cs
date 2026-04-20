@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public int selectedSlot;
     public int selectedFarmID;
     public List<string> activeAnimals = new List<string>();
+    private PlayerSaveData masterCachedProfile;
 
     [Header("UI Reference")]
     public TextMeshProUGUI coinCountText;
@@ -83,15 +84,26 @@ public class GameManager : MonoBehaviour
         SetupCoinColor();
     }
 
-    public void AddCoin()
-    {
-        totalCoins += 1;
-        UpdateCoinUI();
-        SaveCurrentProgress();
+    public void AddCoin() 
+{
+    // --- THE DYNAMIC REWARD FIX ---
+    // If the difficulty is set to "Hard", give 2 coins. 
+    // For anything else (Easy/Medium), give 1.
+    int rewardAmount = (selectedDifficulty == "Hard") ? 2 : 1;
+    
+    totalCoins += rewardAmount;
+    // ------------------------------
 
-        if (audioSource != null && coinSound != null)
-            audioSource.PlayOneShot(coinSound);
+    UpdateCoinUI();
+    SaveCurrentProgress(); 
+
+    if (audioSource != null && coinSound != null)
+    {
+        audioSource.PlayOneShot(coinSound);
     }
+    
+    Debug.Log($"<color=yellow>Economy:</color> Awarded {rewardAmount} coins for {selectedDifficulty} mode.");
+}
 
     private void SetupCoinColor()
     {
@@ -150,18 +162,26 @@ public class GameManager : MonoBehaviour
     }
 
     public void SaveCurrentProgress()
-    {
-        // 1. Prepare the bundle of data
-        PlayerSaveData data = new PlayerSaveData();
-        data.playerName = this.playerName;
-        data.coins = this.totalCoins;
-        data.farmID = this.selectedFarmID;
-        data.activeAnimals = new List<string>(this.activeAnimals);
+{
+    if (masterCachedProfile == null) masterCachedProfile = LoadGameData();
 
-        // Use the CharacterStyleManager logic to fill the rest if available
-        // For now, we save the core session data
-        SaveGame(data);
+    if (masterCachedProfile != null)
+    {
+        masterCachedProfile.coins = totalCoins;
+        masterCachedProfile.playerName = playerName;
+        masterCachedProfile.farmID = selectedFarmID;
+
+        // CRITICAL: Put the live list BACK into the profile before saving
+        // This stops the Quiz from saving an empty list over your farm!
+        masterCachedProfile.activeAnimals = new List<string>(this.activeAnimals);
+
+        string json = JsonUtility.ToJson(masterCachedProfile, true);
+        string path = Application.persistentDataPath + "/Saves/SaveSlot_" + (selectedSlot + 1) + ".json";
+        File.WriteAllText(path, json);
+        
+        Debug.Log("<color=cyan>GameManager:</color> Save successful. Animals preserved.");
     }
+}
 
     public void SaveGame(PlayerSaveData data)
     {
@@ -216,26 +236,33 @@ public class GameManager : MonoBehaviour
     }
 
     public PlayerSaveData LoadGameData()
+{
+    string filePath = Application.persistentDataPath + "/Saves/SaveSlot_" + (selectedSlot + 1) + ".json";
+
+    if (File.Exists(filePath))
     {
-        string filePath = Application.persistentDataPath + "/Saves/SaveSlot_" + (selectedSlot + 1) + ".json";
+        string json = File.ReadAllText(filePath);
+        masterCachedProfile = JsonUtility.FromJson<PlayerSaveData>(json);
+        
+        // --- THE SYNC FIX ---
+        this.playerName = masterCachedProfile.playerName;
+        this.totalCoins = masterCachedProfile.coins;
+        this.selectedFarmID = masterCachedProfile.farmID;
 
-        if (File.Exists(filePath))
-        {
-            string json = File.ReadAllText(filePath);
-            PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
-
-            // Sync the Brain
-            this.playerName = data.playerName;
-            this.totalCoins = data.coins;
-            this.selectedFarmID = data.farmID;
-            this.activeAnimals = data.activeAnimals != null ? data.activeAnimals : new List<string>();
-
-            UpdateCoinUI();
-            Debug.Log("GameManager: Synchronized with Slot " + (selectedSlot + 1));
-            return data;
+        // CRITICAL: Fill the live list from the file so the Brain 'remembers' them in the Quiz
+        if (masterCachedProfile.activeAnimals != null) {
+            this.activeAnimals = new List<string>(masterCachedProfile.activeAnimals);
+        } else {
+            this.activeAnimals = new List<string>();
         }
-        return null;
+        // --------------------
+
+        UpdateCoinUI();
+        Debug.Log("GameManager: Brain synchronized with " + activeAnimals.Count + " animals.");
+        return masterCachedProfile;
     }
+    return null;
+}
 
     public void UpdateCoinUI()
     {
@@ -270,7 +297,7 @@ public class GameManager : MonoBehaviour
         playerName = "Player1";
         selectedFarmID = 0;
         activeAnimals.Clear();
-        //currentSessionData = null;
+        masterCachedProfile = null; // Clear the cache so we start fresh next time we load
         UpdateCoinUI();
         Debug.Log("<color=red>GameManager:</color> Session memory wiped.");
     }

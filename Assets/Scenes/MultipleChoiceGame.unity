@@ -1155,6 +1155,66 @@ MonoBehaviour:
   - {fileID: 1579161275}
   - {fileID: 1044145863}
   totalQuestionsPerSession: 3
+--- !u!1 &322020324
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 322020326}
+  - component: {fileID: 322020325}
+  m_Layer: 0
+  m_Name: CharacterManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &322020325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322020324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d789516d69defa742a6b42b920a6d88c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterLoader
+  hairContainer: {fileID: 96162249}
+  topsContainer: {fileID: 904293295}
+  bottomsContainer: {fileID: 2126551036}
+  bodyContainer: {fileID: 1219976734}
+  glassesObj: {fileID: 833668251}
+  hearingAidObj: {fileID: 884869837}
+  crutchesObj: {fileID: 1331908006}
+  sceneSmile: {fileID: 1795307601}
+  sceneSad: {fileID: 285373985}
+  nameLabel: {fileID: 0}
+  coinLabel: {fileID: 851583739}
+  farmPrefabs:
+  - {fileID: 2041639313822950638, guid: 32f92523106dce54da3adb1506e77d02, type: 3}
+  - {fileID: 2041639313822950638, guid: c5d1d2ea70431764c8bbcf15adde12f0, type: 3}
+  - {fileID: 2041639313822950638, guid: c90b92161c247ef4ca9c620d0185f830, type: 3}
+  farmStudioParent: {fileID: 0}
+--- !u!4 &322020326
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322020324}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 654.9122, y: 361.0071, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &380991121
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4373,69 +4433,13 @@ RectTransform:
   m_AnchoredPosition: {x: -185.37129, y: -60.463814}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &2143037399
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2143037401}
-  - component: {fileID: 2143037400}
-  m_Layer: 0
-  m_Name: CharacterLoader
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
---- !u!114 &2143037400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2143037399}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d789516d69defa742a6b42b920a6d88c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterLoader
-  hairContainer: {fileID: 96162249}
-  topsContainer: {fileID: 904293295}
-  bottomsContainer: {fileID: 2126551036}
-  bodyContainer: {fileID: 1219976734}
-  glassesObj: {fileID: 833668251}
-  hearingAidObj: {fileID: 884869837}
-  crutchesObj: {fileID: 1331908006}
-  sceneSmile: {fileID: 1795307601}
-  sceneSad: {fileID: 285373985}
-  nameLabel: {fileID: 0}
-  farmLayouts: []
-  coinLabel: {fileID: 851583739}
---- !u!4 &2143037401
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2143037399}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 685.6548, y: 312.75427, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 1236171564}
-  - {fileID: 2143037401}
+  - {fileID: 322020326}
   - {fileID: 2064242525}
   - {fileID: 1608977494}
   - {fileID: 856936824}

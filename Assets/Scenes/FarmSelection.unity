@@ -429,6 +429,7 @@ MonoBehaviour:
   deletePopupText: {fileID: 0}
   loadPopup: {fileID: 0}
   loadPopupText: {fileID: 0}
+  amountPopup: {fileID: 0}
 --- !u!4 &448195758
 Transform:
   m_ObjectHideFlags: 0

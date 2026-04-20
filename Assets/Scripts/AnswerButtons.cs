@@ -63,7 +63,7 @@ public class AnswerButton : MonoBehaviour
 
             // 1. Visual Feedback: Show Cross, hide Text
             if (crossIcon != null) crossIcon.SetActive(true);
-
+            if (AnswerText != null) AnswerText.gameObject.SetActive(false);    
             // 2. Animation & Sound
             if (GameManager.Instance != null)
             {
@@ -78,6 +78,7 @@ public class AnswerButton : MonoBehaviour
 
             // 3. THE FIX: Reset the UI but DO NOT call NextQuestionDelay
             // This brings the text back and hides the 'X' so they can try again!
+            GameManager.Instance.SaveCurrentProgress(); 
             StartCoroutine(ResetButtonUI());
             StartCoroutine(NextQuestionDelay());     // MOVE TO NEXT QUESTION
         }
