@@ -45,7 +45,7 @@ public class RewardsManager : MonoBehaviour
     private AnimalAI pendingAnimalToDelete; // Remembers which animal we clicked
 
     private List<AnimalData> shopInventory = new List<AnimalData>();
-    
+
     [Header("Limits")]
     public int maxAnimals = 20;
 
@@ -72,13 +72,20 @@ public class RewardsManager : MonoBehaviour
         {
             if (string.IsNullOrWhiteSpace(lines[i])) continue;
             string[] columns = lines[i].Split(',');
-            if (columns.Length < 4) continue;
+
+            // Your CSV now has 6 columns, so we check for at least 6
+            if (columns.Length < 6) continue;
 
             AnimalData newItem = new AnimalData();
             newItem.name = columns[0].Trim();
             newItem.price = int.Parse(columns[1].Trim());
             newItem.spritePath = columns[2].Trim();
-            newItem.prefabPath = columns[3].Trim();
+
+            // columns[3] is the SheetName ("RewardsAnimalSpritesheet"), which we don't need to store in the object
+
+            newItem.prefabPath = columns[4].Trim(); // Column 4 is the PrefabName
+            newItem.soundPath = columns[5].Trim();  // Column 5 is your SoundPath ("sfx_chicken")
+
             shopInventory.Add(newItem);
         }
     }
@@ -100,7 +107,7 @@ public class RewardsManager : MonoBehaviour
             return;
         }
         shopInventory = shopInventory.OrderBy(animal => animal.price).ToList();
-        
+
         // 3. Build buttons
         foreach (AnimalData data in shopInventory)
         {
@@ -110,7 +117,7 @@ public class RewardsManager : MonoBehaviour
             newBtn.transform.Find("Animal Image/AnimalText").GetComponent<TextMeshProUGUI>().text = data.name.ToUpper();
             newBtn.transform.Find("PriceCoin/PriceText1").GetComponent<TextMeshProUGUI>().text = data.price.ToString();
             newBtn.transform.Find("PriceCoin/PriceText2").GetComponent<TextMeshProUGUI>().text = data.price.ToString();
-            
+
             // 4. Find and set the button Icon
             Image icon = newBtn.transform.Find("Animal Image").GetComponent<Image>();
             foreach (Sprite s in allSprites)
@@ -142,7 +149,7 @@ public class RewardsManager : MonoBehaviour
         if (GameManager.Instance.activeAnimals.Count >= maxAnimals)
         {
             Debug.LogWarning("FARM FULL: Cannot buy more animals!");
-            return; 
+            return;
         }
 
         // Validate currency before completing purchase
@@ -159,57 +166,78 @@ public class RewardsManager : MonoBehaviour
         else
         {
             GameManager.Instance.TriggerCoinFlash();
-            GameManager.Instance.PlayWrongSound(); 
+            GameManager.Instance.PlayWrongSound();
         }
     }
 
     // --- Spawning System ---
 
-    public void SpawnAnimalWithData(string animalName, string spriteName)
+    public void SpawnAnimalWithData(string animalName, string spriteName, string soundName)
     {
-        if (animalTemplatePrefab == null || farmWorldParent == null)
-        {
-            return;
-        }
+        // SAFETY CHECKS
+        if (animalTemplatePrefab == null || farmWorldParent == null) return;
 
-        // Create a new instance from the template and rename it
+        // CREATE THE ANIMAL
         GameObject newAnimal = Instantiate(animalTemplatePrefab, farmWorldParent);
         newAnimal.name = "Farmer_" + animalName;
 
-        // Locate the specific sprite within the animal sheet
+        // APPLY ARTWORK
         string sheetPath = "Images/CharacterItems/Animals/RewardsAnimalSpritesheet";
         Sprite[] allSprites = Resources.LoadAll<Sprite>(sheetPath);
-        Sprite targetSprite = null;
-
         foreach (Sprite s in allSprites)
         {
             if (s.name == spriteName)
             {
-                targetSprite = s;
+                SpriteRenderer sr = newAnimal.GetComponent<SpriteRenderer>();
+                sr.sprite = s;
+                sr.sortingLayerName = "Animals";
+                sr.sortingOrder = 10;
                 break;
             }
         }
 
-        // Set up the renderer with the correct sorting and sprite
-        SpriteRenderer sr = newAnimal.GetComponent<SpriteRenderer>();
-        if (sr != null && targetSprite != null)
+        // THE AUDIO INJECTION
+        // Load the sound from Resources/Audio/Animals/ (Ensure folder exists!)
+        AudioClip animalClip = null;
+        if (!string.IsNullOrEmpty(soundName))
         {
-            sr.sprite = targetSprite;
-            sr.sortingLayerName = "Animals"; 
-            sr.sortingOrder = 10;            
+            animalClip = Resources.Load<AudioClip>("Audio/Animals/" + soundName);
         }
 
-        // Calculate a randomized position between the boundary markers
-        float spawnX = 0;
-        float spawnY = 0;
+        AnimalAI aiScript = newAnimal.GetComponent<AnimalAI>();
 
-        if (topLeftMarker != null && bottomRightMarker != null)
+        if (aiScript != null && animalClip != null)
         {
-            spawnX = Random.Range(topLeftMarker.localPosition.x, bottomRightMarker.localPosition.x);
-            spawnY = Random.Range(bottomRightMarker.localPosition.y, topLeftMarker.localPosition.y);
+            aiScript.animalSound = animalClip; // Corrected: Hand the sound to the AI script
+            Debug.Log("<color=green>AUDIO:</color> Injected " + soundName + " into " + animalName);
         }
 
+        // POSITIONING
+        float spawnX = Random.Range(topLeftMarker.localPosition.x, bottomRightMarker.localPosition.x);
+        float spawnY = Random.Range(bottomRightMarker.localPosition.y, topLeftMarker.localPosition.y);
         newAnimal.transform.localPosition = new Vector3(spawnX, spawnY, -1f);
+    }
+
+    // Fallback overload to handle Save File loading and missing parameters
+    public void SpawnAnimalWithData(string animalName, string animalSpriteName)
+    {
+        string soundToInject = "";
+
+        // Look up the missing sound path from our loaded CSV shop inventory
+        AnimalData foundData = shopInventory.FirstOrDefault(a => a.spritePath == animalSpriteName);
+        if (foundData != null)
+        {
+            soundToInject = foundData.soundPath;
+
+            // Fix the generic "Animal" name for save file loading
+            if (string.IsNullOrEmpty(animalName) || animalName == "Animal" || animalName == "v")
+            {
+                animalName = foundData.name;
+            }
+        }
+
+        // Pass everything to your main spawning method
+        SpawnAnimalWithData(animalName, animalSpriteName, soundToInject);
     }
 
     // --- Deletion & Confirmation System ---
@@ -220,7 +248,7 @@ public class RewardsManager : MonoBehaviour
         pendingAnimalToDelete = animal;
         animalDeletePopup.SetActive(true);
     }
-   
+
     public void ConfirmAnimalDelete()
     {
         // Triggered by the "YES" button in the deletion UI
@@ -228,7 +256,7 @@ public class RewardsManager : MonoBehaviour
         {
             // Identify the sprite to remove it from the persistent save list
             string spriteName = pendingAnimalToDelete.GetComponent<SpriteRenderer>().sprite.name;
-            
+
             if (GameManager.Instance.activeAnimals.Contains(spriteName))
             {
                 GameManager.Instance.activeAnimals.Remove(spriteName);
@@ -257,7 +285,7 @@ public class RewardsManager : MonoBehaviour
         // Coroutine to animate the animal scaling down before destruction
         if (target == null) yield break;
 
-        float duration = 2f; 
+        float duration = 2f;
         float elapsed = 0f;
         Vector3 startScale = target.transform.localScale;
 
@@ -271,7 +299,6 @@ public class RewardsManager : MonoBehaviour
         Destroy(target);
     }
 }
-    
 [System.Serializable]
 public class AnimalData
 {
@@ -279,4 +306,5 @@ public class AnimalData
     public int price;
     public string spritePath;
     public string prefabPath;
+    public string soundPath;
 }

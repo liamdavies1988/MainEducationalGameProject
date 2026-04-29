@@ -9,27 +9,28 @@
 // Description:
 // Handles the autonomous wandering behavior and interaction logic for farm animals, 
 // facilitating movement randomization and deletion through sustained user interaction.
-//
-// Third-Party Assets / Code:
-// - Logic assistance and structural debugging provided by Google Gemini API.
-// - UI Assets sourced from Kenney.nl and Vecteezy (see Appendix B of report).
-// - Sound assets sourced from Pixabay.
 // =================================================================================================
 
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AnimalAI : MonoBehaviour
 {
     [Header("Movement Settings")]
     public float moveSpeed;
-    public float moveTime; 
-    public float waitTime; 
+    public float moveTime;
+    public float waitTime;
 
     [Header("Deletion Settings")]
     public float holdTimeThreshold = 1f;
     private float currentHoldTimer = 0f;
     private bool isBeingHeld = false;
-    
+
+    [Header("Audio")]
+    public AudioSource animalAudioSource;
+    public AudioClip mySound;
+    public AudioClip animalSound; // Missing field added here
+
     // Internal Components & State
     private Rigidbody2D rb;
     public SpriteRenderer spriteRenderer;
@@ -48,12 +49,19 @@ public class AnimalAI : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        
+
+        // Safely get or add an AudioSource component
+        animalAudioSource = GetComponent<AudioSource>();
+        if (animalAudioSource == null)
+        {
+            animalAudioSource = gameObject.AddComponent<AudioSource>();
+        }
+
         // Setup physics defaults
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        
-        timer = waitTime; 
+
+        timer = waitTime;
     }
 
     void Update()
@@ -62,14 +70,13 @@ public class AnimalAI : MonoBehaviour
         if (isBeingHeld)
         {
             currentHoldTimer += Time.deltaTime;
-            
+
             if (currentHoldTimer >= holdTimeThreshold)
             {
                 spriteRenderer.color = new Color(1, 0, 0);
-
                 RemoveAnimal();
             }
-            
+
             return;
         }
 
@@ -79,7 +86,6 @@ public class AnimalAI : MonoBehaviour
         {
             isMoving = !isMoving;
             timer = isMoving ? moveTime : waitTime;
-            // Switch between moving state and waiting state
 
             if (isMoving) // Calculate new direction when starting to move
             {
@@ -115,7 +121,11 @@ public class AnimalAI : MonoBehaviour
         // Stop movement and start the hold timer
         isBeingHeld = true;
         currentHoldTimer = 0f;
-        rb.linearVelocity = Vector2.zero; 
+        rb.linearVelocity = Vector2.zero;
+
+        // Trigger Audio and Animation
+        PlaySound();
+        TriggerAnimation();
     }
 
     public void OnMouseUp()
@@ -125,14 +135,15 @@ public class AnimalAI : MonoBehaviour
     }
 
     public void ResetAnimal()
-    // Restores animal state if deletion is cancelled
     {
-        // Return the animal to its normal visual and physical state
+        // Restores animal state if deletion is cancelled
         isBeingHeld = false;
         currentHoldTimer = 0f;
-        transform.localScale = Vector3.one + Vector3.one; 
+        transform.localScale = Vector3.one + Vector3.one;
         spriteRenderer.color = Color.white;
         isMoving = false;
+
+        Debug.Log("AnimalAI: Resetting animal..."); // Debug line added here
     }
 
     void RemoveAnimal()
@@ -142,6 +153,70 @@ public class AnimalAI : MonoBehaviour
         if (rm != null)
         {
             rm.RequestAnimalDeletion(this);
+        }
+    }
+
+    public void StartManualClick()
+    {
+        isBeingHeld = true;
+        spriteRenderer.color = Color.red;
+        rb.linearVelocity = Vector2.zero;
+
+        PlaySound();
+    }
+
+    // --- Audio and Animation Safe Methods ---
+
+    public void PlaySound()
+    {
+        // 1. SELF-HEAL AUDIO SOURCE: Ensure the AudioSource exists on click
+        if (animalAudioSource == null)
+        {
+            animalAudioSource = GetComponent<AudioSource>();
+            if (animalAudioSource == null)
+            {
+                animalAudioSource = gameObject.AddComponent<AudioSource>();
+            }
+        }
+
+        // 2. SELF-HEAL AUDIO CLIP: If mySound is missing (for BOTH loaded and shop animals)
+        if (mySound == null)
+        {
+            // Guess the sound name based on the animal's name (e.g., "Farmer_chicken" -> "sfx_chicken")
+            string guessedSoundName = gameObject.name.Replace("Farmer_", "sfx_");
+            mySound = Resources.Load<AudioClip>("Audio/Animals/" + guessedSoundName);
+
+            if (mySound != null)
+            {
+                Debug.Log($"<color=cyan>[Auto-Fix]</color> Successfully fetched missing sound for {gameObject.name}");
+            }
+        }
+
+        // 3. PLAY THE SOUND
+        if (animalAudioSource != null && mySound != null)
+        {
+            animalAudioSource.PlayOneShot(mySound);
+        }
+        else
+        {
+            // If it STILL fails, it gives us the exact reason why
+            if (mySound == null)
+                Debug.LogWarning($"<color=orange>[AnimalAI]</color> Missing AudioClip! It tried to look for an audio file named '{gameObject.name.Replace("Farmer_", "sfx_")}' in Resources/Audio/Animals/");
+
+            if (animalAudioSource == null)
+                Debug.LogWarning($"<color=orange>[AnimalAI]</color> Missing AudioSource component on {gameObject.name}!");
+        }
+    }
+
+    public void TriggerAnimation()
+    {
+        Animator myAnimator = GetComponent<Animator>();
+
+        // Safe check: Only trigger animation IF the Animator has a Controller assigned!
+        if (myAnimator != null && myAnimator.runtimeAnimatorController != null)
+        {
+            myAnimator.SetTrigger("Click");
+            Debug.Log($"Triggering 'Click' animation on {gameObject.name}");
         }
     }
 }

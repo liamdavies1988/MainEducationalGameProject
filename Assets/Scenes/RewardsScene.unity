@@ -239,7 +239,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 535107290}
   m_HandleRect: {fileID: 535107289}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -5739,7 +5739,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8215755174188626224, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
       propertyPath: Loop
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8215755174188626224, guid: 2ceeafaa889915645a7cda8f978a836a, type: 3}
+      propertyPath: m_Volume
+      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
