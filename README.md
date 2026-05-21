@@ -8,6 +8,9 @@ MODULE:     CS39440 - Major Project (40 Credits)
 UNIVERSITY: Aberystwyth University
 STATUS:     Technical Feature-Complete (Mid-Project Mark: 80%)
 
+Grow & Know
+<img width="1020" height="574" alt="picture1" src="https://github.com/user-attachments/assets/b05d2c04-6eff-4f9a-87b9-277bdec3d2eb" />
+
 --------------------------------------------------------------------------------
 1. PROJECT OVERVIEW
 --------------------------------------------------------------------------------
