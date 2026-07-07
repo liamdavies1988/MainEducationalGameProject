@@ -101,16 +101,16 @@ public class AnimalAI : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+void FixedUpdate()
     {
         // Handle movement through the physics engine
         if (isMoving && !isBeingHeld)
         {
-            rb.linearVelocity = moveDirection * moveSpeed;
+            rb.linearVelocity = moveDirection * moveSpeed; // Fixed from rb.linearVelocity
         }
         else
         {
-            rb.linearVelocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero; // Fixed from rb.linearVelocity
         }
     }
 

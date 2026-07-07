@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.IO;
 using System.Collections;
+using System.Runtime.InteropServices;
 
 public class GameManager : MonoBehaviour
 {
@@ -130,6 +131,11 @@ public class GameManager : MonoBehaviour
 
     // --- Data Persistence ---
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [System.Runtime.InteropServices.DllImport("__Internal")]
+    private static extern void SyncFilesystem();
+#endif
+
     public void SaveCurrentProgress()
     {
         // Ensure the cache is initialized before updating values
@@ -145,6 +151,11 @@ public class GameManager : MonoBehaviour
             string json = JsonUtility.ToJson(masterCachedProfile, true);
             string path = Application.persistentDataPath + "/Saves/SaveSlot_" + (selectedSlot + 1) + ".json";
             File.WriteAllText(path, json);
+
+            // Sync virtual file system to commit data to browser storage on WebGL
+#if UNITY_WEBGL && !UNITY_EDITOR
+            SyncFilesystem();
+#endif
         }
     }
 
@@ -162,6 +173,11 @@ public class GameManager : MonoBehaviour
         this.playerName = data.playerName;
         this.selectedFarmID = data.farmID;
         this.activeAnimals = data.activeAnimals;
+
+            // Sync virtual file system to commit data to browser storage on WebGL
+#if UNITY_WEBGL && !UNITY_EDITOR
+            SyncFilesystem();
+#endif
     }
 
     public PlayerSaveData LoadGameData()
