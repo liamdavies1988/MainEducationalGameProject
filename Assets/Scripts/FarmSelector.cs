@@ -24,73 +24,33 @@ using UnityEngine.SceneManagement;
 public class FarmSelector : MonoBehaviour
 {
     [Header("UI Visuals")]
-    public Sprite[] farmOptions; // Drag your 3 JPEGs here
+    public Sprite[] farmOptions; 
     public Image displayImage;
-
     private int currentFarmIndex = 0;
 
-    // --- Unity Callbacks ---
+    void Start() { if (farmOptions.Length > 0) displayImage.sprite = farmOptions[0]; }
 
-    void Start()
-    {
-        // Set the initial preview image if options are available
-        if (farmOptions.Length > 0)
-        {
-            displayImage.sprite = farmOptions[0];
-        }
-    }
-
-    // --- Navigation Logic ---
-
-    public void NextFarm()
-    {
-        // Increment index and wrap around to the start if necessary
-        currentFarmIndex++;
-        if (currentFarmIndex >= farmOptions.Length)
-        {
-            currentFarmIndex = 0;
-        }
+    public void NextFarm() {
+        currentFarmIndex = (currentFarmIndex + 1) % farmOptions.Length;
         UpdateUI();
     }
 
-    public void PrevFarm()
-    {
-        // Decrement index and wrap around to the end if necessary
-        currentFarmIndex--;
-        if (currentFarmIndex < 0)
-        {
-            currentFarmIndex = farmOptions.Length - 1;
-        }
+    public void PrevFarm() {
+        currentFarmIndex = (currentFarmIndex - 1 + farmOptions.Length) % farmOptions.Length;
         UpdateUI();
     }
 
-    private void UpdateUI()
-    {
-        // Apply the selected sprite to the display component
-        displayImage.sprite = farmOptions[currentFarmIndex];
-    }
+    private void UpdateUI() => displayImage.sprite = farmOptions[currentFarmIndex];
 
-    // --- Data Persistence ---
-
-    public void ConfirmAndStartGame()
-    {
-        // Identify the current save slot and prepare the file path
+    public void ConfirmAndStartGame() {
         int slot = GameManager.Instance.selectedSlot;
-        string fileName = "SaveSlot_" + (slot + 1) + ".json";
-        string filePath = Path.Combine(Application.persistentDataPath, "Saves", fileName);
+        string filePath = Path.Combine(Application.persistentDataPath, "Saves", "SaveSlot_" + (slot + 1) + ".json");
 
-        if (File.Exists(filePath))
-        {
-            // Load existing profile data to append the farm choice
+        if (File.Exists(filePath)) {
             string json = File.ReadAllText(filePath);
             PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
-
-            // Update the farm ID and save the modified JSON back to disk
             data.farmID = currentFarmIndex;
-            string updatedJson = JsonUtility.ToJson(data, true);
-            File.WriteAllText(filePath, updatedJson);
-
-            // Transition to the main game environment scene
+            File.WriteAllText(filePath, JsonUtility.ToJson(data, true));
             SceneManager.LoadScene("PlayerAndFarm");
         }
     }

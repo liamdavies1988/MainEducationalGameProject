@@ -1,21 +1,3 @@
-// =================================================================================================
-// File: MenuController.cs
-// Author: Liam Davies (lid37)
-// Supervisor: Helen Miles (hem23)
-// Project: Gamifying the Curriculum: An Educational Application for Primary Education
-// Date Created: March 12, 2026
-// Last Modified: April 20, 2026
-//
-// Description:
-// Manages main menu navigation, save slot interactions, and the curriculum selection flow, 
-// interfacing with the GameManager for persistent state transitions and UI pop-up management.
-//
-// Third-Party Assets / Code:
-// - Logic assistance and structural debugging provided by Google Gemini API.
-// - UI Assets sourced from Kenney.nl and Vecteezy (see Appendix B of report).
-// - Sound assets sourced from Pixabay.
-// =================================================================================================
-
 using UnityEngine;
 using TMPro;
 using System.IO;
@@ -24,179 +6,87 @@ using UnityEngine.SceneManagement;
 public class MenuController : MonoBehaviour
 {
     [Header("Save Slot UI")]
-    public TextMeshProUGUI[] slotTexts; // Only fill these in the Slots Scene
+    public TextMeshProUGUI[] slotTexts;
 
     [Header("Pop-up Windows")]
-    public GameObject difficultyPopup; // For Subject Scene
-    public GameObject deletePopup; // For Slots Scene
+    public GameObject difficultyPopup; 
+    public GameObject deletePopup;
     public TextMeshProUGUI deletePopupText;
-
-    [Header("Load Confirmation Pop-up")]
     public GameObject loadPopup;
     public TextMeshProUGUI loadPopupText;
+    public GameObject amountPopup; 
 
-    [Header("Question Amount UI")]
-    public GameObject amountPopup; // Drag your 'QuestionAmount' object here
+    private int slotIndexToProcess;
 
-    private int slotIndexToProcess; // Remembers which slot was clicked
+    private void Start() { if (slotTexts != null && slotTexts.Length > 0) RefreshSlotLabels(); }
 
-    private void Start()
-    {
-        // Refresh save slot names when this controller starts.
-        if (slotTexts != null && slotTexts.Length > 0)
-        {
-            RefreshSlotLabels();
-        }
-    }
-
-
-    // 1. Updated: Called when the student clicks Maths/Spelling
-    public void OnSubjectClicked(string subject)
-    {
+    public void OnSubjectClicked(string subject) {
         GameManager.Instance.selectedSubject = subject;
-
-        // Switch: Show the Amount popup first
         if (amountPopup != null) amountPopup.SetActive(true);
     }
 
-    // 2. NEW: Called by the 5, 10, 15, 20 buttons
-    public void OnAmountSelected(int amount)
-    {
+    public void OnAmountSelected(int amount) {
         GameManager.Instance.SetQuestionAmount(amount);
-
-        // Hide this popup and show the Difficulty popup
         if (amountPopup != null) amountPopup.SetActive(false);
         if (difficultyPopup != null) difficultyPopup.SetActive(true);
     }
 
-    // --- SAVE SLOT LOGIC ---
-
-    // Update the UI text for each save slot.
-    public void RefreshSlotLabels()
-    {
-        for (int i = 0; i < slotTexts.Length; i++)
-        {
+    public void RefreshSlotLabels() {
+        for (int i = 0; i < slotTexts.Length; i++) {
             string path = Application.persistentDataPath + "/Saves/SaveSlot_" + (i + 1) + ".json";
-
-            if (File.Exists(path))
-            {
+            if (File.Exists(path)) {
                 string json = File.ReadAllText(path);
                 PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
                 slotTexts[i].text = data.playerName;
-            }
-            else
-            {
+            } else {
                 slotTexts[i].text = "New Game";
             }
         }
     }
 
-    // Called when a save slot is clicked.
-    public void OnSlotClicked(int id)
-    {
-        // 1. THIS IS THE FIX: Tell the popup which slot we are talking about!
+    public void OnSlotClicked(int id) {
         slotIndexToProcess = id;
-
-        // 2. Tell the Brain which slot we are using
         GameManager.Instance.selectedSlot = id;
-
-        // 3. CRITICAL PATH FIX: Change 'dataPath' to 'persistentDataPath'
-        // If you don't do this, the popup will check the wrong folder!
         string path = Application.persistentDataPath + "/Saves/SaveSlot_" + (id + 1) + ".json";
-
-        if (File.Exists(path))
-        {
+        if (File.Exists(path)) {
             string json = File.ReadAllText(path);
             PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
-
             GameManager.Instance.totalCoins = data.coins;
             GameManager.Instance.playerName = data.playerName;
             GameManager.Instance.selectedFarmID = data.farmID;
-
             loadPopup.SetActive(true);
-
-            Debug.Log("Popup showing for Slot: " + (id + 1));
             if (loadPopupText != null) loadPopupText.text = "Do you want to load " + data.playerName + "?";
-        }
-        else
-        {
+        } else {
             GameManager.Instance.ResetData();
             SceneManager.LoadScene("PlayerCreation");
         }
     }
 
-    // Confirm loading an existing save slot.
-    public void ConfirmLoad()
-    {
-        // Use the variable we just set in OnSlotClicked
+    public void ConfirmLoad() {
         GameManager.Instance.selectedSlot = slotIndexToProcess;
-
-        // Synchronize the Brain with the file
         GameManager.Instance.LoadGameData();
-
-        Debug.Log("ConfirmLoad: Loading Data for Slot: " + (slotIndexToProcess + 1));
-
         SceneManager.LoadScene("PlayerAndFarm");
     }
 
-    // Show the delete confirmation pop-up for a slot.
-    public void OpenDeleteConfirmation(int id)
-    {
+    public void OpenDeleteConfirmation(int id) {
         slotIndexToProcess = id;
-        if (deletePopup != null)
-        {
-            deletePopup.SetActive(true);
-        }
+        if (deletePopup != null) deletePopup.SetActive(true);
     }
 
-    // Delete the selected save slot and refresh UI.
-    public void ConfirmDelete()
-    {
+    public void ConfirmDelete() {
         string path = Application.persistentDataPath + "/Saves/SaveSlot_" + (slotIndexToProcess + 1) + ".json";
-
-        if (File.Exists(path))
-        {
+        if (File.Exists(path)) {
             File.Delete(path);
-            Debug.Log("Deleted File: " + path);
-
             GameManager.Instance.ResetData();
         }
-
-        if (deletePopup != null)
-        {
-            deletePopup.SetActive(false);
-        }
-
+        if (deletePopup != null) deletePopup.SetActive(false);
         RefreshSlotLabels();
     }
 
-  
+    public void OnDifficultyClicked(string difficulty) => GameManager.Instance.SelectDifficultyAndStart(difficulty);
 
-    // --- CURRICULUM LOGIC ---
-
-   
-
-// Called when the player chooses a difficulty (e.g., Easy)
-public void OnDifficultyClicked(string difficulty)
-{
-    // We tell the GameManager to save the difficulty and START THE GAME
-    GameManager.Instance.SelectDifficultyAndStart(difficulty);
-}
-
-    // --- GENERAL UI ---
-
-    // Close any active pop-up windows.
-    public void CloseAllPopups()
-    {
-        // Turn off the Delete Pop-up if it exists
-        if (deletePopup != null) 
-            deletePopup.SetActive(false);
-
-        // Turn off the Load Pop-up if it exists
-        if (loadPopup != null) 
-            loadPopup.SetActive(false);
-        
-        // Optional: Log it so you can see it working in the console
-        Debug.Log("UI: All pop-ups closed.");
+    public void CloseAllPopups() {
+        if (deletePopup) deletePopup.SetActive(false);
+        if (loadPopup) loadPopup.SetActive(false);
     }
 }
