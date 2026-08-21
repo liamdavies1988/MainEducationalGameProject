@@ -4,16 +4,17 @@
 // Supervisor: Helen Miles (hem23)
 // Project: Gamifying the Curriculum: An Educational Application for Primary Education
 // Date Created: February 15, 2026
-// Last Modified: August 19, 2026
+// Last Modified: August 21, 2026
 // =================================================================================================
 
-using UnityEngine;
-using TMPro;
 using System;
-using System.Collections.Generic;
-using UnityEngine.SceneManagement;
-using System.IO;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices; // ADDED: Needed for WebGL communication
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -38,7 +39,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI coinCountText;
 
     [Header("Character Feedback UI")]
-    public GameObject smileFace; 
+    public GameObject smileFace;
     public GameObject sadFace;
 
     [Header("Topic Settings")]
@@ -51,14 +52,24 @@ public class GameManager : MonoBehaviour
     [Header("Difficulty Popup")]
     public GameObject difficultyPopup;
 
+    // --- ADDED: WebGL Native Bridge Declaration ---
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")]
+    private static extern void SyncFilesystem();
+#endif
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
             if (!Directory.Exists(Application.persistentDataPath + "/Saves/"))
+            {
                 Directory.CreateDirectory(Application.persistentDataPath + "/Saves/");
+            }
+
             LoadGameData();
         }
         else
@@ -69,12 +80,31 @@ public class GameManager : MonoBehaviour
 
     private void Start() => UpdateCoinUI();
 
+    // --- ADDED: Helper to safely trigger browser save ---
+    private void SaveToBrowser()
+    {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        try
+        {
+            SyncFilesystem();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("WebGL Sync failed: " + e.Message);
+        }
+#endif
+    }
+
     public void AddCoin()
     {
         totalCoins += (selectedDifficulty == "Hard") ? 2 : 1;
         UpdateCoinUI();
         SaveCurrentProgress();
-        if (audioSource != null && coinSound != null) audioSource.PlayOneShot(coinSound);
+
+        if (audioSource != null && coinSound != null)
+        {
+            audioSource.PlayOneShot(coinSound);
+        }
     }
 
     public void SetQuestionAmount(int amount) => totalQuestionsRequested = amount;
@@ -89,74 +119,138 @@ public class GameManager : MonoBehaviour
 
     public void SaveCurrentProgress()
     {
-        if (masterCachedProfile == null) masterCachedProfile = LoadGameData() ?? new PlayerSaveData();
+        if (masterCachedProfile == null)
+        {
+            masterCachedProfile = LoadGameData() ?? new PlayerSaveData();
+        }
+
         masterCachedProfile.coins = totalCoins;
         masterCachedProfile.playerName = playerName;
         masterCachedProfile.farmID = selectedFarmID;
-        masterCachedProfile.activeAnimals = new List<string>(this.activeAnimals);
+        masterCachedProfile.activeAnimals = new List<string>(activeAnimals);
+
         string json = JsonUtility.ToJson(masterCachedProfile, true);
         File.WriteAllText(Application.persistentDataPath + "/Saves/SaveSlot_" + (selectedSlot + 1) + ".json", json);
+
+        SaveToBrowser(); // ADDED: Tells the browser to keep the file
     }
 
     public void SaveGame(PlayerSaveData data)
     {
         string path = Application.persistentDataPath + "/Saves/SaveSlot_" + (selectedSlot + 1) + ".json";
         File.WriteAllText(path, JsonUtility.ToJson(data, true));
-        this.totalCoins = data.coins;
-        this.playerName = data.playerName;
-        this.selectedFarmID = data.farmID;
-        this.activeAnimals = data.activeAnimals;
+
+        totalCoins = data.coins;
+        playerName = data.playerName;
+        selectedFarmID = data.farmID;
+        activeAnimals = data.activeAnimals;
+
+        SaveToBrowser(); // ADDED: Tells the browser to keep the file
     }
 
     public PlayerSaveData LoadGameData()
     {
         string filePath = Application.persistentDataPath + "/Saves/SaveSlot_" + (selectedSlot + 1) + ".json";
+
         if (File.Exists(filePath))
         {
             string json = File.ReadAllText(filePath);
             masterCachedProfile = JsonUtility.FromJson<PlayerSaveData>(json);
-            this.playerName = masterCachedProfile.playerName;
-            this.totalCoins = masterCachedProfile.coins;
-            this.selectedFarmID = masterCachedProfile.farmID;
-            this.activeAnimals = masterCachedProfile.activeAnimals ?? new List<string>();
+
+            playerName = masterCachedProfile.playerName;
+            totalCoins = masterCachedProfile.coins;
+            selectedFarmID = masterCachedProfile.farmID;
+            activeAnimals = masterCachedProfile.activeAnimals ?? new List<string>();
+
             UpdateCoinUI();
             return masterCachedProfile;
         }
+
         return null;
     }
 
     public void ResetData()
     {
-        totalCoins = 0; playerName = "Player1"; selectedFarmID = 0;
-        activeAnimals.Clear(); masterCachedProfile = null; UpdateCoinUI();
+        totalCoins = 0;
+        playerName = "Player1";
+        selectedFarmID = 0;
+        activeAnimals.Clear();
+        masterCachedProfile = null;
+        UpdateCoinUI();
     }
 
     public void ShowReaction(bool isCorrect)
     {
-        if (smileFace != null) smileFace.SetActive(isCorrect);
-        if (sadFace != null) sadFace.SetActive(!isCorrect);
+        if (smileFace != null)
+        {
+            smileFace.SetActive(isCorrect);
+        }
+
+        if (sadFace != null)
+        {
+            sadFace.SetActive(!isCorrect);
+        }
+
         Invoke(nameof(HideFaces), 1.5f);
     }
 
-    private void HideFaces() { if(smileFace) smileFace.SetActive(false); if(sadFace) sadFace.SetActive(false); }
+    private void HideFaces()
+    {
+        if (smileFace)
+        {
+            smileFace.SetActive(false);
+        }
+
+        if (sadFace)
+        {
+            sadFace.SetActive(false);
+        }
+    }
 
     public void UpdateCoinUI()
     {
-        if (coinCountText == null) {
+        if (coinCountText == null)
+        {
             GameObject t = GameObject.Find("CoinCountText");
-            if (t) coinCountText = t.GetComponent<TextMeshProUGUI>();
+
+            if (t)
+            {
+                coinCountText = t.GetComponent<TextMeshProUGUI>();
+            }
         }
-        if (coinCountText) coinCountText.text = "Coins: " + totalCoins;
+
+        if (coinCountText)
+        {
+            coinCountText.text = "Coins: " + totalCoins;
+        }
     }
 
-    public void PlayWrongSound() { if (audioSource && wrongAnswerSound) audioSource.PlayOneShot(wrongAnswerSound); }
-    public void TriggerCoinFlash() { /* Logic removed for brevity */ }
+    public void PlayWrongSound()
+    {
+        if (audioSource && wrongAnswerSound)
+        {
+            audioSource.PlayOneShot(wrongAnswerSound);
+        }
+    }
+
+    public void TriggerCoinFlash()
+    {
+        /* Logic removed for brevity */
+    }
 }
 
 [System.Serializable]
-public class PlayerSaveData {
-    public string playerName; public int coins; public int farmID;
-    public string hairName; public string topName; public string bottomName;
-    public string skinName; public bool hasGlasses; public bool hasHearingAid;
-    public bool hasCrutches; public List<string> activeAnimals;
+public class PlayerSaveData
+{
+    public string playerName;
+    public int coins;
+    public int farmID;
+    public string hairName;
+    public string topName;
+    public string bottomName;
+    public string skinName;
+    public bool hasGlasses;
+    public bool hasHearingAid;
+    public bool hasCrutches;
+    public List<string> activeAnimals;
 }
