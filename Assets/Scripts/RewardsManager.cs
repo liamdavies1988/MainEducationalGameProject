@@ -54,7 +54,16 @@ public class RewardsManager : MonoBehaviour
     void Start()
     {
         LoadShopData();
-        BuildShopUI();
+
+        // The farm scene uses this manager for spawning and deletion but has no shop UI.
+        if (itemGrid != null && ButtonPrefab != null)
+        {
+            BuildShopUI();
+        }
+        else
+        {
+            Debug.Log("<color=yellow>[RewardsManager]</color> Shop UI not present in this scene; skipping UI build.");
+        }
     }
 
     // --- Data Loading & UI Generation ---
@@ -94,51 +103,84 @@ public class RewardsManager : MonoBehaviour
     {
         Debug.Log("<color=magenta>[RewardsManager]</color> Building shop UI...");
 
-        // 1. Clear grid
+        // 1. Safety Check: Item Grid
+        if (itemGrid == null)
+        {
+            Debug.LogError("FATAL: itemGrid is not assigned in the Inspector!");
+            return;
+        }
+
+        // 2. Clear grid safely
         foreach (Transform child in itemGrid) { Destroy(child.gameObject); }
 
-        // 2. Load the spritesheet once
+        // 3. Load spritesheet
         string sheetPath = "Images/CharacterItems/Animals/RewardsAnimalSpritesheet";
         Sprite[] allSprites = Resources.LoadAll<Sprite>(sheetPath);
 
-        if (allSprites.Length <= 1)
+        if (allSprites == null || allSprites.Length == 0)
         {
-            Debug.LogError($"<color=red>[PATH ERROR]</color> Found {allSprites.Length} sprites. Check folder name and Sprite Mode!");
+            Debug.LogError($"FATAL: No sprites found at {sheetPath}. Check folder naming and capital letters!");
             return;
         }
+
         shopInventory = shopInventory.OrderBy(animal => animal.price).ToList();
 
-        // 3. Build buttons
+        // 4. Build buttons with individual null checks
         foreach (AnimalData data in shopInventory)
         {
-            GameObject newBtn = Instantiate(ButtonPrefab, itemGrid);
-
-            // UI mapping for Name and Price (Including your shadow text)
-            newBtn.transform.Find("Animal Image/AnimalText").GetComponent<TextMeshProUGUI>().text = data.name.ToUpper();
-            newBtn.transform.Find("PriceCoin/PriceText1").GetComponent<TextMeshProUGUI>().text = data.price.ToString();
-            newBtn.transform.Find("PriceCoin/PriceText2").GetComponent<TextMeshProUGUI>().text = data.price.ToString();
-
-            // 4. Find and set the button Icon
-            Image icon = newBtn.transform.Find("Animal Image").GetComponent<Image>();
-            foreach (Sprite s in allSprites)
+            if (ButtonPrefab == null)
             {
-                if (s.name == data.spritePath)
-                {
-                    icon.sprite = s;
-                    icon.preserveAspect = true;
-                    break;
-                }
+                Debug.LogError("ButtonPrefab is missing!");
+                break;
             }
 
-            ShopItemManager dragScript = newBtn.GetComponent<ShopItemManager>();
-            if (dragScript == null) dragScript = newBtn.AddComponent<ShopItemManager>();
+            GameObject newBtn = Instantiate(ButtonPrefab, itemGrid);
 
-            // Pass sprite data to the drag script for the purchase logic
-            dragScript.animalType = data.name;
-            dragScript.price = data.price;
-            dragScript.prefabToSpawn = data.spritePath;
+            try
+            {
+                // Check Name Text
+                Transform nameTrans = newBtn.transform.Find("Animal Image/AnimalText");
+                if (nameTrans != null) nameTrans.GetComponent<TextMeshProUGUI>().text = data.name.ToUpper();
+                else Debug.LogWarning($"Could not find 'Animal Image/AnimalText' in prefab for {data.name}");
+
+                // Check Price Text 1
+                Transform p1 = newBtn.transform.Find("PriceCoin/PriceText1");
+                if (p1 != null) p1.GetComponent<TextMeshProUGUI>().text = data.price.ToString();
+
+                // Check Price Text 2
+                Transform p2 = newBtn.transform.Find("PriceCoin/PriceText2");
+                if (p2 != null) p2.GetComponent<TextMeshProUGUI>().text = data.price.ToString();
+
+                // Find Icon
+                Transform iconTrans = newBtn.transform.Find("Animal Image");
+                if (iconTrans != null)
+                {
+                    Image icon = iconTrans.GetComponent<Image>();
+                    foreach (Sprite sprite in allSprites)
+                    {
+                        if (sprite.name == data.spritePath)
+                        {
+                            icon.sprite = sprite;
+                            icon.preserveAspect = true;
+                            break;
+                        }
+                    }
+                }
+
+                // Setup Drag Script
+                ShopItemManager dragScript = newBtn.GetComponent<ShopItemManager>();
+                if (dragScript == null) dragScript = newBtn.AddComponent<ShopItemManager>();
+
+                dragScript.animalType = data.name;
+                dragScript.price = data.price;
+                dragScript.prefabToSpawn = data.spritePath;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Error setting up button for {data.name}: {e.Message}");
+            }
         }
-        Debug.Log("<color=magenta>[RewardsManager]</color> Shop UI built and sorted by price!");
+        Debug.Log("<color=magenta>[RewardsManager]</color> Shop UI built!");
     }
 
     // --- Shop Interaction Logic ---

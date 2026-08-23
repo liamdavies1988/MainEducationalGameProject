@@ -19,10 +19,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using System.Runtime.InteropServices;
 using UnityEngine.SceneManagement;
 
 public class FarmSelector : MonoBehaviour
 {
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")]
+    private static extern void CommitInternalSave();
+#endif
+
     [Header("UI Visuals")]
     public Sprite[] farmOptions; 
     public Image displayImage;
@@ -51,6 +57,18 @@ public class FarmSelector : MonoBehaviour
             PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
             data.farmID = currentFarmIndex;
             File.WriteAllText(filePath, JsonUtility.ToJson(data, true));
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+            try
+            {
+                CommitInternalSave();
+            }
+            catch (System.Exception)
+            {
+                Debug.LogWarning("Browser sync skipped.");
+            }
+#endif
+
             SceneManager.LoadScene("PlayerAndFarm");
         }
     }

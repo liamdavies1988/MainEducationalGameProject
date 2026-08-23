@@ -169,20 +169,14 @@ void FixedUpdate()
 
     public void PlaySound()
     {
-        // 1. SELF-HEAL AUDIO SOURCE: Ensure the AudioSource exists on click
-        if (animalAudioSource == null)
-        {
-            animalAudioSource = GetComponent<AudioSource>();
-            if (animalAudioSource == null)
-            {
-                animalAudioSource = gameObject.AddComponent<AudioSource>();
-            }
-        }
+        if (animalAudioSource == null) animalAudioSource = GetComponent<AudioSource>();
+        if (animalAudioSource == null) animalAudioSource = gameObject.AddComponent<AudioSource>();
 
-        // 2. SELF-HEAL AUDIO CLIP: If mySound is missing (for BOTH loaded and shop animals)
+        // Use the clip injected by RewardsManager before falling back to a resource lookup.
+        if (mySound == null && animalSound != null) mySound = animalSound;
+
         if (mySound == null)
         {
-            // Guess the sound name based on the animal's name (e.g., "Farmer_chicken" -> "sfx_chicken")
             string guessedSoundName = gameObject.name.Replace("Farmer_", "sfx_");
             mySound = Resources.Load<AudioClip>("Audio/Animals/" + guessedSoundName);
 
@@ -192,19 +186,19 @@ void FixedUpdate()
             }
         }
 
-        // 3. PLAY THE SOUND
-        if (animalAudioSource != null && mySound != null)
+        // Check if the clip is loaded and ready before playing it.
+        if (mySound != null && mySound.loadState == AudioDataLoadState.Loaded)
         {
             animalAudioSource.PlayOneShot(mySound);
         }
+        else if (mySound != null)
+        {
+            mySound.LoadAudioData();
+            Debug.LogWarning($"Sound for {gameObject.name} wasn't ready yet. Pre-loading now.");
+        }
         else
         {
-            // If it STILL fails, it gives us the exact reason why
-            if (mySound == null)
-                Debug.LogWarning($"<color=orange>[AnimalAI]</color> Missing AudioClip! It tried to look for an audio file named '{gameObject.name.Replace("Farmer_", "sfx_")}' in Resources/Audio/Animals/");
-
-            if (animalAudioSource == null)
-                Debug.LogWarning($"<color=orange>[AnimalAI]</color> Missing AudioSource component on {gameObject.name}!");
+            Debug.LogWarning($"<color=orange>[AnimalAI]</color> Missing AudioClip! It tried to look for an audio file named '{gameObject.name.Replace("Farmer_", "sfx_")}' in Resources/Audio/Animals/");
         }
     }
 

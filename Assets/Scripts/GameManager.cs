@@ -11,7 +11,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices; // ADDED: Needed for WebGL communication
+using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -52,10 +52,9 @@ public class GameManager : MonoBehaviour
     [Header("Difficulty Popup")]
     public GameObject difficultyPopup;
 
-    // --- ADDED: WebGL Native Bridge Declaration ---
 #if UNITY_WEBGL && !UNITY_EDITOR
     [DllImport("__Internal")]
-    private static extern void SyncFilesystem();
+    private static extern void CommitInternalSave();
 #endif
 
     private void Awake()
@@ -80,17 +79,16 @@ public class GameManager : MonoBehaviour
 
     private void Start() => UpdateCoinUI();
 
-    // --- ADDED: Helper to safely trigger browser save ---
-    private void SaveToBrowser()
+    private void SyncToBrowser()
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
         try
         {
-            SyncFilesystem();
+            CommitInternalSave();
         }
-        catch (Exception e)
+        catch (System.Exception)
         {
-            Debug.LogWarning("WebGL Sync failed: " + e.Message);
+            Debug.LogWarning("Browser sync skipped.");
         }
 #endif
     }
@@ -131,8 +129,7 @@ public class GameManager : MonoBehaviour
 
         string json = JsonUtility.ToJson(masterCachedProfile, true);
         File.WriteAllText(Application.persistentDataPath + "/Saves/SaveSlot_" + (selectedSlot + 1) + ".json", json);
-
-        SaveToBrowser(); // ADDED: Tells the browser to keep the file
+        SyncToBrowser();
     }
 
     public void SaveGame(PlayerSaveData data)
@@ -144,8 +141,7 @@ public class GameManager : MonoBehaviour
         playerName = data.playerName;
         selectedFarmID = data.farmID;
         activeAnimals = data.activeAnimals;
-
-        SaveToBrowser(); // ADDED: Tells the browser to keep the file
+        SyncToBrowser();
     }
 
     public PlayerSaveData LoadGameData()
