@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
 
     private void Start() => UpdateCoinUI();
 
-    private void SyncToBrowser()
+    public void SyncToBrowser()
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
         try
@@ -91,6 +91,7 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("Browser sync skipped.");
         }
 #endif
+    
     }
 
     public void AddCoin()

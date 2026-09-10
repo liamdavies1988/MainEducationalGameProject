@@ -188,6 +188,7 @@ MonoBehaviour:
   animalAudioSource: {fileID: 0}
   mySound: {fileID: 0}
   animalSound: {fileID: 0}
+  clickVolume: 1
   spriteRenderer: {fileID: 0}
 --- !u!82 &4625251034205691590
 AudioSource:

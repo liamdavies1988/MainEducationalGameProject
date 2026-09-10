@@ -19,6 +19,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using UnityEngine.UI;
 
 public class AnswerButton : MonoBehaviour
 {
@@ -57,6 +58,16 @@ public class AnswerButton : MonoBehaviour
     // Triggered by the Button component's onClick event
     public void OnClick()
     {
+        Button clickedButton = GetComponent<Button>();
+        if (clickedButton != null && !clickedButton.interactable) return;
+
+        AnswerButton[] allButtons = Object.FindObjectsByType<AnswerButton>(FindObjectsSortMode.None);
+        foreach (AnswerButton answerButton in allButtons)
+        {
+            Button button = answerButton.GetComponent<Button>();
+            if (button != null) button.interactable = false;
+        }
+
         if (isCorrectAnswer)
         {
             // Show the tick icon for visual confirmation
@@ -114,6 +125,13 @@ public class AnswerButton : MonoBehaviour
         if (qs != null)
         {
             qs.StartNextQuestion();
+        }
+
+        AnswerButton[] allButtons = Object.FindObjectsByType<AnswerButton>(FindObjectsSortMode.None);
+        foreach (AnswerButton answerButton in allButtons)
+        {
+            Button button = answerButton.GetComponent<Button>();
+            if (button != null) button.interactable = true;
         }
     }
 

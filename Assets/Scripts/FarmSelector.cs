@@ -48,28 +48,24 @@ public class FarmSelector : MonoBehaviour
 
     private void UpdateUI() => displayImage.sprite = farmOptions[currentFarmIndex];
 
-    public void ConfirmAndStartGame() {
-        int slot = GameManager.Instance.selectedSlot;
-        string filePath = Path.Combine(Application.persistentDataPath, "Saves", "SaveSlot_" + (slot + 1) + ".json");
+    public void ConfirmAndStartGame() 
+{
+    int slot = GameManager.Instance.selectedSlot;
+    string filePath = Path.Combine(Application.persistentDataPath, "Saves", "SaveSlot_" + (slot + 1) + ".json");
 
-        if (File.Exists(filePath)) {
-            string json = File.ReadAllText(filePath);
-            PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
-            data.farmID = currentFarmIndex;
-            File.WriteAllText(filePath, JsonUtility.ToJson(data, true));
+    if (File.Exists(filePath)) 
+    {
+        string json = File.ReadAllText(filePath);
+        PlayerSaveData data = JsonUtility.FromJson<PlayerSaveData>(json);
+        
+        // 1. Update the farm ID
+        data.farmID = currentFarmIndex;
+        
+        // 2. SaveGame writes the file, updates GameManager's variables, and syncs to browser
+        GameManager.Instance.SaveGame(data);
 
-#if UNITY_WEBGL && !UNITY_EDITOR
-            try
-            {
-                CommitInternalSave();
-            }
-            catch (System.Exception)
-            {
-                Debug.LogWarning("Browser sync skipped.");
-            }
-#endif
-
-            SceneManager.LoadScene("PlayerAndFarm");
-        }
+        // 3. Load the scene
+        SceneManager.LoadScene("PlayerAndFarm");
     }
+}
 }

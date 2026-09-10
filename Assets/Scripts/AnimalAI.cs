@@ -31,17 +31,24 @@ public class AnimalAI : MonoBehaviour
     public AudioClip mySound;
     public AudioClip animalSound; // Missing field added here
 
+    [Range(0f, 1f)]
+    [Tooltip("1 = 100% volume, 0.5 = 50% volume, 0 = silent")]
+    public float clickVolume = 0.5f;
+
     // Internal Components & State
     private Rigidbody2D rb;
     public SpriteRenderer spriteRenderer;
     private bool isMoving;
     private Vector2 moveDirection;
     private float timer;
+    private Vector3 initialScale;
 
     // --- Unity Callbacks ---
 
     void Start()
     {
+        initialScale = transform.localScale;
+
         // Randomize behavior parameters to make each animal feel unique
         moveSpeed = Random.Range(0.5f, 3.5f);
         moveTime = Random.Range(0.5f, 1.5f);
@@ -73,6 +80,8 @@ public class AnimalAI : MonoBehaviour
 
             if (currentHoldTimer >= holdTimeThreshold)
             {
+                isBeingHeld = false;
+                currentHoldTimer = 0f;
                 spriteRenderer.color = new Color(1, 0, 0);
                 RemoveAnimal();
             }
@@ -139,7 +148,7 @@ void FixedUpdate()
         // Restores animal state if deletion is cancelled
         isBeingHeld = false;
         currentHoldTimer = 0f;
-        transform.localScale = Vector3.one + Vector3.one;
+        transform.localScale = initialScale;
         spriteRenderer.color = Color.white;
         isMoving = false;
 
@@ -189,7 +198,7 @@ void FixedUpdate()
         // Check if the clip is loaded and ready before playing it.
         if (mySound != null && mySound.loadState == AudioDataLoadState.Loaded)
         {
-            animalAudioSource.PlayOneShot(mySound);
+            animalAudioSource.PlayOneShot(mySound, clickVolume);
         }
         else if (mySound != null)
         {

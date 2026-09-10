@@ -181,7 +181,8 @@ public class CharacterStyleManager : MonoBehaviour
         if (string.IsNullOrWhiteSpace(nameInput.text))
         {
             StartCoroutine(FlashNameBoxRed());
-            nameInput.GetComponent<Animator>().SetTrigger("Shake"); 
+            Animator anim = nameInput.GetComponent<Animator>();
+            if (anim != null) anim.SetTrigger("Shake");
 
             if (warningText != null)
             {

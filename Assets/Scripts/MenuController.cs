@@ -78,6 +78,7 @@ public class MenuController : MonoBehaviour
         if (File.Exists(path)) {
             File.Delete(path);
             GameManager.Instance.ResetData();
+            GameManager.Instance.SyncToBrowser(); // <--- Tell browser storage the file was deleted!
         }
         if (deletePopup != null) deletePopup.SetActive(false);
         RefreshSlotLabels();
