@@ -118,31 +118,63 @@ public class QuestionSetup : MonoBehaviour
     }
 
     // --- UI Configuration ---
-
+    
+    // These methods ensure that the UI reflects the current question and its answers.
     private void SetQuestionValues()
     {
-        if (currentQuestion == null) return;
+        if (currentQuestion == null)
+        {
+            Debug.LogError("[QuestionSetup] currentQuestion is NULL! Check if questions exist in Resources/Questions.");
+            return;
+        }
 
-        // Update the textual labels for the current question
+        // 1. Check Question Count Text
+        if (QuestionCountText != null)
+            QuestionCountText.text = "Question " + currentQuestionNumber;
+        else
+            Debug.LogError("[QuestionSetup] 'QuestionCountText' is unassigned in the Inspector!");
 
-        QuestionCountText.text = "Question " + currentQuestionNumber; 
-        QuestionText.text = currentQuestion.question;
-        TopicDisplay.text = currentQuestion.topic;
-        
-        if (GameManager.Instance != null)
-            DifficultyDisplay.text = GameManager.Instance.selectedDifficulty;
+        // 2. Check Main Question Text
+        if (QuestionText != null)
+            QuestionText.text = currentQuestion.question;
+        else
+            Debug.LogError("[QuestionSetup] 'QuestionText' is unassigned in the Inspector!");
+
+        // 3. Check Topic Display
+        if (TopicDisplay != null)
+            TopicDisplay.text = currentQuestion.topic;
+        else
+            Debug.LogWarning("[QuestionSetup] 'TopicDisplay' is unassigned in the Inspector!");
+
+        // 4. Check Difficulty Display
+        if (DifficultyDisplay != null)
+        {
+            if (GameManager.Instance != null)
+                DifficultyDisplay.text = GameManager.Instance.selectedDifficulty;
+        }
+        else
+        {
+            Debug.LogWarning("[QuestionSetup] 'DifficultyDisplay' is unassigned in the Inspector!");
+        }
     }
 
+    // --- Answer Configuration ---
+    // This method randomizes the answer order and assigns them to the UI buttons.
     private void SetAnswerValues()
     {
-        if (currentQuestion == null) return;
+        if (currentQuestion == null || currentQuestion.answers == null) return;
 
-        // Shuffle the answers so the correct one isn't always in the same spot
         List<string> randomizedAnswers = RandomizeAnswers(new List<string>(currentQuestion.answers));
 
-        // Configure each button with its randomized answer and correctness state
         for (int i = 0; i < answerbuttons.Length; i++)
         {
+            // Make sure the button slot in the array isn't null
+            if (answerbuttons[i] == null)
+            {
+                Debug.LogError($"[QuestionSetup] AnswerButton at index {i} is MISSING (None) in the Inspector!");
+                continue;
+            }
+
             if (i < randomizedAnswers.Count)
             {
                 answerbuttons[i].gameObject.SetActive(true);

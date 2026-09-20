@@ -2622,17 +2622,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7096337172415229305, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
   m_PrefabInstance: {fileID: 1122574766}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1122574770 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5617617047804635269, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
-  m_PrefabInstance: {fileID: 1122574766}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2816820a4e7f32d45ba351361ac74de3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AnswerButton
 --- !u!1001 &1154426416
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2890,17 +2879,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7096337172415229305, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
   m_PrefabInstance: {fileID: 1173759854}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1173759858 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5617617047804635269, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
-  m_PrefabInstance: {fileID: 1173759854}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2816820a4e7f32d45ba351361ac74de3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AnswerButton
 --- !u!1 &1206383553
 GameObject:
   m_ObjectHideFlags: 0
@@ -3066,7 +3044,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1243875106}
   - component: {fileID: 1243875108}
-  - component: {fileID: 1243875107}
   m_Layer: 5
   m_Name: TopicChoice Box
   m_TagString: Untagged
@@ -3094,29 +3071,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -196}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1243875107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1243875105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51a1cc29ac21af4438fd346b9c62eb2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QuestionSetup
-  questions: []
-  QuestionCountText: {fileID: 0}
-  QuestionText: {fileID: 1269597081}
-  TopicDisplay: {fileID: 0}
-  DifficultyDisplay: {fileID: 0}
-  answerbuttons:
-  - {fileID: 1122574770}
-  - {fileID: 1304465400}
-  - {fileID: 1173759858}
-  - {fileID: 0}
-  totalQuestionsPerSession: 3
 --- !u!222 &1243875108
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3462,17 +3416,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7096337172415229305, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
   m_PrefabInstance: {fileID: 1304465396}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1304465400 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5617617047804635269, guid: 8e7af7a1935daea4e9287cf8f59c7090, type: 3}
-  m_PrefabInstance: {fileID: 1304465396}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2816820a4e7f32d45ba351361ac74de3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AnswerButton
 --- !u!1 &1343441233
 GameObject:
   m_ObjectHideFlags: 0

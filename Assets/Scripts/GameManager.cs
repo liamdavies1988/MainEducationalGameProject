@@ -82,16 +82,10 @@ public class GameManager : MonoBehaviour
     public void SyncToBrowser()
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
-        try
-        {
-            CommitInternalSave();
-        }
-        catch (System.Exception)
-        {
-            Debug.LogWarning("Browser sync skipped.");
-        }
+        CommitInternalSave();
+#else
+        Debug.Log("<color=cyan>[Editor Simulation]</color> WebGL SyncToBrowser called successfully.");
 #endif
-    
     }
 
     public void AddCoin()

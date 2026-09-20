@@ -4151,7 +4151,7 @@ MonoBehaviour:
   - {fileID: 166421635}
   - {fileID: 1579161275}
   - {fileID: 1044145863}
-  totalQuestionsPerSession: 3
+  totalQuestionsPerSession: 5
 --- !u!4 &2064242525
 Transform:
   m_ObjectHideFlags: 0
