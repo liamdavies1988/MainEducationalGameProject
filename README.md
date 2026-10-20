@@ -1,6 +1,4 @@
-================================================================================
           GAMIFYING THE CURRICULUM: PRIMARY EDUCATION APPLICATION
-================================================================================
 
 AUTHOR:     Liam Davies (lid37)
 SUPERVISOR: Helen Miles (hem23)
