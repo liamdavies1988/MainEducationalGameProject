@@ -1,6 +1,22 @@
---------------------------------------------------------------------------------
-          GAMIFYING THE CURRICULUM: PRIMARY EDUCATION APPLICATION
---------------------------------------------------------------------------------
+# Grow & Know — Gamified Key Stage 1 Learning Game
+Grow & Know
+<img width="1020" height="574" alt="picture1" src="https://github.com/user-attachments/assets/b05d2c04-6eff-4f9a-87b9-277bdec3d2eb" />
+A gamified learning tool for ages 5–7 (Maths & Literacy), built as my BSc final-year major project.
+
+## Tech Stack
+C# · Unity 2022.3 LTS · .NET · LINQ · JSON Serialization · CSV Parsing · Custom ShaderLab
+
+## Key Technical Achievements
+- **CSV → ScriptableObject pipeline** — custom C# parser automates curriculum data import, no manual data entry
+- **JSON save system** — multi-slot persistence with master profile caching; preserves progress across sessions
+- **Accessibility-first design** — 6 skin tones, 61 hairstyles, toggleable hearing aids/glasses/crutches, wheelchair body types, non-verbal feedback for lower-literacy users
+- **Bilingual (English/Welsh)** localisation
+- **Custom screen-space → world-space raycasting** for dual-camera viewport interaction
+- **Systematic testing & debugging** — resolved rendering bugs and improved UI responsiveness
+
+## What I Learned
+Building this taught me full software lifecycle discipline: requirements → architecture → implementation → testing → polish. The CSV/JSON data layer and accessibility features were the hardest parts — and the ones I'm most proud of.
+
 
 AUTHOR:     Liam Davies (lid37)
 
@@ -11,9 +27,6 @@ MODULE:     CS39440 - Major Project (40 Credits)
 UNIVERSITY: Aberystwyth University
 
 STATUS:     Technical Feature-Complete (Mid-Project Mark: 80%)
-
-Grow & Know
-<img width="1020" height="574" alt="picture1" src="https://github.com/user-attachments/assets/b05d2c04-6eff-4f9a-87b9-277bdec3d2eb" />
 
 --------------------------------------------------------------------------------
 1. PROJECT OVERVIEW
