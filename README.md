@@ -1,9 +1,13 @@
           GAMIFYING THE CURRICULUM: PRIMARY EDUCATION APPLICATION
 
 AUTHOR:     Liam Davies (lid37)
+
 SUPERVISOR: Helen Miles (hem23)
+
 MODULE:     CS39440 - Major Project (40 Credits)
+
 UNIVERSITY: Aberystwyth University
+
 STATUS:     Technical Feature-Complete (Mid-Project Mark: 80%)
 
 Grow & Know
